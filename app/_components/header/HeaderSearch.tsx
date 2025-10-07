@@ -8,7 +8,7 @@ export default function HeaderSearch() {
       <Input
         type="search"
         placeholder="Search for products"
-        className="pl-10 border-accent-foreground" // adds padding to make room for the icon
+        className="pl-10 border-muted-foreground" // adds padding to make room for the icon
       />
     </div>
   );
