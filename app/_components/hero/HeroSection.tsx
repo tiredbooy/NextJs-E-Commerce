@@ -1,9 +1,10 @@
+import HeroBackground from "./HeroBackground";
 
 function HeroSection () {
   return (
-    <div className="">
-      
-    </div>
+    <section className="w-screen">
+      <HeroBackground />
+    </section>
   );
 };
 
