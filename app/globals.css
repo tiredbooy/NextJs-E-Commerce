@@ -4,120 +4,959 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Core System Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-active: var(--secondary-active);
+
+  /* Surface & Card Colors */
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-card-hover: var(--card-hover);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-modal: var(--modal);
+  --color-modal-foreground: var(--modal-foreground);
+  --color-modal-overlay: var(--modal-overlay);
+
+  /* Muted & Accent Colors */
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted-hover: var(--muted-hover);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-hover: var(--accent-hover);
+
+  /* Status & Feedback Colors */
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-hover: var(--destructive-hover);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-hover: var(--success-hover);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-hover: var(--warning-hover);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-hover: var(--info-hover);
+
+  /* Border & Input Colors */
+  --color-border: var(--border);
+  --color-border-hover: var(--border-hover);
+  --color-border-focus: var(--border-focus);
+  --color-input: var(--input);
+  --color-input-hover: var(--input-hover);
+  --color-input-focus: var(--input-focus);
+  --color-input-disabled: var(--input-disabled);
+  --color-ring: var(--ring);
+
+  /* Link Colors */
+  --color-link: var(--link);
+  --color-link-hover: var(--link-hover);
+  --color-link-visited: var(--link-visited);
+
+  /* E-commerce Specific Colors */
+  --color-price: var(--price);
+  --color-price-original: var(--price-original);
+  --color-price-discount: var(--price-discount);
+  --color-sale-badge: var(--sale-badge);
+  --color-sale-badge-foreground: var(--sale-badge-foreground);
+  --color-new-badge: var(--new-badge);
+  --color-new-badge-foreground: var(--new-badge-foreground);
+  --color-featured-badge: var(--featured-badge);
+  --color-featured-badge-foreground: var(--featured-badge-foreground);
+  --color-stock-in: var(--stock-in);
+  --color-stock-low: var(--stock-low);
+  --color-stock-out: var(--stock-out);
+  --color-rating-star: var(--rating-star);
+  --color-rating-star-empty: var(--rating-star-empty);
+
+  /* Navigation & Sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-hover: var(--sidebar-hover);
+  --color-sidebar-active: var(--sidebar-active);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-nav: var(--nav);
+  --color-nav-foreground: var(--nav-foreground);
+  --color-nav-hover: var(--nav-hover);
+  --color-nav-active: var(--nav-active);
+
+  /* Header & Footer */
+  --color-header: var(--header);
+  --color-header-foreground: var(--header-foreground);
+  --color-header-border: var(--header-border);
+  --color-footer: var(--footer);
+  --color-footer-foreground: var(--footer-foreground);
+  --color-footer-muted: var(--footer-muted);
+
+  /* Table Colors */
+  --color-table-header: var(--table-header);
+  --color-table-header-foreground: var(--table-header-foreground);
+  --color-table-row: var(--table-row);
+  --color-table-row-hover: var(--table-row-hover);
+  --color-table-row-selected: var(--table-row-selected);
+  --color-table-border: var(--table-border);
+
+  /* Badge & Tag Colors */
+  --color-badge-primary: var(--badge-primary);
+  --color-badge-primary-foreground: var(--badge-primary-foreground);
+  --color-badge-secondary: var(--badge-secondary);
+  --color-badge-secondary-foreground: var(--badge-secondary-foreground);
+  --color-badge-success: var(--badge-success);
+  --color-badge-success-foreground: var(--badge-success-foreground);
+  --color-badge-warning: var(--badge-warning);
+  --color-badge-warning-foreground: var(--badge-warning-foreground);
+  --color-badge-error: var(--badge-error);
+  --color-badge-error-foreground: var(--badge-error-foreground);
+  --color-badge-info: var(--badge-info);
+  --color-badge-info-foreground: var(--badge-info-foreground);
+
+  /* Button States */
+  --color-button-primary: var(--button-primary);
+  --color-button-primary-foreground: var(--button-primary-foreground);
+  --color-button-primary-hover: var(--button-primary-hover);
+  --color-button-primary-active: var(--button-primary-active);
+  --color-button-secondary: var(--button-secondary);
+  --color-button-secondary-foreground: var(--button-secondary-foreground);
+  --color-button-secondary-hover: var(--button-secondary-hover);
+  --color-button-ghost: var(--button-ghost);
+  --color-button-ghost-hover: var(--button-ghost-hover);
+  --color-button-outline: var(--button-outline);
+  --color-button-outline-hover: var(--button-outline-hover);
+  --color-button-disabled: var(--button-disabled);
+  --color-button-disabled-foreground: var(--button-disabled-foreground);
+
+  /* Notification & Toast Colors */
+  --color-toast: var(--toast);
+  --color-toast-foreground: var(--toast-foreground);
+  --color-toast-border: var(--toast-border);
+  --color-notification-success: var(--notification-success);
+  --color-notification-error: var(--notification-error);
+  --color-notification-warning: var(--notification-warning);
+  --color-notification-info: var(--notification-info);
+
+  /* Skeleton & Loading */
+  --color-skeleton: var(--skeleton);
+  --color-skeleton-shimmer: var(--skeleton-shimmer);
+  --color-loading: var(--loading);
+  --color-progress: var(--progress);
+  --color-progress-background: var(--progress-background);
+
+  /* Chart Colors */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
+  --color-chart-grid: var(--chart-grid);
+  --color-chart-axis: var(--chart-axis);
+
+  /* Tooltip & Hint */
+  --color-tooltip: var(--tooltip);
+  --color-tooltip-foreground: var(--tooltip-foreground);
+  --color-hint: var(--hint);
+  --color-hint-foreground: var(--hint-foreground);
+
+  /* Selection & Highlight */
+  --color-selection: var(--selection);
+  --color-selection-foreground: var(--selection-foreground);
+  --color-highlight: var(--highlight);
+  --color-code-background: var(--code-background);
+  --color-code-foreground: var(--code-foreground);
+
+  /* Scrollbar */
+  --color-scrollbar-track: var(--scrollbar-track);
+  --color-scrollbar-thumb: var(--scrollbar-thumb);
+  --color-scrollbar-thumb-hover: var(--scrollbar-thumb-hover);
+
+  /* Divider & Separator */
+  --color-divider: var(--divider);
+  --color-separator: var(--separator);
+
+  /* Shadow Colors */
+  --color-shadow-sm: var(--shadow-sm);
+  --color-shadow-md: var(--shadow-md);
+  --color-shadow-lg: var(--shadow-lg);
+  --color-shadow-xl: var(--shadow-xl);
+
+  /* Font Families */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
+
+  /* Border Radius */
+  --radius-xs: calc(var(--radius) - 6px);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-full: 9999px;
+
+  /* Spacing Scale */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+
+  /* Typography Scale */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 2.5rem;
+
+  /* Z-index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-notification: 1080;
 }
 
+/* ========================================
+   LIGHT THEME - Modern Minimalist E-commerce
+   Clean, professional with warm accents
+   ======================================== */
 :root {
-  --radius: 0.625rem;
+  --radius: 0.5rem;
+
+  /* Core System Colors */
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.15 0 0);
+  --primary: oklch(0.45 0.15 265);
+  --primary-foreground: oklch(0.98 0 0);
+  --primary-hover: oklch(0.4 0.16 265);
+  --primary-active: oklch(0.35 0.17 265);
+  --secondary: oklch(0.85 0.08 45);
+  --secondary-foreground: oklch(0.25 0.02 45);
+  --secondary-hover: oklch(0.8 0.09 45);
+  --secondary-active: oklch(0.75 0.1 45);
+
+  /* Surface & Card Colors */
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.15 0 0);
+  --card-hover: oklch(0.98 0.005 265);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.15 0 0);
+  --modal: oklch(1 0 0);
+  --modal-foreground: oklch(0.15 0 0);
+  --modal-overlay: oklch(0.15 0 0 / 0.5);
+
+  /* Muted & Accent Colors */
+  --muted: oklch(0.96 0.005 265);
+  --muted-foreground: oklch(0.5 0.01 265);
+  --muted-hover: oklch(0.94 0.008 265);
+  --accent: oklch(0.92 0.05 265);
+  --accent-foreground: oklch(0.25 0.08 265);
+  --accent-hover: oklch(0.88 0.06 265);
+
+  /* Status & Feedback Colors */
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --destructive-hover: oklch(0.5 0.24 25);
+  --success: oklch(0.55 0.15 145);
+  --success-foreground: oklch(0.98 0 0);
+  --success-hover: oklch(0.5 0.17 145);
+  --warning: oklch(0.75 0.15 75);
+  --warning-foreground: oklch(0.15 0 0);
+  --warning-hover: oklch(0.7 0.16 75);
+  --info: oklch(0.6 0.15 235);
+  --info-foreground: oklch(0.98 0 0);
+  --info-hover: oklch(0.55 0.17 235);
+
+  /* Border & Input Colors */
+  --border: oklch(0.9 0.01 265);
+  --border-hover: oklch(0.85 0.02 265);
+  --border-focus: oklch(0.45 0.15 265);
+  --input: oklch(0.92 0.01 265);
+  --input-hover: oklch(0.88 0.02 265);
+  --input-focus: oklch(0.96 0.005 265);
+  --input-disabled: oklch(0.94 0.005 265);
+  --ring: oklch(0.45 0.15 265);
+
+  /* Link Colors */
+  --link: oklch(0.45 0.15 265);
+  --link-hover: oklch(0.4 0.16 265);
+  --link-visited: oklch(0.4 0.12 285);
+
+  /* E-commerce Specific Colors */
+  --price: oklch(0.35 0.05 265);
+  --price-original: oklch(0.55 0.01 0);
+  --price-discount: oklch(0.55 0.22 25);
+  --sale-badge: oklch(0.55 0.22 25);
+  --sale-badge-foreground: oklch(0.98 0 0);
+  --new-badge: oklch(0.6 0.15 235);
+  --new-badge-foreground: oklch(0.98 0 0);
+  --featured-badge: oklch(0.75 0.18 65);
+  --featured-badge-foreground: oklch(0.15 0 0);
+  --stock-in: oklch(0.55 0.15 145);
+  --stock-low: oklch(0.75 0.15 75);
+  --stock-out: oklch(0.55 0.22 25);
+  --rating-star: oklch(0.75 0.18 65);
+  --rating-star-empty: oklch(0.88 0.02 265);
+
+  /* Navigation & Sidebar */
+  --sidebar: oklch(0.98 0 0);
+  --sidebar-foreground: oklch(0.2 0 0);
+  --sidebar-hover: oklch(0.96 0.005 265);
+  --sidebar-active: oklch(0.92 0.05 265);
+  --sidebar-primary: oklch(0.45 0.15 265);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.94 0.03 265);
+  --sidebar-accent-foreground: oklch(0.25 0.08 265);
+  --sidebar-border: oklch(0.92 0.01 265);
+  --sidebar-ring: oklch(0.45 0.15 265);
+  --nav: oklch(1 0 0);
+  --nav-foreground: oklch(0.2 0 0);
+  --nav-hover: oklch(0.96 0.005 265);
+  --nav-active: oklch(0.92 0.05 265);
+
+  /* Header & Footer */
+  --header: oklch(1 0 0);
+  --header-foreground: oklch(0.15 0 0);
+  --header-border: oklch(0.92 0.01 265);
+  --footer: oklch(0.2 0.01 265);
+  --footer-foreground: oklch(0.9 0.005 265);
+  --footer-muted: oklch(0.6 0.01 265);
+
+  /* Table Colors */
+  --table-header: oklch(0.96 0.005 265);
+  --table-header-foreground: oklch(0.25 0.02 265);
+  --table-row: oklch(1 0 0);
+  --table-row-hover: oklch(0.98 0.005 265);
+  --table-row-selected: oklch(0.94 0.03 265);
+  --table-border: oklch(0.92 0.01 265);
+
+  /* Badge & Tag Colors */
+  --badge-primary: oklch(0.45 0.15 265);
+  --badge-primary-foreground: oklch(0.98 0 0);
+  --badge-secondary: oklch(0.85 0.08 45);
+  --badge-secondary-foreground: oklch(0.25 0.02 45);
+  --badge-success: oklch(0.55 0.15 145);
+  --badge-success-foreground: oklch(0.98 0 0);
+  --badge-warning: oklch(0.75 0.15 75);
+  --badge-warning-foreground: oklch(0.15 0 0);
+  --badge-error: oklch(0.55 0.22 25);
+  --badge-error-foreground: oklch(0.98 0 0);
+  --badge-info: oklch(0.6 0.15 235);
+  --badge-info-foreground: oklch(0.98 0 0);
+
+  /* Button States */
+  --button-primary: oklch(0.45 0.15 265);
+  --button-primary-foreground: oklch(0.98 0 0);
+  --button-primary-hover: oklch(0.4 0.16 265);
+  --button-primary-active: oklch(0.35 0.17 265);
+  --button-secondary: oklch(0.96 0.005 265);
+  --button-secondary-foreground: oklch(0.25 0.02 265);
+  --button-secondary-hover: oklch(0.92 0.01 265);
+  --button-ghost: transparent;
+  --button-ghost-hover: oklch(0.96 0.005 265);
+  --button-outline: transparent;
+  --button-outline-hover: oklch(0.96 0.005 265);
+  --button-disabled: oklch(0.94 0.005 265);
+  --button-disabled-foreground: oklch(0.65 0.01 265);
+
+  /* Notification & Toast Colors */
+  --toast: oklch(1 0 0);
+  --toast-foreground: oklch(0.15 0 0);
+  --toast-border: oklch(0.9 0.01 265);
+  --notification-success: oklch(0.92 0.05 145);
+  --notification-error: oklch(0.92 0.08 25);
+  --notification-warning: oklch(0.95 0.08 75);
+  --notification-info: oklch(0.92 0.05 235);
+
+  /* Skeleton & Loading */
+  --skeleton: oklch(0.92 0.01 265);
+  --skeleton-shimmer: oklch(0.96 0.005 265);
+  --loading: oklch(0.45 0.15 265);
+  --progress: oklch(0.45 0.15 265);
+  --progress-background: oklch(0.92 0.01 265);
+
+  /* Chart Colors */
+  --chart-1: oklch(0.55 0.18 265);
+  --chart-2: oklch(0.7 0.15 45);
+  --chart-3: oklch(0.65 0.12 145);
+  --chart-4: oklch(0.6 0.18 305);
+  --chart-5: oklch(0.75 0.15 25);
+  --chart-6: oklch(0.6 0.15 235);
+  --chart-7: oklch(0.7 0.16 165);
+  --chart-8: oklch(0.65 0.14 205);
+  --chart-grid: oklch(0.9 0.01 265);
+  --chart-axis: oklch(0.7 0.01 265);
+
+  /* Tooltip & Hint */
+  --tooltip: oklch(0.25 0.02 265);
+  --tooltip-foreground: oklch(0.98 0 0);
+  --hint: oklch(0.96 0.005 265);
+  --hint-foreground: oklch(0.4 0.02 265);
+
+  /* Selection & Highlight */
+  --selection: oklch(0.8 0.1 265);
+  --selection-foreground: oklch(0.98 0 0);
+  --highlight: oklch(0.9 0.08 65);
+  --code-background: oklch(0.96 0.005 265);
+  --code-foreground: oklch(0.35 0.08 325);
+
+  /* Scrollbar */
+  --scrollbar-track: oklch(0.96 0.005 265);
+  --scrollbar-thumb: oklch(0.75 0.02 265);
+  --scrollbar-thumb-hover: oklch(0.65 0.03 265);
+
+  /* Divider & Separator */
+  --divider: oklch(0.92 0.01 265);
+  --separator: oklch(0.9 0.01 265);
+
+  /* Shadow Colors */
+  --shadow-sm: oklch(0.15 0 0 / 0.05);
+  --shadow-md: oklch(0.15 0 0 / 0.1);
+  --shadow-lg: oklch(0.15 0 0 / 0.15);
+  --shadow-xl: oklch(0.15 0 0 / 0.2);
 }
 
+/* ========================================
+   DARK THEME - Luxe E-commerce
+   Rich, premium with vibrant accents
+   ======================================== */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --radius: 0.5rem;
+
+  /* Core System Colors */
+  --background: oklch(0.12 0.01 265);
+  --foreground: oklch(0.95 0.01 265);
+  --primary: oklch(0.7 0.2 285);
+  --primary-foreground: oklch(0.98 0 0);
+  --primary-hover: oklch(0.75 0.22 285);
+  --primary-active: oklch(0.8 0.24 285);
+  --secondary: oklch(0.35 0.05 75);
+  --secondary-foreground: oklch(0.95 0.05 75);
+  --secondary-hover: oklch(0.4 0.06 75);
+  --secondary-active: oklch(0.45 0.07 75);
+
+  /* Surface & Card Colors */
+  --card: oklch(0.18 0.015 265);
+  --card-foreground: oklch(0.95 0.01 265);
+  --card-hover: oklch(0.22 0.02 265);
+  --popover: oklch(0.2 0.015 265);
+  --popover-foreground: oklch(0.95 0.01 265);
+  --modal: oklch(0.2 0.015 265);
+  --modal-foreground: oklch(0.95 0.01 265);
+  --modal-overlay: oklch(0.05 0 0 / 0.7);
+
+  /* Muted & Accent Colors */
+  --muted: oklch(0.25 0.02 265);
+  --muted-foreground: oklch(0.65 0.03 265);
+  --muted-hover: oklch(0.3 0.025 265);
+  --accent: oklch(0.28 0.04 265);
+  --accent-foreground: oklch(0.8 0.15 285);
+  --accent-hover: oklch(0.32 0.05 265);
+
+  /* Status & Feedback Colors */
+  --destructive: oklch(0.65 0.25 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --destructive-hover: oklch(0.7 0.27 25);
+  --success: oklch(0.65 0.18 155);
+  --success-foreground: oklch(0.98 0 0);
+  --success-hover: oklch(0.7 0.2 155);
+  --warning: oklch(0.75 0.18 85);
+  --warning-foreground: oklch(0.1 0 0);
+  --warning-hover: oklch(0.8 0.2 85);
+  --info: oklch(0.7 0.18 245);
+  --info-foreground: oklch(0.98 0 0);
+  --info-hover: oklch(0.75 0.2 245);
+
+  /* Border & Input Colors */
+  --border: oklch(0.3 0.03 265);
+  --border-hover: oklch(0.4 0.04 265);
+  --border-focus: oklch(0.7 0.2 285);
+  --input: oklch(0.25 0.02 265);
+  --input-hover: oklch(0.28 0.025 265);
+  --input-focus: oklch(0.22 0.02 265);
+  --input-disabled: oklch(0.2 0.015 265);
+  --ring: oklch(0.7 0.2 285);
+
+  /* Link Colors */
+  --link: oklch(0.75 0.2 285);
+  --link-hover: oklch(0.8 0.22 285);
+  --link-visited: oklch(0.7 0.18 305);
+
+  /* E-commerce Specific Colors */
+  --price: oklch(0.9 0.08 285);
+  --price-original: oklch(0.6 0.02 265);
+  --price-discount: oklch(0.75 0.25 35);
+  --sale-badge: oklch(0.65 0.25 25);
+  --sale-badge-foreground: oklch(0.98 0 0);
+  --new-badge: oklch(0.7 0.18 245);
+  --new-badge-foreground: oklch(0.98 0 0);
+  --featured-badge: oklch(0.75 0.2 85);
+  --featured-badge-foreground: oklch(0.1 0 0);
+  --stock-in: oklch(0.65 0.18 155);
+  --stock-low: oklch(0.75 0.18 85);
+  --stock-out: oklch(0.65 0.25 25);
+  --rating-star: oklch(0.8 0.2 85);
+  --rating-star-empty: oklch(0.35 0.03 265);
+
+  /* Navigation & Sidebar */
+  --sidebar: oklch(0.15 0.015 265);
+  --sidebar-foreground: oklch(0.9 0.02 265);
+  --sidebar-hover: oklch(0.2 0.02 265);
+  --sidebar-active: oklch(0.28 0.04 265);
+  --sidebar-primary: oklch(0.7 0.2 285);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.25 0.03 265);
+  --sidebar-accent-foreground: oklch(0.85 0.15 285);
+  --sidebar-border: oklch(0.28 0.03 265);
+  --sidebar-ring: oklch(0.7 0.2 285);
+  --nav: oklch(0.18 0.015 265);
+  --nav-foreground: oklch(0.9 0.02 265);
+  --nav-hover: oklch(0.22 0.02 265);
+  --nav-active: oklch(0.28 0.04 265);
+
+  /* Header & Footer */
+  --header: oklch(0.18 0.015 265);
+  --header-foreground: oklch(0.95 0.01 265);
+  --header-border: oklch(0.28 0.03 265);
+  --footer: oklch(0.15 0.015 265);
+  --footer-foreground: oklch(0.8 0.02 265);
+  --footer-muted: oklch(0.55 0.02 265);
+
+  /* Table Colors */
+  --table-header: oklch(0.25 0.02 265);
+  --table-header-foreground: oklch(0.85 0.03 265);
+  --table-row: oklch(0.18 0.015 265);
+  --table-row-hover: oklch(0.22 0.02 265);
+  --table-row-selected: oklch(0.28 0.04 265);
+  --table-border: oklch(0.3 0.03 265);
+
+  /* Badge & Tag Colors */
+  --badge-primary: oklch(0.7 0.2 285);
+  --badge-primary-foreground: oklch(0.98 0 0);
+  --badge-secondary: oklch(0.35 0.05 75);
+  --badge-secondary-foreground: oklch(0.95 0.05 75);
+  --badge-success: oklch(0.65 0.18 155);
+  --badge-success-foreground: oklch(0.98 0 0);
+  --badge-warning: oklch(0.75 0.18 85);
+  --badge-warning-foreground: oklch(0.1 0 0);
+  --badge-error: oklch(0.65 0.25 25);
+  --badge-error-foreground: oklch(0.98 0 0);
+  --badge-info: oklch(0.7 0.18 245);
+  --badge-info-foreground: oklch(0.98 0 0);
+
+  /* Button States */
+  --button-primary: oklch(0.7 0.2 285);
+  --button-primary-foreground: oklch(0.98 0 0);
+  --button-primary-hover: oklch(0.75 0.22 285);
+  --button-primary-active: oklch(0.8 0.24 285);
+  --button-secondary: oklch(0.25 0.02 265);
+  --button-secondary-foreground: oklch(0.9 0.02 265);
+  --button-secondary-hover: oklch(0.3 0.03 265);
+  --button-ghost: transparent;
+  --button-ghost-hover: oklch(0.25 0.02 265);
+  --button-outline: transparent;
+  --button-outline-hover: oklch(0.25 0.02 265);
+  --button-disabled: oklch(0.22 0.015 265);
+  --button-disabled-foreground: oklch(0.45 0.02 265);
+
+  /* Notification & Toast Colors */
+  --toast: oklch(0.2 0.015 265);
+  --toast-foreground: oklch(0.95 0.01 265);
+  --toast-border: oklch(0.3 0.03 265);
+  --notification-success: oklch(0.25 0.08 155);
+  --notification-error: oklch(0.28 0.1 25);
+  --notification-warning: oklch(0.3 0.08 85);
+  --notification-info: oklch(0.25 0.08 245);
+
+  /* Skeleton & Loading */
+  --skeleton: oklch(0.25 0.02 265);
+  --skeleton-shimmer: oklch(0.35 0.03 265);
+  --loading: oklch(0.7 0.2 285);
+  --progress: oklch(0.7 0.2 285);
+  --progress-background: oklch(0.25 0.02 265);
+
+  /* Chart Colors */
+  --chart-1: oklch(0.7 0.2 285);
+  --chart-2: oklch(0.75 0.18 175);
+  --chart-3: oklch(0.7 0.18 65);
+  --chart-4: oklch(0.65 0.22 330);
+  --chart-5: oklch(0.75 0.2 45);
+  --chart-6: oklch(0.7 0.18 245);
+  --chart-7: oklch(0.68 0.19 135);
+  --chart-8: oklch(0.72 0.17 205);
+  --chart-grid: oklch(0.3 0.03 265);
+  --chart-axis: oklch(0.5 0.02 265);
+
+  /* Tooltip & Hint */
+  --tooltip: oklch(0.85 0.02 265);
+  --tooltip-foreground: oklch(0.15 0.01 265);
+  --hint: oklch(0.25 0.02 265);
+  --hint-foreground: oklch(0.7 0.03 265);
+
+  /* Selection & Highlight */
+  --selection: oklch(0.45 0.15 285);
+  --selection-foreground: oklch(0.98 0 0);
+  --highlight: oklch(0.35 0.12 85);
+  --code-background: oklch(0.22 0.02 265);
+  --code-foreground: oklch(0.8 0.15 325);
+
+  /* Scrollbar */
+  --scrollbar-track: oklch(0.18 0.015 265);
+  --scrollbar-thumb: oklch(0.4 0.04 265);
+  --scrollbar-thumb-hover: oklch(0.5 0.05 265);
+
+  /* Divider & Separator */
+  --divider: oklch(0.28 0.03 265);
+  --separator: oklch(0.3 0.03 265);
+
+  /* Shadow Colors */
+  --shadow-sm: oklch(0.05 0 0 / 0.3);
+  --shadow-md: oklch(0.05 0 0 / 0.4);
+  --shadow-lg: oklch(0.05 0 0 / 0.5);
+  --shadow-xl: oklch(0.05 0 0 / 0.6);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    @apply transition-all
+    @apply transition-colors duration-200;
   }
+
   body {
     @apply bg-background text-foreground;
+    @apply antialiased;
+  }
+
+  /* Enhanced focus states for accessibility */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+
+  /* Smooth transitions for theme switching */
+  html {
+    @apply transition-colors duration-300;
+  }
+
+  /* Custom Scrollbar Styles */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+    border-radius: var(--radius-md);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--scrollbar-track);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+  }
+
+  /* Selection Styles */
+  ::selection {
+    background: var(--selection);
+    color: var(--selection-foreground);
+  }
+
+  /* Link Styles */
+  a {
+    color: var(--link);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--link-hover);
+  }
+
+  a:visited {
+    color: var(--link-visited);
+  }
+
+  /* Code Blocks */
+  code {
+    background: var(--code-background);
+    color: var(--code-foreground);
+    padding: 0.125rem 0.25rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875em;
+    font-family: var(--font-mono);
+  }
+
+  pre {
+    background: var(--code-background);
+    color: var(--code-foreground);
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+    font-family: var(--font-mono);
+  }
+
+  pre code {
+    background: transparent;
+    padding: 0;
+  }
+
+  /* Table Styles */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead {
+    background: var(--table-header);
+    color: var(--table-header-foreground);
+  }
+
+  th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid var(--table-border);
+  }
+
+  td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--table-border);
+  }
+
+  tbody tr {
+    background: var(--table-row);
+    transition: background-color 0.2s ease;
+  }
+
+  tbody tr:hover {
+    background: var(--table-row-hover);
+  }
+
+  tbody tr.selected {
+    background: var(--table-row-selected);
+  }
+
+  /* Divider */
+  hr {
+    border: none;
+    border-top: 1px solid var(--divider);
+    margin: 1.5rem 0;
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES FOR E-COMMERCE
+   ======================================== */
+@layer utilities {
+  /* Glass Morphism Effects */
+  .glass {
+    background: color-mix(in oklch, var(--card) 80%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+  }
+
+  .glass-strong {
+    background: color-mix(in oklch, var(--card) 90%, transparent);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+  }
+
+  .glass-subtle {
+    background: color-mix(in oklch, var(--card) 60%, transparent);
+    backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in oklch, var(--border) 50%, transparent);
+  }
+
+  /* Glow Effects */
+  .glow-primary {
+    box-shadow: 0 0 20px color-mix(in oklch, var(--primary) 30%, transparent);
+  }
+
+  .glow-primary:hover {
+    box-shadow: 0 0 30px color-mix(in oklch, var(--primary) 50%, transparent);
+  }
+
+  .glow-primary-strong {
+    box-shadow: 0 0 40px color-mix(in oklch, var(--primary) 50%, transparent);
+  }
+
+  .glow-secondary {
+    box-shadow: 0 0 20px color-mix(in oklch, var(--secondary) 30%, transparent);
+  }
+
+  .glow-success {
+    box-shadow: 0 0 20px color-mix(in oklch, var(--success) 30%, transparent);
+  }
+
+  .glow-destructive {
+    box-shadow: 0 0 20px
+      color-mix(in oklch, var(--destructive) 30%, transparent);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 20px
+      color-mix(in oklch, var(--accent-foreground) 30%, transparent);
+  }
+
+  /* Gradient Text */
+  .text-gradient-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-secondary {
+    background: linear-gradient(
+      135deg,
+      var(--secondary),
+      var(--secondary-hover)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-accent {
+    background: linear-gradient(
+      135deg,
+      var(--accent-foreground),
+      var(--primary)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-rainbow {
+    background: linear-gradient(
+      135deg,
+      var(--primary),
+      var(--secondary),
+      var(--accent-foreground)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Animated Gradient */
+  .animate-gradient {
+    background: linear-gradient(
+      -45deg,
+      var(--primary),
+      var(--secondary),
+      var(--accent-foreground),
+      var(--primary-hover)
+    );
+    background-size: 400% 400%;
+    animation: gradient-shift 8s ease infinite;
+  }
+
+  @keyframes gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  /* Gradient Borders */
+  .border-gradient-primary {
+    border: 2px solid transparent;
+    background: linear-gradient(var(--background), var(--background))
+        padding-box,
+      linear-gradient(135deg, var(--primary), var(--primary-hover)) border-box;
+  }
+
+  .border-gradient-accent {
+    border: 2px solid transparent;
+    background: linear-gradient(var(--background), var(--background))
+        padding-box,
+      linear-gradient(135deg, var(--accent-foreground), var(--primary))
+        border-box;
+  }
+
+  /* Shimmer Effect */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in oklch, var(--primary) 20%, transparent) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  /* Shadow Variants */
+  .shadow-glow-sm {
+    box-shadow: 0 2px 8px var(--shadow-sm),
+      0 0 12px color-mix(in oklch, var(--primary) 10%, transparent);
+  }
+
+  .shadow-glow-md {
+    box-shadow: 0 4px 12px var(--shadow-md),
+      0 0 20px color-mix(in oklch, var(--primary) 15%, transparent);
+  }
+
+  .shadow-glow-lg {
+    box-shadow: 0 8px 24px var(--shadow-lg),
+      0 0 30px color-mix(in oklch, var(--primary) 20%, transparent);
+  }
+
+  /* Modal Overlay */
+  .modal-overlay {
+    background: var(--modal-overlay);
+    backdrop-filter: blur(4px);
+  }
+
+  /* Frosted Glass */
+  .frosted {
+    background: color-mix(in oklch, var(--card) 70%, transparent);
+    backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid color-mix(in oklch, var(--border) 40%, transparent);
   }
 }
