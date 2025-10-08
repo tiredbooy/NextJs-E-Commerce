@@ -1,9 +1,9 @@
-import HeaderSearch from "./HeaderSearch";
-import AnnouncementBar from "./AnnouncementBar";
-import HeaderNav from "./HeaderNav";
-import HeaderLogo from "./HeaderLogo";
-import HeaderUserMenu from "./HeaderUserMenu";
 import { Announcment } from "@/app/_lib/types";
+import AnnouncementBar from "./AnnouncementBar";
+import HeaderLogo from "./HeaderLogo";
+import HeaderNav from "./HeaderNav";
+import HeaderSearch from "./HeaderSearch";
+import HeaderUserMenu from "./HeaderUserMenu";
 
 const announcment: Announcment = {
   announcmentTxt: "Sign up and get 20% off your first order.",
