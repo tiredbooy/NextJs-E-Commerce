@@ -59,12 +59,12 @@ function HeroBackground() {
         }}
         pagination={{
           clickable: true,
-          bulletClass: "swiper-pagination-bullet !bg-white/50",
+          bulletClass: "swiper-pagination-bullet !bg-white/70 ",
           bulletActiveClass: "swiper-pagination-bullet-active !bg-white",
         }}
         onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
         className="!absolute !inset-0 !w-full !h-full"
-        style={{ zIndex: 0 }}
+        // style={{ zIndex: 0 }}
       >
         {heroSlides.map((slide) => (
           <SwiperSlide key={slide.id}>
