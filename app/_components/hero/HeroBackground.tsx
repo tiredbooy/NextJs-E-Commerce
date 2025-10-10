@@ -10,8 +10,18 @@ import { useState } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
 
+interface HeroSlice {
+  id :number
+  image : string
+  badge : string
+  title : string
+  titleAccent: string
+  description : string
+  cta? : string
+}
+
 // Hero slides data
-const heroSlides = [
+const heroSlides : HeroSlice[] = [
   {
     id: 1,
     image: "/hero-suits.jpg", // Replace with your actual image paths

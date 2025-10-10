@@ -19,7 +19,7 @@ function Header() {
           <AnnouncementBar announcmentObj={announcment} />
         </div>
       )}
-      <div className=" flex-row justify-between items-center bg-accent h-fit p-4 hidden md:flex">
+      <div className=" flex-row justify-between items-center bg-accent h-fit p-4 hidden sm:flex">
         <HeaderLogo />
         <HeaderNav />
         <HeaderSearch />
