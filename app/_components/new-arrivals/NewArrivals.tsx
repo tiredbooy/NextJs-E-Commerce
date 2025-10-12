@@ -2,10 +2,11 @@ import { Product } from "@/app/_lib/types";
 import productImage from "@/public/a.jpg";
 import React from "react";
 import NewArrivalProducts from "./NewArrivalProducts";
+import NewArrivalHeader from "./NewArrivalHeader";
 
 const products: Product[] = [
   {
-    id:1,
+    id: 1,
     title: "White T-Shirt",
     description: "White Compression T-Shirt For Showing Good Body part",
     price: 19.99,
@@ -22,7 +23,7 @@ const products: Product[] = [
     created_at: new Date().toISOString(),
   },
   {
-    id:2,
+    id: 2,
     title: "Black T-Shirt",
     description: "White Compression T-Shirt For Showing Good Body part",
     price: 19.99,
@@ -39,7 +40,7 @@ const products: Product[] = [
     created_at: new Date().toISOString(),
   },
   {
-    id:3,
+    id: 3,
     title: "Green T-Shirt",
     description: "White Compression T-Shirt For Showing Good Body part",
     price: 19.99,
@@ -56,7 +57,7 @@ const products: Product[] = [
     created_at: new Date().toISOString(),
   },
   {
-    id:4,
+    id: 4,
     title: "Green T-Shirt",
     description: "White Compression T-Shirt For Showing Good Body part",
     price: 19.99,
@@ -72,7 +73,7 @@ const products: Product[] = [
     created_at: new Date().toISOString(),
   },
   {
-    id:5,
+    id: 5,
     title: "Green T-Shirt",
     description: "White Compression T-Shirt For Showing Good Body part",
     price: 19.99,
@@ -91,8 +92,8 @@ const products: Product[] = [
 
 const NewArrivals: React.FC = ({}) => {
   return (
-    <section className="w-full max-w-screen bg-background flex flex-col py-8 md:py-14 px-4 md:px-8 items-center">
-      <h1 className="text-3xl md:text-5xl font-bold mb-8">New Arrival</h1>
+    <section className="w-full max-w-screen h-screen bg-background flex flex-col py-8 md:py-20 px-4 md:px-8 items-center">
+      <NewArrivalHeader />
 
       <NewArrivalProducts products={products} />
     </section>

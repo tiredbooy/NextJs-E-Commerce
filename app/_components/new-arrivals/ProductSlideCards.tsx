@@ -25,11 +25,11 @@ const ProductSlideCards: React.FC<Props> = ({ product }) => {
         <h2 className="font-semibold text-foreground">{product.title}</h2>
         <p className="text-muted-foreground">{product.description}</p>
         {product.discount_price && product.discount_price > 0 ? (
-          <div className="flex flex-row gap-5">
-            <p className="text-price font-semibold">
+          <div className="flex flex-row gap-5 items-center">
+            <p className="text-price font-semibold text-md">
               ${product.discount_price}
             </p>
-            <span className="text-muted-foreground line-through">
+            <span className="text-muted-foreground line-through text-sm">
               ${product.price}
             </span>
           </div>
