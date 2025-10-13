@@ -126,7 +126,8 @@ function MobileNavigations() {
         initial={{ y: 100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="fixed bottom-0 left-0 right-0 z-50 md:hidden "
+        className="fixed bottom-0 left-0 z-50 md:hidden w-[100vw]"
+        style={{ right: 0 }}
       >
         {/* Dock Container with Glass Effect */}
         <div className="relative mx-4 mb-2 ">
@@ -198,8 +199,7 @@ function MobileNavigations() {
                       : "text-foreground/60 opacity-0 group-hover:opacity-100"
                   }`}
                   animate={{ y: showMenu ? 0 : 4 }}
-                >
-                </motion.span>
+                ></motion.span>
               </button>
 
               {/* Other Nav Items */}
@@ -263,8 +263,6 @@ function MobileNavigations() {
                         )}
                       </motion.div>
                     </motion.div>
-
-                    
                   </Link>
                 );
               })}
@@ -283,7 +281,7 @@ function MobileNavigations() {
     return null;
   }
 
-  return createPortal(dockContent, document.body);
+  return dockContent
 }
 
 export default MobileNavigations;

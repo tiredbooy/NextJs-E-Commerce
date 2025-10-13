@@ -1,19 +1,36 @@
 "use client";
 import { Product } from "@/app/_lib/types";
+import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
 
 interface Props {
   product: Product;
+  usage?: "New" | "Sale" | "Featured";
 }
 
-const ProductSlideCards: React.FC<Props> = ({ product }) => {
+const ProductSlideCards: React.FC<Props> = ({ product, usage }) => {
   return (
     <Link href="">
       <article
         key={product.id}
-        className="p-4 flex flex-col bg-card group hover:bg-card-hover gap-4 md:p-8 rounded-xl shadow-lg text-white"
+        className="p-4 flex flex-col bg-card group hover:bg-card-hover gap-4 md:p-8 rounded-xl shadow-lg text-white relative"
       >
+        {usage === "New" && (
+          <Badge className="absolute bg-new-badge top-2 left-2 text-background z-10 font-semibold">
+            New{" "}
+          </Badge>
+        )}
+        {usage === "Featured" && (
+          <Badge className="absolute top-2 left-2 z-10 bg-featured-badge text-featured-badge-foreground font-semibold">
+            Featured
+          </Badge>
+        )}
+        {usage === "Sale" && (
+          <Badge className="absolute top-2 left-2 z-10 bg-sale-badge text-background font-semibold">
+            Sale
+          </Badge>
+        )}
         <div className="aspect-square h-48 relative rounded-xl">
           <Image
             fill

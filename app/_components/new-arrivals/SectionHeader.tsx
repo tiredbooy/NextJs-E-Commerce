@@ -2,11 +2,19 @@
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 
-interface Props {
-  // props here
-}
+type Props = {
+  badgeIcon?: React.ElementType;
+  badge?: string;
+  header?: string;
+  description?: string;
+};
 
-const NewArrivalHeader: React.FC<Props> = ({}) => {
+function SectionHeader({
+  badgeIcon: Icon = Sparkles,
+  badge = "Just Dropped",
+  header = "New Arrival",
+  description = "Discover our latest collection of premium products, carefully curated just for you",
+}: Props) {
   return (
     <motion.div
       className="flex flex-col items-center justify-center mb-12 md:mb-16 text-center relative"
@@ -17,14 +25,30 @@ const NewArrivalHeader: React.FC<Props> = ({}) => {
     >
       {/* Decorative Badge */}
       <motion.div
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4"
+        className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 mb-4 ${
+          header.includes("New") ? "bg-new-badge/10" : "bg-featured-badge/10"
+        }`}
         initial={{ opacity: 0, scale: 0.8 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ delay: 0.2, duration: 0.5 }}
       >
-        <Sparkles className="w-4 h-4 text-primary" />
-        <span className="text-sm font-medium text-primary">Just Dropped</span>
+        <Icon
+          className={`w-4 h-4 ${
+            header.includes("New")
+              ? "text-new-badge"
+              : "text-featured-badge-foreground"
+          }`}
+        />
+        <span
+          className={`text-sm font-medium ${
+            header.includes("New")
+              ? "text-new-badge"
+              : "text-featured-badge-foreground"
+          }`}
+        >
+          {badge}
+        </span>
       </motion.div>
 
       {/* Main Heading */}
@@ -35,7 +59,7 @@ const NewArrivalHeader: React.FC<Props> = ({}) => {
         viewport={{ once: true }}
         transition={{ delay: 0.3, duration: 0.6 }}
       >
-        New Arrival
+        {header}
       </motion.h1>
 
       {/* Subtitle */}
@@ -46,13 +70,14 @@ const NewArrivalHeader: React.FC<Props> = ({}) => {
         viewport={{ once: true }}
         transition={{ delay: 0.4, duration: 0.6 }}
       >
-        Discover our latest collection of premium products, carefully curated
-        just for you
+        {description}
       </motion.p>
 
       {/* Decorative Line */}
       <motion.div
-        className="w-48 h-1 bg-gradient-to-r from-transparent via-primary to-transparent mt-6"
+        className={`w-48 h-1 bg-gradient-to-r from-transparent ${
+          header.includes("New") ? "via-primary" : "via-warning"
+        } to-transparent mt-6`}
         initial={{ scaleX: 0, opacity: 0 }}
         whileInView={{ scaleX: 1, opacity: 1 }}
         viewport={{ once: true }}
@@ -65,6 +90,6 @@ const NewArrivalHeader: React.FC<Props> = ({}) => {
       </div>
     </motion.div>
   );
-};
+}
 
-export default NewArrivalHeader;
+export default SectionHeader;

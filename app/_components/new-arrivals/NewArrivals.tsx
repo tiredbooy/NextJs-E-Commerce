@@ -2,9 +2,10 @@ import { Product } from "@/app/_lib/types";
 import productImage from "@/public/a.jpg";
 import React from "react";
 import NewArrivalProducts from "./NewArrivalProducts";
-import NewArrivalHeader from "./NewArrivalHeader";
+import NewArrivalHeader from "./SectionHeader";
+import SwiperProducts from "./NewArrivalProducts";
 
-const products: Product[] = [
+export const products: Product[] = [
   {
     id: 1,
     title: "White T-Shirt",
@@ -95,7 +96,7 @@ const NewArrivals: React.FC = ({}) => {
     <section className="w-full max-w-screen h-screen bg-background flex flex-col py-8 md:py-20 px-4 md:px-8 items-center">
       <NewArrivalHeader />
 
-      <NewArrivalProducts products={products} />
+      <SwiperProducts products={products} usage="New" />
     </section>
   );
 };

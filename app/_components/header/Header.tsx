@@ -11,7 +11,6 @@ const announcment: Announcment = {
 function Header() {
   return (
     <>
-      
       <HeaderItem announcment={announcment} />
     </>
   );

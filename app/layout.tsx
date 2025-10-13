@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
+import Header from "./_components/header/Header";
+import MobileNavigations from "./_components/header/MobileNavigations";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -23,7 +25,9 @@ export default function RootLayout({
       <body
         className={` ${poppins.className} ${poppins.variable} antialiased bg-background`}
       >
+        <Header />
         {children}
+        <MobileNavigations />
       </body>
     </html>
   );

@@ -6,9 +6,10 @@ import ProductSlideCards from "./ProductSlideCards";
 
 interface Props {
   products: Product[];
+  usage? : string
 }
 
-const NewArrivalProducts: React.FC<Props> = ({ products }) => {
+const SwiperProducts: React.FC<Props> = ({ products, usage }) => {
   // Duplicate products multiple times to ensure smooth infinite loop
   const duplicatedProducts = [
     ...products,
@@ -35,7 +36,7 @@ const NewArrivalProducts: React.FC<Props> = ({ products }) => {
       allowTouchMove={true}
       grabCursor={true}
       freeMode={true}
-      className="select-none w-full h-fit pb-16 !overflow-visible"
+      className="select-none w-full h-fit pb-16 "
       breakpoints={{
         0: {
           slidesPerView: 1,
@@ -76,11 +77,11 @@ const NewArrivalProducts: React.FC<Props> = ({ products }) => {
           key={`${p.id || index}-${index}`}
           className="flex justify-center items-center"
         >
-          <ProductSlideCards product={p} />
+          <ProductSlideCards product={p} usage={usage} />
         </SwiperSlide>
       ))}
     </Swiper>
   );
 };
 
-export default NewArrivalProducts;
+export default SwiperProducts;

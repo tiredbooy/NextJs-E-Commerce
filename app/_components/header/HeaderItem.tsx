@@ -30,7 +30,7 @@ const HeaderItem: React.FC<Props> = ({ announcment }) => {
 
   return (
     <motion.header
-      className="sticky top-0 z-50 w-full hidden md:block"
+      className="sticky top-0 z-50 w-full "
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -44,7 +44,7 @@ const HeaderItem: React.FC<Props> = ({ announcment }) => {
             opacity: isScrolled ? 0 : 1,
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="overflow-hidden"
+          className="overflow-hidden block"
         >
           <AnnouncementBar announcmentObj={announcment} />
         </motion.div>
@@ -53,9 +53,9 @@ const HeaderItem: React.FC<Props> = ({ announcment }) => {
       {/* Main Header - Single Row with 4 Items */}
       <motion.div
         className={`
-          flex flex-row justify-between items-center
+           flex-row justify-between items-center
           bg-background/80 backdrop-blur-xl
-          border-b transition-all duration-300 px-6
+          border-b transition-all duration-300 px-6 hidden md:flex
           ${
             isScrolled
               ? "border-border/50 shadow-lg shadow-black/5 py-3"
