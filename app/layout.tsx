@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "./_components/header/Header";
 import MobileNavigations from "./_components/header/MobileNavigations";
+import Footer from "./_components/reusable/Footer";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -12,7 +13,8 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: "Velisse",
-  description: "Where elegance meets individuality. Explore refined footwear, couture apparel, and signature fragrances crafted for those who move with purpose and style.",
+  description:
+    "Where elegance meets individuality. Explore refined footwear, couture apparel, and signature fragrances crafted for those who move with purpose and style.",
 };
 
 export default function RootLayout({
@@ -28,6 +30,7 @@ export default function RootLayout({
         <Header />
         {children}
         <MobileNavigations />
+        <Footer />
       </body>
     </html>
   );
