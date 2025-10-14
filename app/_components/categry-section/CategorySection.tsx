@@ -32,7 +32,7 @@ const categories = [
 
 const CategorySection = () => {
   return (
-    <section className="w-full min-h-screen bg-background flex flex-col py-12 md:py-20 px-4 md:px-8 lg:px-16">
+    <section className="w-full h-fit bg-background flex flex-col py-12 md:py-20 px-4 md:px-8 lg:px-16">
       <div className="max-w-7xl mx-auto w-full">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">

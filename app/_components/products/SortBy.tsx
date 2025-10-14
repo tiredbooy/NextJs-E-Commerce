@@ -40,7 +40,7 @@ const SORT_OPTIONS: SortConfig[] = [
 
 // Update URL with sort parameter
 const updateURLWithSort = (sortValue: SortOption) => {
-  const params = new URLSearchParams(location.search);
+  const params = new URLSearchParams(window?.location?.search);
 
   if (sortValue === "relevance") {
     params.delete("sort");
