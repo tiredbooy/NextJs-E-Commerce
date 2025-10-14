@@ -22,7 +22,7 @@ const page: React.FC<Props> = ({ searchParams }) => {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <SortBy />
         </div>
-        <ProductsCards searchParams={searchParams} />
+        <ProductsCards />
       </section>
     </div>
   );
