@@ -6,11 +6,7 @@ interface Props {
 }
 
 const page: React.FC<Props> = ({  }) => {
-  return (
-    <>
-    <ProductsPageItems />
-    </>
-  );
+  return null;
 };
 
 export default page;
