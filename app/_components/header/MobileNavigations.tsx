@@ -65,7 +65,7 @@ function MobileNavigations() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setShowMenu(false)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+            className="fixed inset-0 bg-black/60 backdrop-blur-md backdrop-saturate-150 z-40 md:hidden"
           />
         )}
       </AnimatePresence>
@@ -78,7 +78,7 @@ function MobileNavigations() {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed top-0 left-0 bottom-0 w-[80vw] max-w-sm bg-card border-r border-border z-50 md:hidden overflow-y-auto"
+            className="fixed top-0 left-0 bottom-0 w-[80vw]  bg-card border-r border-border z-50 md:hidden overflow-y-auto"
           >
             {/* Menu Header */}
             <div className="flex items-center justify-between p-6 border-b border-border">
@@ -132,7 +132,7 @@ function MobileNavigations() {
         {/* Dock Container with Glass Effect */}
         <div className="relative mx-4 mb-2 ">
           {/* Glass Background */}
-          <div className="glass-strong rounded-2xl shadow-2xl border border-white/20 overflow-hidden">
+          <div className="glass rounded-2xl shadow-2xl border border-divider overflow-hidden">
             {/* Active Item Indicator */}
             <motion.div
               className="absolute top-0 h-1 bg-primary rounded-full"
@@ -281,7 +281,7 @@ function MobileNavigations() {
     return null;
   }
 
-  return dockContent
+  return dockContent;
 }
 
 export default MobileNavigations;
