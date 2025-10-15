@@ -4,10 +4,7 @@ import { products } from "../new-arrivals/NewArrivals";
 import Pagination from "../reusable/Pagination";
 import ProductCard from "./ProductCard";
 
-async function ProductsCards({}) {
-  // searchParams
-  // console.log('searchParams:', searchParams);
-  // const page = Number(searchParams?.page) || 1;
+function ProductsCards({}) {
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
   console.log("page:", page);
@@ -15,7 +12,7 @@ async function ProductsCards({}) {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
         {products.map((p) => (
           <ProductCard key={p.id} product={p} />
         ))}

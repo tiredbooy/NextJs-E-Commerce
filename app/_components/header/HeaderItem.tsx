@@ -30,7 +30,7 @@ const HeaderItem: React.FC<Props> = ({ announcment }) => {
 
   return (
     <motion.header
-      className="sticky top-0 z-50 w-full "
+      className="sticky top-0 z-50 w-full border-b shadow-md"
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
