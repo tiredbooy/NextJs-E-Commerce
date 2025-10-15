@@ -2,6 +2,7 @@
 import ProductThumbnail from "./ProductThumbnail";
 import ProductInformation from "./ProductInformation";
 import { Product } from "@/app/_lib/types";
+import ProductDetailsTabs from "./ProductReviews";
 
 interface Props {
   product: Product;
@@ -21,12 +22,7 @@ const ProductDetailLayout: React.FC<Props> = ({ product }) => {
 
       {/* Reviews Section - Add later */}
       <div className="mt-16">
-        {/* <ProductReviews productId={product.id} /> */}
-      </div>
-
-      {/* Related Products Section - Add later */}
-      <div className="mt-16">
-        {/* <RelatedProducts category={product.category} /> */}
+        <ProductDetailsTabs productId={product.id} description={product.description} />
       </div>
     </div>
   );

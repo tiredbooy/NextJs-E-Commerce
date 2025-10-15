@@ -337,8 +337,8 @@
   --nav-active: oklch(0.92 0.05 265);
 
   /* Header & Footer */
-  --header: oklch(1 0 0);
-  --header-foreground: oklch(0.15 0 0);
+  --header: oklch(0% 0 0);
+  --header-foreground: oklch(85.142% 0.0001 271.152);
   --header-border: oklch(0.92 0.01 265);
   --footer: oklch(0.2 0.01 265);
   --footer-foreground: oklch(0.9 0.005 265);
@@ -537,7 +537,7 @@
   --nav-active: oklch(0.28 0.04 265);
 
   /* Header & Footer */
-  --header: oklch(0.18 0.015 265);
+  --header: oklch(35.61% 0.04387 256.499);
   --header-foreground: oklch(0.95 0.01 265);
   --header-border: oklch(0.28 0.03 265);
   --footer: oklch(0.15 0.015 265);

@@ -8,10 +8,10 @@ interface AnnouncmentObj {
 function AnnouncementBar({ announcmentObj }: AnnouncmentObj) {
   const { announcmentTxt, linkTxt, href } = announcmentObj;
   return (
-    <div className="w-full bg-foreground text-muted-foreground py-2 text-sm md:text-lg ">
+    <div className="w-full bg-header text-muted-foreground py-2 text-sm md:text-lg ">
       <span className="flex flex-row items-center gap-2 justify-center">
         <span>{announcmentTxt}</span>
-        <Link className="text-popover underline" href={href}>
+        <Link className=" underline font-semibold text-header-foreground" href={href}>
           {linkTxt}
         </Link>
       </span>

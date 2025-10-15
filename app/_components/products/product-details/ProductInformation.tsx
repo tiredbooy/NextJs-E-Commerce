@@ -26,7 +26,11 @@ const ProductInformation: React.FC<Props> = ({ product }) => {
         {product.category.length > 0 && (
           <div className="flex gap-2 flex-wrap">
             {product.category.map((cat) => (
-              <Badge key={cat.id} variant="secondary" className="text-xs">
+              <Badge
+                key={cat.id}
+                variant="secondary"
+                className="text-xs bg-badge-primary text-badge-primary-foreground"
+              >
                 {cat.title}
               </Badge>
             ))}
@@ -34,13 +38,13 @@ const ProductInformation: React.FC<Props> = ({ product }) => {
         )}
 
         {/* Title */}
-        <h1 className="font-bold text-3xl lg:text-4xl text-gray-900">
+        <h1 className="font-bold text-3xl lg:text-4xl text-foreground">
           {product.title}
         </h1>
 
         {/* Price Section */}
         <div className="flex items-center gap-3">
-          <span className="text-3xl font-bold text-gray-900">
+          <span className="text-3xl font-bold text-foreground">
             $
             {hasDiscount
               ? product.discount_price?.toFixed(2)
@@ -48,7 +52,7 @@ const ProductInformation: React.FC<Props> = ({ product }) => {
           </span>
           {hasDiscount && (
             <>
-              <span className="text-xl text-gray-500 line-through">
+              <span className="text-xl text-muted-foreground line-through">
                 ${product.price.toFixed(2)}
               </span>
               <Badge variant="destructive" className="text-sm">
@@ -80,7 +84,9 @@ const ProductInformation: React.FC<Props> = ({ product }) => {
         </div>
 
         {/* Description */}
-        <p className="text-gray-600 leading-relaxed">{product.description}</p>
+        <p className="text-muted-foreground leading-relaxed">
+          {product.description}
+        </p>
       </div>
 
       {/* Client Component for Interactive Parts */}
@@ -88,7 +94,7 @@ const ProductInformation: React.FC<Props> = ({ product }) => {
 
       {/* Additional Info */}
       {product.sales > 0 && (
-        <div className="flex items-center justify-between text-sm text-gray-600 pt-4 border-t">
+        <div className="flex items-center justify-between text-sm text-muted-foreground pt-4 border-t">
           <span>{product.sales} sold</span>
         </div>
       )}
