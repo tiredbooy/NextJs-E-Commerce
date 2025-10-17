@@ -11,7 +11,7 @@ const layout: React.FC<Props> = ({ children }) => {
   return (
     <div className="h-full">
       <SidebarProvider>
-        <SideNavigation />
+        <SideNavigation role="user" />
         <main className="max-w-screen w-full">
           <HeaderNavigation />
           <div className="px-4 py-3">

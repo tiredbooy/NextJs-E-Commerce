@@ -1,9 +1,9 @@
-
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Header from "./_components/header/Header";
 import MobileNavigations from "./_components/header/MobileNavigations";
 import "./globals.css";
+import { ThemeProvider } from "next-themes";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -23,11 +23,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={` ${poppins.className} ${poppins.variable} antialiased bg-background`}
       >
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange >{children}</ThemeProvider>
       </body>
     </html>
   );
