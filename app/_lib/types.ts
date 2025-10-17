@@ -48,3 +48,16 @@ export interface CategoryCard {
   description?: string;
   href?: string;
 }
+
+export interface SideBarItem {
+    title : string
+    href : string
+    icon : React.ElementType
+    
+}
+
+export type SideBar<T extends string = string> = {
+  [K in T]: SideBarItem[]
+}
+
+export type dashboardRole = "admin" | "user"
