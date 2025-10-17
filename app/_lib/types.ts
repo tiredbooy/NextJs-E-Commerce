@@ -1,4 +1,5 @@
 import { StaticImageData } from "next/image";
+import { IconType } from "react-icons/lib";
 
 export interface Announcment {
   announcmentTxt: string;
@@ -61,3 +62,28 @@ export type SideBar<T extends string = string> = {
 }
 
 export type dashboardRole = "admin" | "user"
+
+export interface Stat {
+  title: string;
+  icon: IconType;
+  value: number;
+  change?: number; // Percentage change (e.g., 20.1 for +20.1%)
+  changeType?: "increase" | "decrease";
+  color: "chart-1" | "chart-2" | "chart-3" | "chart-4" | "chart-5";
+  prefix?: string; // e.g., "$" for currency
+  suffix?: string; // e.g., "%" or "K"
+}
+
+export interface PopularCategory {
+  name : string
+  value : number
+  color? : string
+}
+
+export interface RecentOrder {
+  id: number
+  orderId : number
+  payment_method : string
+  amount : number
+  status : "pending" | "completed" | "paid"
+}

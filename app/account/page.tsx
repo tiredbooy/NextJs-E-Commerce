@@ -1,3 +1,4 @@
+import Dashboard from "../_components/account/dashboard/Dashboard";
 
 interface Props {
   // props here
@@ -5,9 +6,7 @@ interface Props {
 
 const page: React.FC<Props> = ({  }) => {
   return (
-    <div className="bg-green-200">
-      no no no
-    </div>
+    <Dashboard />
   );
 };
 

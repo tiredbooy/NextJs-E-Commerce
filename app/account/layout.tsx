@@ -15,7 +15,7 @@ const layout: React.FC<Props> = ({ children }) => {
         <main className="max-w-screen w-full">
           <HeaderNavigation />
           <div className="px-4 py-3">
-            <SidebarTrigger className="block md:hidden" />
+            {/* <SidebarTrigger className="block md:hidden" /> */}
             {children}
           </div>
         </main>
