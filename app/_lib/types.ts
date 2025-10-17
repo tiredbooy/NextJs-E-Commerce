@@ -93,3 +93,23 @@ export type RevenueData = {
   sales: number
   revenue : number
 };
+
+export interface OrderItem {
+  id : 1, 
+  name : string
+  price : number
+  quantity : number
+  subtotal : number
+}
+
+export interface Order {
+  id : number
+  order_id : number
+  items : OrderItem[]
+  user_id : number
+  message? : string
+  total_price : number
+  payment_method : string
+  created_at : string
+  status : "pending" | "completed" | "paid"
+}
