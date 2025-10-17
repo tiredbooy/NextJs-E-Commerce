@@ -30,7 +30,7 @@ import {
 } from "react-icons/hi";
 import { cn } from "@/lib/utils";
 
-// ✅ Improved sidebar items with better icons
+
 export const sideBarItems: SideBar<dashboardRole> = {
   admin: [
     { title: "Dashboard", href: "/admin", icon: HiOutlineHome },

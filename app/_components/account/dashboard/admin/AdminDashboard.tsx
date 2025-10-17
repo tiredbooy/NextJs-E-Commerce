@@ -7,7 +7,7 @@ interface Props {
   // Add props if needed later
 }
 
-const Dashboard: React.FC<Props> = ({}) => {
+const AdminDashboard: React.FC<Props> = ({}) => {
   return (
     <div className="flex flex-col gap-6 p-4 md:p-6">
       {/* Page Header */}
@@ -83,4 +83,4 @@ const Dashboard: React.FC<Props> = ({}) => {
   );
 };
 
-export default Dashboard;
+export default AdminDashboard;

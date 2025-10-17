@@ -1,4 +1,4 @@
-import UserDashboard from "../_components/account/dashboard/user/UserDashboard";
+import AdminDashboard from "../_components/account/dashboard/admin/AdminDashboard";
 
 interface Props {
   // props here
@@ -6,7 +6,7 @@ interface Props {
 
 const page: React.FC<Props> = ({  }) => {
   return (
-    <UserDashboard />
+    <AdminDashboard />
   );
 };
 
