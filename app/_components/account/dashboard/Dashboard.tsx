@@ -1,5 +1,6 @@
 import CategoryChart from "./CategoryChart";
 import RecentOrders from "./RecentOrders";
+import RevenueChart from "./RevenueChart";
 import Stats from "./Stats";
 
 interface Props {
@@ -50,7 +51,7 @@ const Dashboard: React.FC<Props> = ({}) => {
                   Latest orders from your customers
                 </p>
               </div>
-              <button className="text-sm font-medium text-primary hover:underline">
+              <button className="text-xs font-medium text-primary hover:underline">
                 View All
               </button>
             </div>
@@ -74,10 +75,7 @@ const Dashboard: React.FC<Props> = ({}) => {
             </p>
           </div>
           <div className="p-6 pt-0">
-            {/* Chart Component Will Go Here */}
-            <div className="h-[350px] w-full flex items-center justify-center border-2 border-dashed rounded-lg text-muted-foreground">
-              Chart Component
-            </div>
+            <RevenueChart />
           </div>
         </div>
       </div>

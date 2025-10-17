@@ -12,7 +12,7 @@ const navItems = [
     id: "home",
     label: "Home",
     icon: Home,
-    // href: "/", // Uncomment and ensure valid href
+    href: "/",
   },
   {
     id: "search",
@@ -24,14 +24,14 @@ const navItems = [
     id: "cart",
     label: "Cart",
     icon: ShoppingCart,
-    // href: "/cart",
+    href: "/cart",
     badge: 3,
   },
   {
     id: "account",
     label: "Account",
     icon: User,
-    // href: "/account",
+    href: "/account",
   },
 ];
 

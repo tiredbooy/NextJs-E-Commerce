@@ -87,3 +87,9 @@ export interface RecentOrder {
   amount : number
   status : "pending" | "completed" | "paid"
 }
+
+export type RevenueData = {
+  month: string
+  sales: number
+  revenue : number
+};
