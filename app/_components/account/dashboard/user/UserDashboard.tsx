@@ -1,13 +1,14 @@
-import UserDashboardHeader from "./UserDashboardHeader";
+import UserDashboardHeader from "./UserDashboardHeader"
 
 interface Props {
   // props here
 }
 
-const UserDashboard: React.FC<Props> = ({  }) => {
+const UserDashboard: React.FC<Props> = ({}) => {
   return (
-    <>
-    <UserDashboardHeader /></>
+    <div className="flex flex-col gap-6 p-4 md:p-6">
+      <UserDashboardHeader />
+    </div>
   );
 };
 
