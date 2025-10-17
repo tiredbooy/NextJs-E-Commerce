@@ -1,7 +1,7 @@
 "use client";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState, useEffect } from "react";
-import HeaderLogo from "./HeaderLogo";
+import HeaderLogo from "./Logo";
 import HeaderNav from "./HeaderNav";
 import HeaderSearch from "./HeaderSearch";
 import HeaderUserMenu from "./HeaderUserMenu";

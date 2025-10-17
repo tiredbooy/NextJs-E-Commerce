@@ -9,7 +9,7 @@ interface Props {
 
 const layout: React.FC<Props> = ({ children }) => {
   return (
-    <div className="h-full bg-red-500">
+    <div className="h-full">
       <SidebarProvider>
         <SideNavigation />
         <main className="max-w-screen w-full">
