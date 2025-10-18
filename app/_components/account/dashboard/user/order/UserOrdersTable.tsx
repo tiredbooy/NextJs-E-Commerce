@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import OrderTableRow from "./UserOrderTable";
 
-const orders: Order[] = [
+export const orders: Order[] = [
   {
     id: 1,
     order_id: 1223,
@@ -66,7 +66,9 @@ const orders: Order[] = [
   },
 ];
 
-function UserOrdersTable() {
+
+
+function UserOrdersTable({}) {
   return (
     <Table>
       <TableHeader>
