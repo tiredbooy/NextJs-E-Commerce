@@ -3,12 +3,10 @@ import { Product } from "@/app/_lib/types";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import { FaEye } from "react-icons/fa";
 import { HiDotsVertical, HiEye, HiPencil, HiTrash } from "react-icons/hi";
 import {
   ContextMenu,
-  ContextMenuTheme,
-  useContextMenu,
+  useContextMenu
 } from "react-smart-contextmenu";
 
 interface Props {
