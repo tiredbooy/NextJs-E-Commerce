@@ -113,3 +113,25 @@ export interface Order {
   created_at : string
   status : "pending" | "completed" | "paid"
 }
+
+export interface User {
+  id : number
+  first_name : string
+  last_name : string
+  phone : string
+  image? : string | StaticImageData
+  total_orders : number
+  total_spent : number
+  status : "active" | "inactive" | "banned" | "pending"
+  created_at : string
+  email? : string
+  addresses? : Address[]
+}
+
+export interface Address {
+  id : number
+  country : string
+  city : string
+  address : string
+  postal_code : number | string
+}
