@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { MdArticle } from "react-icons/md";
 import { FaPlusCircle } from "react-icons/fa";
+import Link from "next/link";
 
 interface Props {
   // props here
@@ -13,10 +14,12 @@ export default function BlogPageHeader({}: Props) {
         <MdArticle />
         <h1 className="font-semibold">Blogs</h1>
       </div>
-      <Button className="cursor-pointer text-background font-semibold">
-        <FaPlusCircle />
-        <span>Create New Blog</span>
-      </Button>
+      <Link href="/admin/blogs/new">
+        <Button className="cursor-pointer text-background font-semibold">
+          <FaPlusCircle />
+          <span>Create New Blog</span>
+        </Button>
+      </Link>
     </div>
   );
 }
