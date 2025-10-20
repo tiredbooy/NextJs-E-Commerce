@@ -137,8 +137,10 @@ export interface Address {
 
 export interface Message {
   id: number;
-  user_id: number;
-  message: string;
+  content: string;
+  sender: "user" | "admin";
+  senderName: string;
+  timestamp: Date | string;
 }
 
 export interface Ticket {

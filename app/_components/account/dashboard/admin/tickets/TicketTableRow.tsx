@@ -3,12 +3,10 @@ import { Ticket } from "@/app/_lib/types";
 import { Badge } from "@/components/ui/badge";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useTheme } from "next-themes";
+import { usePathname, useRouter } from "next/navigation";
 import { HiDotsVertical, HiEye, HiPencil, HiTrash } from "react-icons/hi";
 
-import {
-  ContextMenu,
-  useContextMenu
-} from "react-smart-contextmenu";
+import { ContextMenu, useContextMenu } from "react-smart-contextmenu";
 
 interface Props {
   // props here
@@ -18,9 +16,15 @@ interface Props {
 export default function TicketTableRow({ ticket }: Props) {
   const { id, client, subject, status, priority, created_at } = ticket;
   const { theme } = useTheme();
+  const pathname = usePathname();
+  const route = useRouter();
 
   let statusColor: string;
   let priorityColor: string;
+
+  function navigateToTicketDetail(): void {
+    route.push(`${pathname}/${id}`)
+  }
 
   const {
     isOpen,
@@ -35,7 +39,7 @@ export default function TicketTableRow({ ticket }: Props) {
     { type: "header" as const, label: subject },
     {
       label: "View Ticket",
-      onClick: () => console.log("Clicked"),
+      onClick: () => navigateToTicketDetail(),
       icon: <HiEye />,
     },
     {
@@ -78,7 +82,11 @@ export default function TicketTableRow({ ticket }: Props) {
 
   return (
     <>
-      <TableRow onContextMenu={handleContextMenu} className="cursor-pointer">
+      <TableRow
+        onClick={navigateToTicketDetail}
+        onContextMenu={handleContextMenu}
+        className="cursor-pointer"
+      >
         <TableCell>#{id}</TableCell>
         <TableCell>{client}</TableCell>
         <TableCell>{subject}</TableCell>

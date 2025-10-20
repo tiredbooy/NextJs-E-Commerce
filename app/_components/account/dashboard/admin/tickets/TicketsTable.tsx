@@ -1,4 +1,10 @@
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import TicketTableRow from "./TicketTableRow";
 import { Ticket } from "@/app/_lib/types";
 
@@ -11,8 +17,10 @@ const tickets: Ticket[] = [
     messages: [
       {
         id: 1,
-        user_id: 1,
-        message: "Hello World",
+        sender: "user",
+        senderName: "Mahdi",
+        timestamp: new Date().toISOString(),
+        content: "Hello World",
       },
     ],
     priority: "low",
@@ -27,8 +35,10 @@ const tickets: Ticket[] = [
     messages: [
       {
         id: 1,
-        user_id: 1,
-        message: "Hello World",
+        sender: "user",
+        senderName: "Mahdi",
+        timestamp: new Date().toISOString(),
+        content: "Hello World",
       },
     ],
     priority: "medium",
@@ -43,8 +53,10 @@ const tickets: Ticket[] = [
     messages: [
       {
         id: 1,
-        user_id: 1,
-        message: "Hello World",
+        sender: "user",
+        senderName: "Mahdi",
+        timestamp: new Date().toISOString(),
+        content: "Hello World",
       },
     ],
     priority: "high",
@@ -59,8 +71,10 @@ const tickets: Ticket[] = [
     messages: [
       {
         id: 1,
-        user_id: 1,
-        message: "Hello World",
+        sender: "user",
+        senderName: "Mahdi",
+        timestamp: new Date().toISOString(),
+        content: "Hello World",
       },
     ],
     priority: "low",
@@ -70,23 +84,24 @@ const tickets: Ticket[] = [
 ];
 
 export default function TicketsTable({}: Props) {
-    
-  return <Table>
-    <TableHeader>
+  return (
+    <Table>
+      <TableHeader>
         <TableRow>
-            <TableHead>ID</TableHead>
-            <TableHead>User</TableHead>
-            <TableHead>Subject</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Priority</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Actions</TableHead>
+          <TableHead>ID</TableHead>
+          <TableHead>User</TableHead>
+          <TableHead>Subject</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead>Priority</TableHead>
+          <TableHead>Created At</TableHead>
+          <TableHead>Actions</TableHead>
         </TableRow>
-    </TableHeader>
-    <TableBody>
-        {tickets.map(ticket => (
-            <TicketTableRow ticket={ticket} key={ticket.id} />
+      </TableHeader>
+      <TableBody>
+        {tickets.map((ticket) => (
+          <TicketTableRow ticket={ticket} key={ticket.id} />
         ))}
-    </TableBody>
-  </Table>;
+      </TableBody>
+    </Table>
+  );
 }
