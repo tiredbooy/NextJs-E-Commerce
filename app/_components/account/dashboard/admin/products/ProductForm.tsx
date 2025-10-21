@@ -9,6 +9,7 @@ import { ProductImages } from "./ProductImages";
 import { ProductInventory } from "./ProductInventory";
 import { ProductSEO } from "./ProductSeo";
 import { ProductVariants } from "./ProductVariants";
+import { Breadcrumb } from "@/app/_components/reusable/BreadCrump";
 
 export interface ProductFormData {
   // Basic Info
@@ -141,6 +142,7 @@ export default function ProductForm({
 
   return (
     <div className="space-y-6">
+      <Breadcrumb />
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">
@@ -177,13 +179,25 @@ export default function ProductForm({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Profit per item</p>
-                <p className={`text-2xl font-bold ${calculateProfit().profit > 0 ? "text-success" : "text-destructive"}`}>
+                <p
+                  className={`text-2xl font-bold ${
+                    calculateProfit().profit > 0
+                      ? "text-success"
+                      : "text-destructive"
+                  }`}
+                >
                   ${calculateProfit().profit.toLocaleString()}
                 </p>
               </div>
               <div className="text-right">
                 <p className="text-sm text-muted-foreground">Profit margin</p>
-                <p className={`text-2xl font-bold ${Number(calculateProfit().margin) > 0 ? "text-success" : "text-destructive"}`}>
+                <p
+                  className={`text-2xl font-bold ${
+                    Number(calculateProfit().margin) > 0
+                      ? "text-success"
+                      : "text-destructive"
+                  }`}
+                >
                   {calculateProfit().margin}%
                 </p>
               </div>
