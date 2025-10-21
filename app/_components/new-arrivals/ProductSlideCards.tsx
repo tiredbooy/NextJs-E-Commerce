@@ -11,7 +11,7 @@ interface Props {
 
 const ProductSlideCards: React.FC<Props> = ({ product, usage }) => {
   return (
-    <Link href="">
+    <Link href={`/products/${product.id}`}>
       <article
         key={product.id}
         className="p-4 flex flex-col bg-card group hover:bg-card-hover gap-4 md:p-8 rounded-xl shadow-lg text-white relative"

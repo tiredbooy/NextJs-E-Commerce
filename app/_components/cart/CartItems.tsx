@@ -1,5 +1,6 @@
 // components/cart/CartItems.tsx
-import { FaShoppingBag, FaShoppingBasket } from "react-icons/fa";
+import Link from "next/link";
+import { FaShoppingBasket } from "react-icons/fa";
 import { CartItem } from "./CartItem";
 
 // Mock data - replace with your actual data fetching
@@ -75,12 +76,12 @@ export async function CartItems() {
         <p className="text-muted-foreground mb-6">
           Add items to your cart to see them here
         </p>
-        <a
-          href="/"
+        <Link
+          href="/products"
           className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary-hover font-semibold transition-colors"
         >
           Continue Shopping
-        </a>
+        </Link>
       </div>
     );
   }

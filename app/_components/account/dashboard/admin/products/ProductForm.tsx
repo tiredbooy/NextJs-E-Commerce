@@ -1,15 +1,15 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Breadcrumb } from "@/app/_components/reusable/BreadCrump";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { useState } from "react";
-import { MdSave, MdPreview } from "react-icons/md";
+import { MdPreview, MdSave } from "react-icons/md";
 import { ProductBasicInfo } from "./ProductBasicInfo";
-import { ProductPricing } from "./ProductPricing";
 import { ProductImages } from "./ProductImages";
 import { ProductInventory } from "./ProductInventory";
+import { ProductPricing } from "./ProductPricing";
 import { ProductSEO } from "./ProductSeo";
 import { ProductVariants } from "./ProductVariants";
-import { Breadcrumb } from "@/app/_components/reusable/BreadCrump";
 
 export interface ProductFormData {
   // Basic Info

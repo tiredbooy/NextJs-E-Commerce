@@ -2,8 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { MdAttachMoney, MdLocalOffer } from "react-icons/md";
 import { ProductFormData } from "./ProductForm";
-import { MdAttachMoney, MdTrendingDown, MdLocalOffer } from "react-icons/md";
 
 interface Props {
   data: ProductFormData;

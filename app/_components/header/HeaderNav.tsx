@@ -21,7 +21,7 @@ const navItems: NavItems[] = [
     icon: IoIosArrowDown,
     dropdown: [{ title: "Casual", href: "/products/?category=casual" }],
   },
-  { title: "On Sale", href: "/products/?category=sales" },
+  { title: "On Sale", href: "/products/?onSale=true" },
   { title: "New Arrivals", href: "/products/?date=new" },
   { title: "Brands", href: "/products/" },
 ];

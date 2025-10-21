@@ -1,23 +1,24 @@
 "use client";
 
 // import { useTheme } from "next-themes";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
-import {
-  HiOutlineLogout,
-  HiOutlineSun,
-  HiOutlineMoon,
-  HiOutlineMenu,
-} from "react-icons/hi";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSidebar } from "@/components/ui/sidebar";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import {
+  HiOutlineLogout,
+  HiOutlineMenu,
+  HiOutlineMoon,
+  HiOutlineSun,
+} from "react-icons/hi";
 
 interface Props {
   userName?: string;
@@ -28,7 +29,6 @@ interface Props {
 const HeaderNavigation: React.FC<Props> = ({
   userName = "Mahdi Kazemi",
   userAvatar,
-  onLogout,
 }) => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -38,14 +38,6 @@ const HeaderNavigation: React.FC<Props> = ({
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  const handleLogout = () => {
-    if (onLogout) {
-      onLogout();
-    } else {
-      window.location.href = "/logout";
-    }
-  };
 
   // Get user initials for fallback
   const getInitials = (name: string) => {
@@ -125,15 +117,16 @@ const HeaderNavigation: React.FC<Props> = ({
           )}
 
           {/* Logout Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleLogout}
-            className="h-9 w-9 text-destructive hover:text-destructive hover:bg-destructive/10"
-            aria-label="Logout"
-          >
-            <HiOutlineLogout className="h-5 w-5" />
-          </Button>
+          <Link href="/auth">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9 text-destructive hover:text-destructive hover:bg-destructive/10 cursor-pointer"
+              aria-label="Logout"
+            >
+              <HiOutlineLogout className="h-5 w-5" />
+            </Button>
+          </Link>
         </div>
       </div>
     </header>
