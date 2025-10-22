@@ -1,3 +1,4 @@
+import Auth from "../_components/auth/Auth";
 import Header from "../_components/header/Header";
 
 interface Props {
@@ -8,7 +9,7 @@ export default function Page({}: Props) {
   return (
     <>
       <Header />
-      <div className="">Login-Sign up</div>
+      <Auth />
     </>
   );
 }
