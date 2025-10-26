@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
-import Header from "./_components/header/Header";
-import MobileNavigations from "./_components/header/MobileNavigations";
-import "./globals.css";
 import { ThemeProvider } from "next-themes";
+import { Poppins } from "next/font/google";
+import Header from "../_components/header/Header";
+import MobileNavigations from "../_components/header/MobileNavigations";
+import Footer from "../_components/reusable/Footer";
+import "./globals.css";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -27,7 +28,17 @@ export default function RootLayout({
       <body
         className={` ${poppins.className} ${poppins.variable} antialiased bg-background`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange >{children}</ThemeProvider>
+        <Header />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+        <MobileNavigations />
+        <Footer />
       </body>
     </html>
   );
