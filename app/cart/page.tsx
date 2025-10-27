@@ -1,6 +1,6 @@
 import { CartItems } from "@/app/_components/cart/CartItems";
 import { CartSummary } from "@/app/_components/cart/CartSummary";
-import { Breadcrumb } from "../../_components/reusable/BreadCrump";
+import { Breadcrumb } from "@/app/_components/reusable/BreadCrump";
 
 export default async function CartPage() {
   return (

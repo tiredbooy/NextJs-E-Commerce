@@ -1,27 +1,23 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import SideNavigation from "../_components/account/SideNavigation";
-import HeaderNavigation from "../_components/account/HeaderNavigation";
+import HeaderNavigation from "@/app/_components/account/HeaderNavigation";
+import SideNavigation from "@/app/_components/account/SideNavigation";
 
 interface Props {
   // props here
   children: React.ReactNode;
 }
 
-const layout: React.FC<Props> = ({ children }) => {
+const DashboardLayout: React.FC<Props> = ({ children }) => {
   return (
-    <div className="h-full">
-      <SidebarProvider>
-        <SideNavigation role="user" />
-        <main className="max-w-screen w-full">
-          <HeaderNavigation />
-          <div className="px-4 py-3">
-            {/* <SidebarTrigger className="block md:hidden" /> */}
-            {children}
-          </div>
-        </main>
-      </SidebarProvider>
-    </div>
+    <>
+      <SideNavigation role="user" />
+      <main className="max-w-screen w-full">
+        <HeaderNavigation />
+        <div className="px-4 py-3">
+          {children}
+        </div>
+      </main>
+    </>
   );
 };
 
-export default layout;
+export default DashboardLayout;

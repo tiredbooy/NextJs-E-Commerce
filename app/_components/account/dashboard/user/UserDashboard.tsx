@@ -1,4 +1,4 @@
-import UserDashboardHeader from "./UserDashboardHeader"
+import UserDashboardHeader from "./UserDashboardHeader";
 
 interface Props {
   // props here

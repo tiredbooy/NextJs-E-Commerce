@@ -1,16 +1,8 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "next-themes";
-import { Poppins } from "next/font/google";
 import Header from "../_components/header/Header";
 import MobileNavigations from "../_components/header/MobileNavigations";
 import Footer from "../_components/reusable/Footer";
-import "./globals.css";
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"], // choose the weights you need
-  variable: "--font-poppins", // optional for CSS variable usage
-});
+import "../globals.css";
 
 export const metadata: Metadata = {
   title: "Velisse",
@@ -26,17 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={` ${poppins.className} ${poppins.variable} antialiased bg-background`}
+        className={` antialiased bg-background`}
       >
         <Header />
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+          {children} 
         <MobileNavigations />
         <Footer />
       </body>
