@@ -16,7 +16,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
       <body
         className={` antialiased bg-background`}
       >
@@ -25,6 +24,5 @@ export default function RootLayout({
         <MobileNavigations />
         <Footer />
       </body>
-    </html>
   );
 }

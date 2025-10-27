@@ -11,17 +11,17 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 interface HeroSlice {
-  id :number
-  image : string
-  badge : string
-  title : string
-  titleAccent: string
-  description : string
-  cta? : string
+  id: number;
+  image: string;
+  badge: string;
+  title: string;
+  titleAccent: string;
+  description: string;
+  cta?: string;
 }
 
 // Hero slides data
-const heroSlides : HeroSlice[] = [
+const heroSlides: HeroSlice[] = [
   {
     id: 1,
     image: "/hero-suits.jpg", // Replace with your actual image paths
@@ -158,7 +158,7 @@ function HeroBackground() {
                   <div className="absolute inset-0 bg-gradient-to-r from-primary-hover to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </button>
 
-                <button className="px-6 sm:px-8 cursor-pointer py-3 sm:py-4 bg-secondary  border border-white/30 text-primary font-semibold rounded-lg text-sm sm:text-base backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:border-white/50 hover:text-secondary">
+                <button className="px-6 sm:px-8 cursor-pointer py-3 sm:py-4 border text-primary font-semibold rounded-lg text-sm sm:text-base bg-white/10 border-white/50 backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:border-white/50 hover:text-background">
                   Learn More
                 </button>
               </motion.div>
