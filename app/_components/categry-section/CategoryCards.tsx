@@ -2,6 +2,7 @@
 import { CategoryCard } from "@/app/_lib/types";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Props {
   category: CategoryCard;
@@ -9,9 +10,9 @@ interface Props {
 
 export default function CategoryCardItem({ category }: Props) {
   return (
-    <div
+    <Link
+      href={category.href ? category.href : "/products"}
       className="group relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
-      onClick={() => console.log(`Clicked ${category.title}`)}
     >
       {/* Image Container */}
       <div className="relative aspect-[4/5] overflow-hidden bg-muted">
@@ -42,6 +43,6 @@ export default function CategoryCardItem({ category }: Props) {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

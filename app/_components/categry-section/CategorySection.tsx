@@ -12,21 +12,25 @@ const categories = [
     title: "Formal",
     image: formalImage,
     description: "Elegant attire for professional occasions",
+    href: "/products?categories=formal"
   },
   {
     title: "Sport",
     image: partyImage,
     description: "Active wear for your fitness journey",
+    href: "/products?categories=sport"
   },
   {
     title: "Casual",
     image: casualImage,
     description: "Comfortable styles for everyday wear",
+    href: "/products?categories=casual"
   },
   {
     title: "Party",
     image: sportImage,
     description: "Stand out at your next celebration",
+    href: "/products?categories=party"
   },
 ];
 

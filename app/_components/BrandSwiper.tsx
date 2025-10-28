@@ -1,9 +1,8 @@
 "use client";
-
-import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
+import { useEffect, useState } from "react";
 
 interface Brand {
   id: number;
@@ -21,9 +20,9 @@ const brands: Brand[] = [
 ];
 
 const BrandSwiper: React.FC = () => {
-  const [direction, setDirection] = React.useState<"left" | "right">("left");
+  const [direction, setDirection] = useState<"left" | "right">("left");
 
-  React.useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
       setDirection((prev) => (prev === "left" ? "right" : "left"));
     }, 8000); // change direction every 8s
@@ -31,7 +30,7 @@ const BrandSwiper: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full bg-foreground py-8 overflow-hidden">
+    <div className="w-full bg-card py-8 overflow-hidden">
       <Swiper
         modules={[Autoplay]}
         loop
@@ -54,7 +53,7 @@ const BrandSwiper: React.FC = () => {
           >
             <span
               className="
-                text-background text-4xl md:text-5xl font-serif tracking-widest uppercase 
+                text-primary text-4xl md:text-5xl font-serif tracking-widest uppercase 
                 transition-all duration-300 hover:opacity-70
               "
             >

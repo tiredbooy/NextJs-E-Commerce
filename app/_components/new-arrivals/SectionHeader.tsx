@@ -37,14 +37,14 @@ function SectionHeader({
           className={`w-4 h-4 ${
             header.includes("New")
               ? "text-new-badge"
-              : "text-featured-badge-foreground"
+              : "text-featured-badge"
           }`}
         />
         <span
           className={`text-sm font-medium ${
             header.includes("New")
               ? "text-new-badge"
-              : "text-featured-badge-foreground"
+              : "text-featured-badge"
           }`}
         >
           {badge}
