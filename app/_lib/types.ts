@@ -151,5 +151,5 @@ export interface Ticket {
   messages: Message[];
   order_id?: number;
   priority: "low" | "medium" | "high";
-  status: "open" | "close" | "pending";
+  status: "open" | "closed" | "pending";
 }
