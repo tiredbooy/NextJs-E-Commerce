@@ -16,13 +16,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <body
-        className={` antialiased bg-background`}
-      >
+        <>
         <Header />
           {children} 
         <MobileNavigations />
-        <Footer />
-      </body>
+        <Footer /></>
   );
 }

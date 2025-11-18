@@ -1,4 +1,5 @@
-"use client"
+"use client";
+import { login } from "@/app/_lib/actions/authAction";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,18 +10,28 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Spinner } from "@/components/ui/spinner";
+import { motion } from "framer-motion";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { useActionState, useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { motion } from "framer-motion";
-import { Lock, Mail, Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { toast } from "sonner";
 
-interface Props {
-  // props here
-}
-
-export default function Login({}: Props) {
+export default function Login() {
+  const searchParams = useSearchParams();
+  const [state, formAction, isPending] = useActionState(login, undefined);
   const [showPassword, setShowPassword] = useState(false);
+
+  const signupSuccess = searchParams.get("signup") === "success";
+  const email = searchParams.get("email");
+
+  useEffect(() => {
+    if (state?.message && state.message !== "NEXT_REDIRECT") {
+      toast.error(state.message);
+    }
+  }, [state]);
 
   return (
     <div className="w-full min-h-screen flex justify-center items-center bg-gradient-to-bl from-background via-card to-background p-4">
@@ -28,7 +39,7 @@ export default function Login({}: Props) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-1/4"
+        className="w-1/3"
       >
         <Card>
           <CardHeader className="space-y-2 text-center">
@@ -42,68 +53,84 @@ export default function Login({}: Props) {
             </motion.div>
             <CardTitle className="text-2xl">Sign in</CardTitle>
             <CardDescription>
-              Welcome back! Please sign in to continue
+              {!signupSuccess ? (
+                "Welcome back! Please sign in to continue"
+              ) : (
+                <div className="bg-success px-4 py-2 rounded-md text-background font-medium">
+                  Account created Succesfully, Please log in.
+                </div>
+              )}
             </CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  className="pl-10"
-                />
+            <form className="space-y-4" action={formAction}>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    defaultValue={email ? email : ""}
+                    className="pl-10"
+                    disabled={isPending}
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <button className="text-xs text-primary hover:underline">
-                  Forgot?
-                </button>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">Password</Label>
+                  <button className="text-xs text-primary hover:underline">
+                    Forgot?
+                  </button>
+                </div>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="••••••••"
+                    className="pl-10 pr-10"
+                    disabled={isPending}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
               </div>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  className="pl-10 pr-10"
+
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  disabled={isPending}
+                  className="w-4 h-4 rounded border-input"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                <Label
+                  htmlFor="remember"
+                  className="text-sm font-normal cursor-pointer"
                 >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
-                </button>
+                  Remember me
+                </Label>
               </div>
-            </div>
 
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="remember"
-                className="w-4 h-4 rounded border-input"
-              />
-              <Label
-                htmlFor="remember"
-                className="text-sm font-normal cursor-pointer"
-              >
-                Remember me
-              </Label>
-            </div>
-
-            <Button className="w-full">Sign in</Button>
+              <Button className="w-full" disabled={isPending}>
+                {isPending ? <Spinner /> : "Sign in"}
+              </Button>
+            </form>
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -117,11 +144,11 @@ export default function Login({}: Props) {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full" disabled={isPending}>
                 <FcGoogle className="w-5 h-5 mr-2" />
                 Google
               </Button>
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full" disabled={isPending}>
                 <FaGithub className="w-5 h-5 mr-2" />
                 GitHub
               </Button>
