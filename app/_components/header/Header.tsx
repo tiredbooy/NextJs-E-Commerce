@@ -1,6 +1,6 @@
 import { Announcment } from "@/app/_lib/types";
-import AnnouncementBar from "./AnnouncementBar";
 import HeaderItem from "./HeaderItem";
+import HeaderUserMenu from "./HeaderUserMenu";
 
 const announcment: Announcment = {
   announcmentTxt: "Sign up and get 20% off your first order.",
@@ -8,10 +8,13 @@ const announcment: Announcment = {
   href: "/products",
 };
 
-function Header() {
+async function Header() {
+  
   return (
     <>
-      <HeaderItem announcment={announcment} />
+      <HeaderItem announcment={announcment}>
+        <HeaderUserMenu />
+      </HeaderItem>
     </>
   );
 }

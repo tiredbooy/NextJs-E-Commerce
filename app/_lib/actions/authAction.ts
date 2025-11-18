@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { loginUser, signupUser } from "../services/auth";
+import { loginUser, signupUser } from "../services/authService";
 import { getStringFromForm } from "../utils/utils";
 import { toast } from "sonner";
 
@@ -82,3 +82,5 @@ export async function login(
 
   redirect("/");
 }
+
+

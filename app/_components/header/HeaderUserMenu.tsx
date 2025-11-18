@@ -1,12 +1,27 @@
+import {
+  getCurrentSession,
+  getCurrentUser,
+} from "@/app/_lib/services/authService";
 import Link from "next/link";
 import { FaShoppingBasket, FaUser } from "react-icons/fa";
 
-function HeaderUserMenu() {
+async function HeaderUserMenu() {
+  const session = await getCurrentSession();
+  const user = await getCurrentUser();
+
+  const path = user.role === "admin" ? "/admin" : "/account";
+
   return (
     <div className="flex flex-row items-center gap-5">
-      <Link href="/account">
-        <FaUser className="h-5 w-5 text-muted-foreground hover:text-foreground" />
-      </Link>
+      {session ? (
+        <Link href={path}>
+          <FaUser className="h-5 w-5 text-muted-foreground hover:text-foreground" />
+        </Link>
+      ) : (
+        <Link href="/login" className="border px-3 py-1 rounded-md text-muted-foreground hover:bg-foreground hover:text-background duration-200 transition-colors">
+          Login/Signup
+        </Link>
+      )}
       <Link href="cart">
         <FaShoppingBasket className="h-5 w-5 text-muted-foreground hover:text-foreground" />
       </Link>

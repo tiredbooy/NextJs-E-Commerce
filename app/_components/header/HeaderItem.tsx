@@ -10,9 +10,10 @@ import { Announcment } from "@/app/_lib/types";
 
 interface Props {
   announcment: Announcment;
+  children : React.ReactNode
 }
 
-const HeaderItem: React.FC<Props> = ({ announcment }) => {
+const HeaderItem: React.FC<Props> = ({ announcment, children }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
 
@@ -99,7 +100,7 @@ const HeaderItem: React.FC<Props> = ({ announcment }) => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4, duration: 0.5 }}
         >
-          <HeaderUserMenu />
+          {children}
         </motion.div>
       </motion.div>
 
