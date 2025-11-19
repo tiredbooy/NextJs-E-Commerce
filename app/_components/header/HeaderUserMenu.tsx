@@ -7,6 +7,7 @@ import { FaShoppingBasket, FaUser } from "react-icons/fa";
 
 async function HeaderUserMenu() {
   const user = await getCurrentUser();
+  // let user = {role : "admin"}
   const path = user?.role === "admin" ? "/admin" : "/account";
 
   return (

@@ -74,7 +74,7 @@ export interface Stat {
   isLoading?: boolean;
 }
 
-export interface PopularCategory {
+export interface PopularChartItem {
   name: string;
   value: number;
   color?: string;

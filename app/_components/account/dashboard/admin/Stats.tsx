@@ -11,7 +11,9 @@ import {
   getOrderStats,
   getRevenueStats,
   getSalesStats,
-} from "@/app/_lib/services/analytics";
+} from "@/app/_lib/services/analyticsService";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Stats = async () => {
   const [revenue, orders, customers, sales] = await Promise.all([
@@ -27,7 +29,7 @@ const Stats = async () => {
       icon: HiOutlineCurrencyDollar,
       value: revenue?.value ?? 0,
       change: revenue?.change ?? 0,
-      changeType: (revenue?.change ?? 0) >= 0 ? "increase" : "decrease",
+      changeType: (revenue?.change ?? 0) > 0 ? "increase" : "decrease",
       color: "chart-1",
       prefix: "$",
     },
@@ -36,7 +38,7 @@ const Stats = async () => {
       icon: HiOutlineShoppingBag,
       value: orders?.value ?? 0,
       change: orders?.change ?? 0,
-      changeType: (orders?.change ?? 0) >= 0 ? "increase" : "decrease",
+      changeType: (orders?.change ?? 0) > 0 ? "increase" : "decrease",
       color: "chart-1",
     },
     {
@@ -44,7 +46,7 @@ const Stats = async () => {
       icon: HiOutlineUsers,
       value: customers?.value ?? 0,
       change: customers?.change ?? 0,
-      changeType: (customers?.change ?? 0) >= 0 ? "increase" : "decrease",
+      changeType: (customers?.change ?? 0) > 0 ? "increase" : "decrease",
       color: "chart-1",
     },
     {
@@ -52,7 +54,7 @@ const Stats = async () => {
       icon: HiOutlineCube,
       value: sales?.value ?? 0,
       change: sales?.change ?? 0,
-      changeType: (sales?.change ?? 0) >= 0 ? "increase" : "decrease",
+      changeType: (sales?.change ?? 0) > 0 ? "increase" : "decrease",
       color: "chart-1",
     },
   ];

@@ -1,19 +1,12 @@
+import { redirect } from 'next/navigation';
 import { SessionData, sessionOptions } from "@/app/_lib/session";
 import axios, { AxiosRequestConfig } from "axios";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { getSession } from "../auth";
+import { serverApi } from "../server_api";
 import { Login, Signup } from "../types/user_types";
-
-const API_URL = process.env.API_URL;
-
-// Create axios instance for server-side use
-const serverApi = axios.create({
-  baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+import { isTokenExpired } from "../utils/utils";
 
 export async function signupUser(userObj: Signup) {
   const response = await serverApi.post("/api/auth/signup", userObj);
@@ -59,18 +52,23 @@ export async function loginUser(userObj: Login) {
       session.isLoggedIn = true;
 
       await session.save();
+      console.log('session:', session);
     }
   }
 
   return response.data;
 }
 
-// Refresh token function
-export async function refreshAccessToken() {
-  const session = await getSession();
+export async function refreshAccessToken(): Promise<string> {
+  const cookieStore = await cookies();
 
-  if (!session.refresh) {
-    throw new Error("No refresh token available");
+  const session = await getIronSession<SessionData>(
+    cookieStore,
+    sessionOptions
+  );
+
+  if (!session?.refresh) {
+    throw new Error("No refresh token");
   }
 
   const response = await serverApi.post("/api/auth/refresh", {
@@ -78,58 +76,67 @@ export async function refreshAccessToken() {
   });
 
   const newAccessToken = response.data.access || response.data.accessToken;
+  if (!newAccessToken) throw new Error("No access token returned");
 
-  // Update session with new access token
-  const cookieStore = await cookies();
-  const updatedSession = await getIronSession<SessionData>(
-    cookieStore,
-    sessionOptions
-  );
-
-  updatedSession.access = newAccessToken;
-  await updatedSession.save();
+  session.access = newAccessToken;
+  await session.save();
 
   return newAccessToken;
 }
 
-// Authenticated axios wrapper with auto-refresh
+export async function getValidAccessToken() {
+  const cookieStore = await cookies();
+  const session = await getIronSession<SessionData>(
+    cookieStore,
+    sessionOptions
+  );
+
+  if (!session.access) throw new Error("Not authenticated");
+
+  if (!isTokenExpired(session.access)) {
+    return session.access;
+  }
+
+  // Instead of calling session.save() here (illegal in layouts)
+  const res = await fetch(
+    `http://localhost:3000/api/auth/refresh-token`,
+    {
+      method: "POST",
+    }
+  );
+
+  if (!res.ok) {
+    console.log('res:', res);
+  };
+
+  const data = await res.json();
+  return data.access;
+}
+
 export async function authenticatedRequest<T = any>(
   config: AxiosRequestConfig
 ): Promise<T> {
-  const session = await getSession();
+  let token: string;
 
-  if (!session || !session.access) {
-    throw new Error("You must be logged in");
+  try {
+    token = await getValidAccessToken();
+  } catch (error: any) {
+    throw new Error(error.message || "Authentication failed");
   }
 
-  // First attempt with current token
   try {
     const response = await serverApi({
       ...config,
       headers: {
         ...config.headers,
-        Authorization: `Bearer ${session.access}`,
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
-    return response.data;
+    return response.data as T;
   } catch (error) {
-    // If 401, refresh and retry
     if (axios.isAxiosError(error) && error.response?.status === 401) {
-      try {
-        const newAccessToken = await refreshAccessToken();
-
-        // Retry with new token
-        const response = await serverApi({
-          ...config,
-          headers: {
-            ...config.headers,
-            Authorization: `Bearer ${newAccessToken}`,
-          },
-        });
-        return response.data;
-      } catch (refreshError) {
-        throw new Error("Session expired. Please login again.");
-      }
+      throw new Error("Session expired. Please login again");
     }
     throw error;
   }

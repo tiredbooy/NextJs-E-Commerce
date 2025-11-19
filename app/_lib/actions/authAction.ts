@@ -1,9 +1,9 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { toast } from "sonner";
 import { loginUser, signupUser } from "../services/authService";
 import { getStringFromForm } from "../utils/utils";
-import { toast } from "sonner";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 

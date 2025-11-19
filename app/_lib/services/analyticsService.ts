@@ -1,14 +1,8 @@
-import { getSession } from "../auth";
+import { PopularChartItem } from "../types";
 import { StatData } from "../types/analytics_types";
 import { authenticatedRequest } from "./authService";
 
 export async function getRevenueStats(): Promise<StatData> {
-  const session = await getSession();
-
-  if (!session || !session.access) {
-    return { value: 0, change: 0 };
-  }
-
   const response = await authenticatedRequest({
     method: "GET",
     url: "/api/admin/analytics/revenue",
@@ -20,12 +14,6 @@ export async function getRevenueStats(): Promise<StatData> {
 }
 
 export async function getOrderStats(): Promise<StatData> {
-  const session = await getSession();
-
-  if (!session || !session.access) {
-    return { value: 0, change: 0 };
-  }
-
   const response = await authenticatedRequest({
     method: "GET",
     url: "/api/admin/analytics/orders",
@@ -37,12 +25,6 @@ export async function getOrderStats(): Promise<StatData> {
 }
 
 export async function getCustomerGrowthStats(): Promise<StatData> {
-  const session = await getSession();
-
-  if (!session || !session.access) {
-    return { value: 0, change: 0 };
-  }
-
   const response = await authenticatedRequest({
     method: "GET",
     url: "/api/admin/analytics/users",
@@ -54,12 +36,6 @@ export async function getCustomerGrowthStats(): Promise<StatData> {
 }
 
 export async function getSalesStats(): Promise<StatData> {
-  const session = await getSession();
-
-  if (!session || !session.access) {
-    return { value: 0, change: 0 };
-  }
-
   const response = await authenticatedRequest({
     method: "GET",
     url: "/api/admin/analytics/sales",
@@ -68,4 +44,29 @@ export async function getSalesStats(): Promise<StatData> {
   const data = await response;
 
   return { value: data?.current_count, change: data?.change_percent };
+}
+
+export async function getPopularCategories(): Promise<PopularChartItem[]> {
+  const response = await authenticatedRequest({
+    method: "GET",
+    url: "/api/admin/analytics/categories?limit=5",
+  });
+
+  const data: { title: string; sales: number }[] = await response;
+
+  return data?.map((item) => ({ name: item.title, value: item.sales }));
+}
+
+export async function getPopularProducts(): Promise<PopularChartItem[]> {
+  const response = await authenticatedRequest({
+    method: "GET",
+    url: "/api/admin/analytics/products?limit=5",
+  });
+
+  const data: { product_name: string; current_sold: number }[] = await response;
+
+  return data?.map((item) => ({
+    name: item.product_name,
+    value: item.current_sold,
+  }));
 }

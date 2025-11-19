@@ -1,4 +1,6 @@
-import CategoryChart from "./CategoryChart";
+import StatsSkeletonCards from "@/app/_components/reusable/SkeletonCard";
+import { Suspense } from "react";
+import PopularChartsSection from "./PopularCharts";
 import RecentOrders from "./RecentOrders";
 import RevenueChart from "./RevenueChart";
 import Stats from "./Stats";
@@ -20,41 +22,16 @@ const AdminDashboard: React.FC<Props> = ({}) => {
 
       {/* Stats Grid - 4 cards in a row on desktop, responsive on mobile */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Stats />
+        <Suspense fallback={<StatsSkeletonCards length={4} />}>
+          <Stats />
+        </Suspense>
       </div>
 
       {/* Recent Orders Table Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="rounded-md border bg-card">
-          <div className="flex flex-col space-y-1.5 p-6 pb-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-xl font-semibold leading-none tracking-tight">
-                  Popular Products
-                </h3>
-                <p className="text-sm text-muted-foreground mt-1.5">
-                  Most Pupolar Products
-                </p>
-              </div>
-            </div>
-            <CategoryChart />
-          </div>
-        </div>
-        <div className="rounded-md border bg-card">
-          <div className="flex flex-col space-y-1.5 p-6 pb-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-xl font-semibold leading-none tracking-tight">
-                  Popular Products
-                </h3>
-                <p className="text-sm text-muted-foreground mt-1.5">
-                  Most Pupolar Products
-                </p>
-              </div>
-            </div>
-            <CategoryChart />
-          </div>
-        </div>
+        <Suspense fallback={<StatsSkeletonCards length={2} />}>
+          <PopularChartsSection />
+        </Suspense>
       </div>
 
       <div className="rounded-lg border bg-card">

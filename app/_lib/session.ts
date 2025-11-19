@@ -1,4 +1,3 @@
-// lib/session.ts
 import { SessionOptions } from "iron-session";
 
 export interface SessionData {
