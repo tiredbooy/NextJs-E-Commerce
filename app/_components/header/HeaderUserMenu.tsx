@@ -6,19 +6,20 @@ import Link from "next/link";
 import { FaShoppingBasket, FaUser } from "react-icons/fa";
 
 async function HeaderUserMenu() {
-  const session = await getCurrentSession();
   const user = await getCurrentUser();
-
-  const path = user.role === "admin" ? "/admin" : "/account";
+  const path = user?.role === "admin" ? "/admin" : "/account";
 
   return (
     <div className="flex flex-row items-center gap-5">
-      {session ? (
+      {user ? (
         <Link href={path}>
           <FaUser className="h-5 w-5 text-muted-foreground hover:text-foreground" />
         </Link>
       ) : (
-        <Link href="/login" className="border px-3 py-1 rounded-md text-muted-foreground hover:bg-foreground hover:text-background duration-200 transition-colors">
+        <Link
+          href="/login"
+          className="border px-3 py-1 rounded-md text-muted-foreground hover:bg-foreground hover:text-background duration-200 transition-colors"
+        >
           Login/Signup
         </Link>
       )}

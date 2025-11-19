@@ -3,54 +3,38 @@ import { Login, Signup } from "../types/user_types";
 import { getIronSession } from "iron-session";
 import { SessionData, sessionOptions } from "@/app/_lib/session";
 import { getSession } from "../auth";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 const API_URL = process.env.API_URL;
 
+// Create axios instance for server-side use
+const serverApi = axios.create({
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 export async function signupUser(userObj: Signup) {
-  const response = await fetch(`${API_URL}/api/auth/signup`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(userObj),
-  });
-
-  const data = await response.json(); // parse first
-
-  if (!response.ok) {
-    // Handle 400, 409, 500 etc.
-    throw new Error(data.message || "Failed to create user");
-  }
-
-  return data;
+  const response = await serverApi.post("/api/auth/signup", userObj);
+  return response.data;
 }
 
 export async function loginUser(userObj: Login) {
-  const response = await fetch(`${API_URL}/api/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    cache: "no-store",
-    body: JSON.stringify(userObj),
+  const response = await serverApi.post("/api/auth/login", userObj, {
+    withCredentials: true,
   });
 
-  if (!response.ok) {
-    let errorMessage = "Login failed";
-    try {
-      const errorData = await response.json();
-      errorMessage = errorData.message || errorMessage;
-    } catch {
-      // ignore
-    }
-    throw new Error(errorMessage);
-  }
-
-  const setCookieHeader = response.headers.get("set-cookie");
+  const setCookieHeader = response.headers["set-cookie"];
 
   if (setCookieHeader) {
-    const accessMatch = setCookieHeader.match(/access=([^;]+)/);
-    const refreshMatch = setCookieHeader.match(/refresh=([^;]+)/);
-    const userMatch = setCookieHeader.match(/user=([^;]+)/);
+    const cookieString = Array.isArray(setCookieHeader)
+      ? setCookieHeader.join("; ")
+      : setCookieHeader;
+
+    const accessMatch = cookieString.match(/access=([^;]+)/);
+    const refreshMatch = cookieString.match(/refresh=([^;]+)/);
+    const userMatch = cookieString.match(/user=([^;]+)/);
 
     if (accessMatch && refreshMatch && userMatch) {
       const access = accessMatch[1];
@@ -78,31 +62,90 @@ export async function loginUser(userObj: Login) {
     }
   }
 
-  return;
+  return response.data;
+}
+
+// Refresh token function
+export async function refreshAccessToken() {
+  const session = await getSession();
+
+  if (!session.refresh) {
+    throw new Error("No refresh token available");
+  }
+
+  const response = await serverApi.post("/api/auth/refresh", {
+    refreshToken: session.refresh,
+  });
+
+  const newAccessToken = response.data.access || response.data.accessToken;
+
+  // Update session with new access token
+  const cookieStore = await cookies();
+  const updatedSession = await getIronSession<SessionData>(
+    cookieStore,
+    sessionOptions
+  );
+
+  updatedSession.access = newAccessToken;
+  await updatedSession.save();
+
+  return newAccessToken;
+}
+
+// Authenticated axios wrapper with auto-refresh
+export async function authenticatedRequest<T = any>(
+  config: AxiosRequestConfig
+): Promise<T> {
+  const session = await getSession();
+
+  if (!session || !session.access) {
+    throw new Error("You must be logged in");
+  }
+
+  // First attempt with current token
+  try {
+    const response = await serverApi({
+      ...config,
+      headers: {
+        ...config.headers,
+        Authorization: `Bearer ${session.access}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    // If 401, refresh and retry
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      try {
+        const newAccessToken = await refreshAccessToken();
+
+        // Retry with new token
+        const response = await serverApi({
+          ...config,
+          headers: {
+            ...config.headers,
+            Authorization: `Bearer ${newAccessToken}`,
+          },
+        });
+        return response.data;
+      } catch (refreshError) {
+        throw new Error("Session expired. Please login again.");
+      }
+    }
+    throw error;
+  }
 }
 
 export async function getCurrentUser() {
   const session = await getSession();
 
-  if (!session) {
-    throw new Error("You must be logged in");
+  if (!session || !session.access) {
+    return null;
   }
 
-  const res = await fetch(`${API_URL}/api/auth/profile`, {
+  return authenticatedRequest({
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${session.access}`,
-      "Content-Type": "application/json",
-    },
+    url: "/api/auth/profile",
   });
-
-  if (!res.ok) {
-    throw new Error("Failed to get User Profile");
-  }
-
-  const data = await res.json();
-
-  return data;
 }
 
 export async function getCurrentSession() {
