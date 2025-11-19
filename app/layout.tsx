@@ -3,6 +3,7 @@ import { ThemeProvider } from "next-themes";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import Providers from "./_lib/providers";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -26,15 +27,17 @@ export default function MainLayout({
       <body
         className={` ${poppins.className} ${poppins.variable} antialiased bg-background`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
-        <Toaster />
+        <Providers>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );

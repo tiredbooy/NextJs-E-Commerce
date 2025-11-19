@@ -67,10 +67,11 @@ export interface Stat {
   icon: IconType;
   value: number;
   change?: number; // Percentage change (e.g., 20.1 for +20.1%)
-  changeType?: "increase" | "decrease";
+  changeType: "increase" | "decrease";
   color: "chart-1" | "chart-2" | "chart-3" | "chart-4" | "chart-5";
   prefix?: string; // e.g., "$" for currency
   suffix?: string; // e.g., "%" or "K"
+  isLoading?: boolean;
 }
 
 export interface PopularCategory {

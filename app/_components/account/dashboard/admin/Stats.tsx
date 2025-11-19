@@ -1,76 +1,65 @@
 import { Stat } from "@/app/_lib/types";
 import {
+  HiOutlineCube,
+  HiOutlineCurrencyDollar,
   HiOutlineShoppingBag,
   HiOutlineUsers,
-  HiOutlineCurrencyDollar,
-  HiOutlineCube,
 } from "react-icons/hi";
 import StatCard from "./StatCard";
+import {
+  getCustomerGrowthStats,
+  getOrderStats,
+  getRevenueStats,
+  getSalesStats,
+} from "@/app/_lib/services/analytics";
 
-const stats: Stat[] = [
-  {
-    title: "Total Revenue",
-    icon: HiOutlineCurrencyDollar,
-    value: 45231,
-    change: 20.1,
-    changeType: "increase",
-    color: "chart-1",
-    prefix: "$",
-  },
-  {
-    title: "New Orders",
-    icon: HiOutlineShoppingBag,
-    value: 156,
-    change: 12.5,
-    changeType: "increase",
-    color: "chart-2",
-  },
-  {
-    title: "New Customers",
-    icon: HiOutlineUsers,
-    value: 89,
-    change: -5.2,
-    changeType: "decrease",
-    color: "chart-3",
-  },
-  {
-    title: "Products in Stock",
-    icon: HiOutlineCube,
-    value: 1247,
-    change: 2.3,
-    changeType: "increase",
-    color: "chart-4",
-  },
-];
+const Stats = async () => {
+  const [revenue, orders, customers, sales] = await Promise.all([
+    getRevenueStats(),
+    getOrderStats(),
+    getCustomerGrowthStats(),
+    getSalesStats(),
+  ]);
 
-interface Props {
-  data?: Stat[];
-  isLoading?: boolean;
-}
-
-const Stats: React.FC<Props> = ({ data, isLoading = false }) => {
-  const statsData = data || stats;
-
-  if (isLoading) {
-    return (
-      <>
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="rounded-lg border bg-card p-6 animate-pulse">
-            <div className="flex items-center justify-between mb-4">
-              <div className="h-4 w-24 bg-muted rounded" />
-              <div className="h-10 w-10 bg-muted rounded-lg" />
-            </div>
-            <div className="h-8 w-20 bg-muted rounded mb-2" />
-            <div className="h-3 w-16 bg-muted rounded" />
-          </div>
-        ))}
-      </>
-    );
-  }
+  const stats: Stat[] = [
+    {
+      title: "Total Revenue",
+      icon: HiOutlineCurrencyDollar,
+      value: revenue?.value ?? 0,
+      change: revenue?.change ?? 0,
+      changeType: (revenue?.change ?? 0) >= 0 ? "increase" : "decrease",
+      color: "chart-1",
+      prefix: "$",
+    },
+    {
+      title: "New Orders",
+      icon: HiOutlineShoppingBag,
+      value: orders?.value ?? 0,
+      change: orders?.change ?? 0,
+      changeType: (orders?.change ?? 0) >= 0 ? "increase" : "decrease",
+      color: "chart-1",
+    },
+    {
+      title: "New Users",
+      icon: HiOutlineUsers,
+      value: customers?.value ?? 0,
+      change: customers?.change ?? 0,
+      changeType: (customers?.change ?? 0) >= 0 ? "increase" : "decrease",
+      color: "chart-1",
+    },
+    {
+      title: "New Sales",
+      icon: HiOutlineCube,
+      value: sales?.value ?? 0,
+      change: sales?.change ?? 0,
+      changeType: (sales?.change ?? 0) >= 0 ? "increase" : "decrease",
+      color: "chart-1",
+    },
+  ];
 
   return (
     <>
-      {statsData.map((stat, index) => (
+      {stats.map((stat, index) => (
         <StatCard key={stat.title + index} stat={stat} />
       ))}
     </>

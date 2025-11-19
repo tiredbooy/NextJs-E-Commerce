@@ -1,6 +1,5 @@
 "use client";
 
-// import { useTheme } from "next-themes";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,10 +25,7 @@ interface Props {
   onLogout?: () => void;
 }
 
-const HeaderNavigation: React.FC<Props> = ({
-  userName = "Mahdi Kazemi",
-  userAvatar,
-}) => {
+const HeaderNavigation: React.FC<Props> = ({ userName = "", userAvatar }) => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const { toggleSidebar } = useSidebar();
@@ -39,7 +35,6 @@ const HeaderNavigation: React.FC<Props> = ({
     setMounted(true);
   }, []);
 
-  // Get user initials for fallback
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -74,7 +69,9 @@ const HeaderNavigation: React.FC<Props> = ({
               </AvatarFallback>
             </Avatar>
             <div className="hidden sm:block">
-              <p className="text-sm font-medium leading-none">{userName}</p>
+              <p className="text-sm font-medium leading-none first-letter:uppercase">
+                {userName}
+              </p>
               <p className="text-xs text-muted-foreground mt-1">Welcome back</p>
             </div>
           </div>

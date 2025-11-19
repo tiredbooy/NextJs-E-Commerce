@@ -1,9 +1,9 @@
-import { cookies } from "next/headers";
-import { Login, Signup } from "../types/user_types";
-import { getIronSession } from "iron-session";
 import { SessionData, sessionOptions } from "@/app/_lib/session";
+import axios, { AxiosRequestConfig } from "axios";
+import { getIronSession } from "iron-session";
+import { cookies } from "next/headers";
 import { getSession } from "../auth";
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import { Login, Signup } from "../types/user_types";
 
 const API_URL = process.env.API_URL;
 

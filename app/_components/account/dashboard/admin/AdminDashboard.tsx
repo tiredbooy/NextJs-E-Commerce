@@ -40,29 +40,44 @@ const AdminDashboard: React.FC<Props> = ({}) => {
             <CategoryChart />
           </div>
         </div>
-        <div className="rounded-lg border bg-card">
+        <div className="rounded-md border bg-card">
           <div className="flex flex-col space-y-1.5 p-6 pb-4">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-xl font-semibold leading-none tracking-tight">
-                  Recent Orders
+                  Popular Products
                 </h3>
                 <p className="text-sm text-muted-foreground mt-1.5">
-                  Latest orders from your customers
+                  Most Pupolar Products
                 </p>
               </div>
-              <button className="text-xs font-medium text-primary hover:underline">
-                View All
-              </button>
             </div>
-          </div>
-          <div className="p-6 pt-0">
-            {/* Table Component Will Go Here */}
-            <RecentOrders />
+            <CategoryChart />
           </div>
         </div>
       </div>
 
+      <div className="rounded-lg border bg-card">
+        <div className="flex flex-col space-y-1.5 p-6 pb-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-xl font-semibold leading-none tracking-tight">
+                Recent Orders
+              </h3>
+              <p className="text-sm text-muted-foreground mt-1.5">
+                Latest orders from your customers
+              </p>
+            </div>
+            <button className="text-xs font-medium text-primary hover:underline">
+              View All
+            </button>
+          </div>
+        </div>
+        <div className="p-6 pt-0">
+          {/* Table Component Will Go Here */}
+          <RecentOrders />
+        </div>
+      </div>
       {/* Chart Section - Full Width */}
       <div className="grid gap-4">
         <div className="rounded-lg border bg-card">
