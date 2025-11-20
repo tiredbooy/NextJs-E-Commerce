@@ -7,42 +7,6 @@ export interface Announcment {
   href: string;
 }
 
-export interface ProductSize {
-  id: number;
-  size: string;
-}
-
-export interface ProductColor {
-  id: number;
-  title: string;
-}
-
-export interface ProductCategory {
-  id: number;
-  title: string;
-}
-
-export interface ProductImage {
-  id: number;
-  url: string | StaticImageData;
-  name?: string;
-}
-
-export interface Product {
-  id: number;
-  title: string;
-  price: number;
-  discount_price?: number;
-  description: string;
-  sizes?: ProductSize[];
-  colros?: ProductColor[];
-  category: ProductCategory[];
-  images: ProductImage[];
-  stock_quantity: number;
-  sales: number;
-  created_at: string;
-}
-
 export interface CategoryCard {
   title: string;
   image: string | StaticImageData;
@@ -82,9 +46,9 @@ export interface PopularChartItem {
 
 export interface RecentOrder {
   id: number;
-  user_id: number
+  user_id: number;
   total_price: number;
-  created_at : number
+  created_at: number;
   status: "pending" | "completed" | "paid";
 }
 
@@ -94,47 +58,9 @@ export type RevenueData = {
   revenue: number;
 };
 
-export interface OrderItem {
-  id: 1;
-  name: string;
-  price: number;
-  quantity: number;
-  subtotal: number;
-}
 
-export interface Order {
-  id: number;
-  order_id: number;
-  items: OrderItem[];
-  user_id: number;
-  message?: string;
-  total_price: number;
-  payment_method: string;
-  created_at: string;
-  status: "pending" | "completed" | "paid";
-}
 
-export interface User {
-  id: number;
-  first_name: string;
-  last_name: string;
-  phone: string;
-  image?: string | StaticImageData;
-  total_orders: number;
-  total_spent: number;
-  status: "active" | "inactive" | "banned" | "pending";
-  created_at: string;
-  email?: string;
-  addresses?: Address[];
-}
 
-export interface Address {
-  id: number;
-  country: string;
-  city: string;
-  address: string;
-  postal_code: number | string;
-}
 
 export interface Message {
   id: number;
@@ -155,22 +81,21 @@ export interface Ticket {
   status: "open" | "closed" | "pending";
 }
 
-
 export interface QueryParams {
-  limit? : number
-  page? : number
-  status?: string
-  total?: string
-  user?: string
-  from?: string
-  to?: string
-  search?: string
-  sortBy?: string
-  orderBy?: string
-  joined?: string
-  category?: string
-  brand?: string
-  minPrice?: string
-  maxPrice?: string
-  sortOrder?: string
+  limit?: number;
+  page?: number;
+  status?: string;
+  total?: string;
+  user?: string;
+  from?: string;
+  to?: string;
+  search?: string;
+  sortBy?: string;
+  orderBy?: string;
+  joined?: string;
+  category?: string;
+  brand?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  sortOrder?: string;
 }
