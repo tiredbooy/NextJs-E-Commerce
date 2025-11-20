@@ -3,11 +3,9 @@ import { Product } from "@/app/_lib/types";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useTheme } from "next-themes";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { HiDotsVertical, HiEye, HiPencil, HiTrash } from "react-icons/hi";
-import {
-  ContextMenu,
-  useContextMenu
-} from "react-smart-contextmenu";
+import { ContextMenu, useContextMenu } from "react-smart-contextmenu";
 
 interface Props {
   // props here
@@ -15,10 +13,10 @@ interface Props {
 }
 
 export default function ProductTableRow({ product }: Props) {
-  const { id, title, price, sales, stock_quantity, created_at, images } =
-    product;
-  const image = images[0].url;
+  const { id, title, price, sales, stock, created_at, images } = product;
+  const image = images?.[0]?.url || "";
   const { theme } = useTheme();
+  const router = useRouter();
 
   const {
     isOpen,
@@ -29,24 +27,28 @@ export default function ProductTableRow({ product }: Props) {
     setFocusedIndex,
   } = useContextMenu();
 
+  function handleEditNavigation() {
+    router.push(`/admin/products/${id}`);
+  }
+
   const menuOptions = [
     { type: "header" as const, label: product.title },
     {
       label: "View Product",
-      onClick: () => console.log("Clicked"),
+      onClick: () => router.replace(`/products/${id}`),
       shortcut: "Ctrl+V+X",
       icon: <HiEye />,
     },
     {
       label: "Edit Product",
-      onClick: () => console.log("Clicked"),
+      onClick: () => handleEditNavigation(),
       icon: <HiPencil />,
     },
     { type: "separator" as const },
     {
       label: "Delete Product",
       onClick: () => console.log("Clicked"),
-      danger : true,
+      danger: true,
       icon: <HiTrash />,
     },
   ];
@@ -56,18 +58,32 @@ export default function ProductTableRow({ product }: Props) {
       <TableRow onContextMenu={handleContextMenu} className="cursor-pointer">
         <TableCell>#{id}</TableCell>
         <TableCell>
-          <Image width={40} height={40} src={image} alt={title} />
+          {image !== "" ? (
+            <Image width={40} height={40} src={image} alt={title} />
+          ) : (
+            <div
+              className={`${
+                image === "" ? "bg-muted rounded-full w-8 h-8" : ""
+              }`}
+            />
+          )}
         </TableCell>
         <TableCell>{title}</TableCell>
-        <TableCell>${price}</TableCell>
-        <TableCell>{stock_quantity}</TableCell>
-        <TableCell>{sales}</TableCell>
+        <TableCell>${price ?? 0}</TableCell>
+        <TableCell>{stock ?? 0}</TableCell>
+        <TableCell>{sales ?? 0}</TableCell>
         <TableCell>{new Date(created_at).toLocaleDateString()}</TableCell>
         <TableCell>
           <div className="flex flex-row gap-1 items-center text-base">
             <HiTrash className="cursor-pointer text-destructive" />
-            <HiPencil className="cursor-pointer text-warning" />
-            <HiDotsVertical onClick={handleContextMenu} className="cursor-pointer text-primary" />
+            <HiPencil
+              onClick={handleEditNavigation}
+              className="cursor-pointer text-warning"
+            />
+            <HiDotsVertical
+              onClick={handleContextMenu}
+              className="cursor-pointer text-primary"
+            />
           </div>
         </TableCell>
       </TableRow>

@@ -3,18 +3,24 @@ import { Card } from "@/components/ui/card";
 import { FaBoxes } from "react-icons/fa";
 import ProductsInformation from "./ProductsInformation";
 import ProductsTable from "./ProductsTable";
+import { getProducts } from "@/app/_lib/services/services";
 
 interface Props {
   // props here
 }
 
-export default function ManageProducts({}: Props) {
+export default async function ManageProducts({}: Props) {
+  const productData = await getProducts();
+  const products = productData.products;
+
   return (
     <Card className="px-10 py-8 border-border bg-card">
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-row gap-1 items-center">
           <FaBoxes />
-          <h1 className="font-semibold text-base md:text-3xl">Manage Products</h1>
+          <h1 className="font-semibold text-base md:text-3xl">
+            Manage Products
+          </h1>
         </div>
         <Button className="font-semibold text-background cursor-pointer">
           Add Product
@@ -22,9 +28,9 @@ export default function ManageProducts({}: Props) {
       </div>
 
       {/* <div className="flex flex-row gap-5"> */}
-      <ProductsInformation />
+      <ProductsInformation totalProducts={productData?.total_items} />
       {/* </div> */}
-      <ProductsTable />
+      <ProductsTable products={products} />
     </Card>
   );
 }

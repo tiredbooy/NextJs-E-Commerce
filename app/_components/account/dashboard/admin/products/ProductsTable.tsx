@@ -7,12 +7,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import ProductTableRow from "./ProductTableRow";
+import { getProducts } from "@/app/_lib/services/services";
+import { PaginatedProductsResponse, Product } from "@/app/_lib/types/product_types";
 
 interface Props {
   // props here
+  products: Product[]
 }
 
-export default function ProductsTable({}: Props) {
+export default async function ProductsTable({products}: Props) {
+
+  
+
   return (
     <Table>
       <TableHeader>
@@ -29,7 +35,7 @@ export default function ProductsTable({}: Props) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {products.map((product) => (
+        {products?.map((product: Product) => (
           <ProductTableRow product={product} key={product.id} />
         ))}
       </TableBody>
