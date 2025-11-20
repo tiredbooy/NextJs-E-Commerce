@@ -1,102 +1,68 @@
+import { getOrders } from "@/app/_lib/services/services";
 import { RecentOrder } from "@/app/_lib/types";
 import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 
 interface Props {
   // props here
 }
 
-const recentOrders: RecentOrder[] = [
-  {
-    id: 1,
-    orderId: 2314,
-    status: "paid",
-    payment_method: "card",
-    amount: 3456.99,
-  },
-  {
-    id: 2,
-    orderId: 2315,
-    status: "paid",
-    payment_method: "card",
-    amount: 114,
-  },
-  {
-    id: 3,
-    orderId: 2316,
-    status: "pending",
-    payment_method: "card",
-    amount: 1754,
-  },
-  {
-    id: 4,
-    orderId: 2317,
-    status: "completed",
-    payment_method: "card",
-    amount: 1754,
-  },
-  {
-    id: 5,
-    orderId: 2317,
-    status: "completed",
-    payment_method: "card",
-    amount: 1754,
-  },
-  {
-    id: 6,
-    orderId: 2317,
-    status: "completed",
-    payment_method: "card",
-    amount: 1754,
-  },
-  {
-    id: 7,
-    orderId: 2317,
-    status: "completed",
-    payment_method: "card",
-    amount: 1754,
-  },
-  {
-    id: 9,
-    orderId: 2317,
-    status: "completed",
-    payment_method: "card",
-    amount: 1754,
-  },
-];
+const RecentOrders: React.FC<Props> = async ({}) => {
+  const ordersData = await getOrders({ limit: 10, page: 1 });
+  const orders = ordersData?.orders || [];
 
-const RecentOrders: React.FC<Props> = ({}) => {
+  if (orders.length === 0) {
+    return null;
+  }
+
   return (
-    <Table>
-      <TableCaption>Recent Orders List</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">#Order ID</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Payment Method</TableHead>
-          <TableHead>Amount</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {recentOrders.slice(0, 8).map((order) => (
-          <TableRow className="cursor-pointer" key={order.id}>
-            <TableCell className="font-medium">#{order.orderId}</TableCell>
-            <TableCell>{order.status}</TableCell>
-            <TableCell className="first-letter:uppercase">
-              {order.payment_method}
-            </TableCell>
-            <TableCell className="">${order.amount}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <div className="rounded-lg border bg-card">
+      <div className="flex flex-col space-y-1.5 p-6 pb-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-xl font-semibold leading-none tracking-tight">
+              Recent Orders
+            </h3>
+            <p className="text-sm text-muted-foreground mt-1.5">
+              Latest orders from your customers
+            </p>
+          </div>
+          <button className="text-xs font-medium text-primary hover:underline">
+            View All
+          </button>
+        </div>
+      </div>
+      <div className="p-6 pt-0">
+        <Table>
+          <TableCaption>Recent Orders List</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">#Order ID</TableHead>
+              <TableHead>UserName</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Status</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {orders.map((order) => (
+              <TableRow className="cursor-pointer" key={order.id}>
+                <TableCell className="font-medium">#{order.id}</TableCell>
+                <TableCell className="first-letter:uppercase">{}</TableCell>
+                <TableCell>{order.status}</TableCell>
+                <TableCell className="">${order.total_price}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   );
 };
 

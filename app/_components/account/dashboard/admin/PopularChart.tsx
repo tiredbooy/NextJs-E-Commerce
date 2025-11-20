@@ -35,6 +35,29 @@ function stringToColor(str: string): string {
   return `oklch(0.76 0.24 ${hue})`;
 }
 
+const defaultData: PopularChartItem[] = [
+  {
+    name : "X",
+    value : 24,
+  },
+  {
+    name : "Y",
+    value : 12,
+  },
+  {
+    name : "A",
+    value : 5,
+  },
+  {
+    name : "V",
+    value : 74,
+  },
+  {
+    name : "C",
+    value : 46,
+  },
+]
+
 interface Props {
   data?: PopularChartItem[];
   title?: string;
@@ -42,9 +65,9 @@ interface Props {
 }
 
 const PopularChart: React.FC<Props> = ({
-  data = [],
-  title = "Popular Items",
-  description = "Sales distribution",
+  data = defaultData,
+  title = "",
+  description = "",
 }) => {
   // Auto-assign colors if missing
   const dataWithColors = useMemo(() => {

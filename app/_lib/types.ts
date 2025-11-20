@@ -82,9 +82,9 @@ export interface PopularChartItem {
 
 export interface RecentOrder {
   id: number;
-  orderId: number;
-  payment_method: string;
-  amount: number;
+  user_id: number
+  total_price: number;
+  created_at : number
   status: "pending" | "completed" | "paid";
 }
 
@@ -153,4 +153,24 @@ export interface Ticket {
   order_id?: number;
   priority: "low" | "medium" | "high";
   status: "open" | "closed" | "pending";
+}
+
+
+export interface QueryParams {
+  limit? : number
+  page? : number
+  status?: string
+  total?: string
+  user?: string
+  from?: string
+  to?: string
+  search?: string
+  sortBy?: string
+  orderBy?: string
+  joined?: string
+  category?: string
+  brand?: string
+  minPrice?: string
+  maxPrice?: string
+  sortOrder?: string
 }

@@ -28,7 +28,7 @@ export default async function PopularChartsSection({}: Props) {
               </p>
             </div>
           </div>
-          <PopularChart data={popularProducts} title="Popular Products" />
+          <PopularChart data={popularProducts} />
         </div>
       </div>
       <div className="rounded-md border bg-card">
@@ -43,7 +43,7 @@ export default async function PopularChartsSection({}: Props) {
               </p>
             </div>
           </div>
-          <PopularChart data={popularCategories} title="Popular Categories" />
+          <PopularChart data={popularCategories} />
         </div>
       </div>
     </>

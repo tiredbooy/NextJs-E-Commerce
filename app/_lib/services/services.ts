@@ -1,0 +1,23 @@
+import { QueryParams } from "../types";
+import { buildQuery } from "../utils/utils";
+import { authenticatedRequest } from "./authService";
+
+type OrderQueryParam = Pick<
+  QueryParams,
+  "limit" | "page" | "status" | "total" | "user" | "from" | "to"
+>;
+
+export async function getOrders(params: OrderQueryParam = {}) {
+  try {
+    const query = buildQuery(params);
+
+    const data = await authenticatedRequest({
+      method: "GET",
+      url: `/api/admin/orders${query}`,
+    });
+    
+    return data;
+  } catch (e: any) {
+    throw new Error(e.message || "Could not get Orders at this time.");
+  }
+}

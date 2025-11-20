@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
 import { SessionData, sessionOptions } from "@/app/_lib/session";
 import axios, { AxiosRequestConfig } from "axios";
 import { getIronSession } from "iron-session";
@@ -7,6 +7,8 @@ import { getSession } from "../auth";
 import { serverApi } from "../server_api";
 import { Login, Signup } from "../types/user_types";
 import { isTokenExpired } from "../utils/utils";
+
+let refreshPromise: Promise<string> | null = null;
 
 export async function signupUser(userObj: Signup) {
   const response = await serverApi.post("/api/auth/signup", userObj);
@@ -52,7 +54,6 @@ export async function loginUser(userObj: Login) {
       session.isLoggedIn = true;
 
       await session.save();
-      console.log('session:', session);
     }
   }
 
@@ -84,6 +85,50 @@ export async function refreshAccessToken(): Promise<string> {
   return newAccessToken;
 }
 
+async function performTokenRefresh(): Promise<string> {
+  if (refreshPromise) {
+    return refreshPromise;
+  }
+
+  refreshPromise = (async () => {
+    try {
+      const cookieStore = await cookies();
+      const session = await getIronSession<SessionData>(
+        cookieStore,
+        sessionOptions
+      );
+
+      if (!session?.refresh) {
+        throw new Error("No refresh token available");
+      }
+
+      const response = await serverApi.post(
+        "/api/auth/refresh",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${session.refresh}`,
+          },
+        }
+      );
+
+      const newAccessToken = response.data.access || response.data.accessToken;
+      if (!newAccessToken) {
+        throw new Error("No access token returned from refresh");
+      }
+
+      session.access = newAccessToken;
+      await session.save();
+
+      return newAccessToken;
+    } finally {
+      refreshPromise = null;
+    }
+  })();
+
+  return refreshPromise;
+}
+
 export async function getValidAccessToken() {
   const cookieStore = await cookies();
   const session = await getIronSession<SessionData>(
@@ -97,34 +142,23 @@ export async function getValidAccessToken() {
     return session.access;
   }
 
-  // Instead of calling session.save() here (illegal in layouts)
-  const res = await fetch(
-    `http://localhost:3000/api/auth/refresh-token`,
-    {
-      method: "POST",
-    }
-  );
-
-  if (!res.ok) {
-    console.log('res:', res);
-  };
-
-  const data = await res.json();
-  return data.access;
+  try {
+    return await performTokenRefresh();
+  } catch (error) {
+    await session.destroy();
+    throw new Error("Session Expired. Plaese login again.");
+  }
 }
 
 export async function authenticatedRequest<T = any>(
-  config: AxiosRequestConfig
+  config: AxiosRequestConfig,
+  retryCount = 0
 ): Promise<T> {
-  let token: string;
+  const MAX_RETRIES = 1;
 
   try {
-    token = await getValidAccessToken();
-  } catch (error: any) {
-    throw new Error(error.message || "Authentication failed");
-  }
+    const token = await getValidAccessToken();
 
-  try {
     const response = await serverApi({
       ...config,
       headers: {
@@ -136,8 +170,25 @@ export async function authenticatedRequest<T = any>(
     return response.data as T;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
-      throw new Error("Session expired. Please login again");
+      if (retryCount < MAX_RETRIES) {
+        try {
+          await performTokenRefresh();
+
+          return authenticatedRequest<T>(config, retryCount + 1);
+        } catch (refreshError) {
+          const cookieStore = await cookies();
+          const session = await getIronSession<SessionData>(
+            cookieStore,
+            sessionOptions
+          );
+          await session.destroy();
+          throw new Error("Session expired. Please login again.");
+        }
+      }
+
+      throw new Error("Session expired. Please login again.");
     }
+
     throw error;
   }
 }
@@ -164,4 +215,15 @@ export async function getCurrentSession() {
     user: session.user,
     isLoggedIn: session.isLoggedIn,
   };
+}
+
+export async function logoutUser() {
+  const cookieStore = await cookies();
+  const session = await getIronSession<SessionData>(
+    cookieStore,
+    sessionOptions
+  );
+
+  await session.destroy();
+  redirect("/auth/login");
 }
