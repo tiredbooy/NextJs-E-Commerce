@@ -23,7 +23,7 @@ const RecentOrders: React.FC<Props> = async ({}) => {
   }
 
   return (
-    <div className="rounded-lg border bg-card">
+    <>
       <div className="flex flex-col space-y-1.5 p-6 pb-4">
         <div className="flex items-center justify-between">
           <div>
@@ -62,7 +62,8 @@ const RecentOrders: React.FC<Props> = async ({}) => {
           </TableBody>
         </Table>
       </div>
-    </div>
+    </>
+
   );
 };
 

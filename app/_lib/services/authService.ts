@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { SessionData, sessionOptions } from "@/app/_lib/session";
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig, AxiosError } from "axios";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { getSession } from "../auth";
@@ -8,6 +8,7 @@ import { serverApi } from "../server_api";
 import { Login, Signup } from "../types/user_types";
 import { isTokenExpired } from "../utils/utils";
 
+// Track ongoing refresh to prevent race conditions
 let refreshPromise: Promise<string> | null = null;
 
 export async function signupUser(userObj: Signup) {
@@ -60,31 +61,6 @@ export async function loginUser(userObj: Login) {
   return response.data;
 }
 
-export async function refreshAccessToken(): Promise<string> {
-  const cookieStore = await cookies();
-
-  const session = await getIronSession<SessionData>(
-    cookieStore,
-    sessionOptions
-  );
-
-  if (!session?.refresh) {
-    throw new Error("No refresh token");
-  }
-
-  const response = await serverApi.post("/api/auth/refresh", {
-    refreshToken: session.refresh,
-  });
-
-  const newAccessToken = response.data.access || response.data.accessToken;
-  if (!newAccessToken) throw new Error("No access token returned");
-
-  session.access = newAccessToken;
-  await session.save();
-
-  return newAccessToken;
-}
-
 async function performTokenRefresh(): Promise<string> {
   if (refreshPromise) {
     return refreshPromise;
@@ -129,14 +105,16 @@ async function performTokenRefresh(): Promise<string> {
   return refreshPromise;
 }
 
-export async function getValidAccessToken() {
+export async function getValidAccessToken(): Promise<string> {
   const cookieStore = await cookies();
   const session = await getIronSession<SessionData>(
     cookieStore,
     sessionOptions
   );
 
-  if (!session.access) throw new Error("Not authenticated");
+  if (!session.access) {
+    throw new Error("Not authenticated");
+  }
 
   if (!isTokenExpired(session.access)) {
     return session.access;
@@ -145,9 +123,37 @@ export async function getValidAccessToken() {
   try {
     return await performTokenRefresh();
   } catch (error) {
-    await session.destroy();
-    throw new Error("Session Expired. Plaese login again.");
+    throw new Error("Session expired. Please login again.");
   }
+}
+
+export async function getSessionReadOnly() {
+  const cookieStore = await cookies();
+  const session = await getIronSession<SessionData>(
+    cookieStore,
+    sessionOptions
+  );
+
+  return {
+    access: session.access,
+    refresh: session.refresh,
+    user: session.user,
+    isLoggedIn: session.isLoggedIn,
+  };
+}
+
+export async function getCurrentUserReadOnly() {
+  const session = await getSessionReadOnly();
+
+  if (!session || !session.access || !session.isLoggedIn) {
+    return null;
+  }
+
+  if (isTokenExpired(session.access)) {
+    return null;
+  }
+
+  return session.user;
 }
 
 export async function authenticatedRequest<T = any>(
@@ -167,21 +173,15 @@ export async function authenticatedRequest<T = any>(
         "Content-Type": "application/json",
       },
     });
+
     return response.data as T;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
       if (retryCount < MAX_RETRIES) {
         try {
           await performTokenRefresh();
-
           return authenticatedRequest<T>(config, retryCount + 1);
         } catch (refreshError) {
-          const cookieStore = await cookies();
-          const session = await getIronSession<SessionData>(
-            cookieStore,
-            sessionOptions
-          );
-          await session.destroy();
           throw new Error("Session expired. Please login again.");
         }
       }
@@ -200,10 +200,14 @@ export async function getCurrentUser() {
     return null;
   }
 
-  return authenticatedRequest({
-    method: "GET",
-    url: "/api/auth/profile",
-  });
+  try {
+    return await authenticatedRequest({
+      method: "GET",
+      url: "/api/auth/profile",
+    });
+  } catch (error) {
+    return null;
+  }
 }
 
 export async function getCurrentSession() {

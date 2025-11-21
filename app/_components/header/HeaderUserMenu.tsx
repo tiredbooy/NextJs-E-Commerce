@@ -1,13 +1,10 @@
-import {
-  getCurrentSession,
-  getCurrentUser,
-} from "@/app/_lib/services/authService";
+import { getCurrentUser, getCurrentUserReadOnly } from "@/app/_lib/services/authService";
 import Link from "next/link";
 import { FaShoppingBasket, FaUser } from "react-icons/fa";
 
 async function HeaderUserMenu() {
   const user = await getCurrentUser();
-  // let user = {role : "admin"}
+  console.log('user:', user);
   const path = user?.role === "admin" ? "/admin" : "/account";
 
   return (
@@ -18,7 +15,7 @@ async function HeaderUserMenu() {
         </Link>
       ) : (
         <Link
-          href="/login"
+          href="/auth/login"
           className="border px-3 py-1 rounded-md text-muted-foreground hover:bg-foreground hover:text-background duration-200 transition-colors"
         >
           Login/Signup
@@ -32,5 +29,3 @@ async function HeaderUserMenu() {
 }
 
 export default HeaderUserMenu;
-
-

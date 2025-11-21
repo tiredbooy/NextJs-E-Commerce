@@ -1,9 +1,12 @@
-import StatsSkeletonCards from "@/app/_components/reusable/SkeletonCard";
 import { Suspense } from "react";
 import PopularChartsSection from "./PopularCharts";
 import RecentOrders from "./RecentOrders";
 import RevenueChart from "./RevenueChart";
 import Stats from "./Stats";
+import {
+  ListItemSkeletonCard,
+  StatsSkeletonCard,
+} from "@/app/_components/reusable/SkeletonCard";
 
 interface Props {
   // Add props if needed later
@@ -22,20 +25,35 @@ const AdminDashboard: React.FC<Props> = ({}) => {
 
       {/* Stats Grid - 4 cards in a row on desktop, responsive on mobile */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Suspense fallback={<StatsSkeletonCards length={4} />}>
+        <Suspense
+          fallback={Array.from({ length: 4 }).map((_, i) => (
+            <StatsSkeletonCard key={i} />
+          ))}
+        >
           <Stats />
         </Suspense>
       </div>
 
       {/* Recent Orders Table Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Suspense fallback={<StatsSkeletonCards length={2} />}>
+        <Suspense
+          fallback={Array.from({ length: 2 }).map((_, i) => (
+            <StatsSkeletonCard key={i} />
+          ))}
+        >
           <PopularChartsSection />
         </Suspense>
       </div>
 
-      
+      <div className="rounded-lg border bg-card">
+        <Suspense
+          fallback={Array.from({ length: 3 }).map((_, i) => (
+            <ListItemSkeletonCard key={i} />
+          ))}
+        >
           <RecentOrders />
+        </Suspense>
+      </div>
       {/* Chart Section - Full Width */}
       <div className="grid gap-4">
         <div className="rounded-lg border bg-card">

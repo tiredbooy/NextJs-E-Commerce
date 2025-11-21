@@ -21,7 +21,19 @@ export interface User {
   image?: string | StaticImageData;
   email: string;
   role: string;
+  total_orders: number;
+  total_spent: number;
   created_at: string;
+}
+
+export interface PaginatedUserResponse {
+  users: User[];
+  page: number;
+  limit: number;
+  total_items: number;
+  total_pages: number;
+  has_next: number;
+  has_prev: number;
 }
 
 export interface Address {
@@ -38,8 +50,8 @@ export interface Address {
 }
 
 export interface Favorits {
-    id: number
-    user_id: number
-    product_id: number
-    created_at: string
+  id: number;
+  user_id: number;
+  product_id: number;
+  created_at: string;
 }
