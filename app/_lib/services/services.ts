@@ -63,6 +63,9 @@ export async function getUserOrders(
 export async function getProducts(params: ProductQueryParam = {}) {
   try {
     const query = buildQuery(params);
+    await new Promise((res) => {
+      setTimeout(() => res,5000)
+    })
 
     const data = await authenticatedRequest({
       method: "GET",

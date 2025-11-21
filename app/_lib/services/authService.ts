@@ -36,6 +36,7 @@ export async function loginUser(userObj: Login) {
       const access = accessMatch[1];
       const refresh = refreshMatch[1];
       const userData = JSON.parse(decodeURIComponent(userMatch[1]));
+      console.log('userMatch:', userMatch);
 
       const cookieStore = await cookies();
       const session = await getIronSession<SessionData>(

@@ -1,10 +1,8 @@
-import { Card } from "@/components/ui/card";
-import UsersTable from "./UsersTable";
-import { HiUsers } from "react-icons/hi";
-import { getUsers } from "@/app/_lib/services/services";
-import UsersContent from "./UsersContent";
-import { Suspense } from "react";
 import { SkeletonGrid, StatsSkeletonCard } from "@/app/_components/reusable/SkeletonCard";
+import { Card } from "@/components/ui/card";
+import { Suspense } from "react";
+import { HiUsers } from "react-icons/hi";
+import UsersContent from "./UsersContent";
 
 interface Props {
   // props here

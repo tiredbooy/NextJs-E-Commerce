@@ -1,18 +1,19 @@
+import {
+  SkeletonGrid,
+  StatsSkeletonCard,
+} from "@/app/_components/reusable/SkeletonCard";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Suspense } from "react";
 import { FaBoxes } from "react-icons/fa";
-import ProductsInformation from "./ProductsInformation";
-import ProductsTable from "./ProductsTable";
-import { getProducts } from "@/app/_lib/services/services";
+import ProductsContent from "./ProductsContent";
 
 interface Props {
   // props here
+  page?: number;
 }
 
-export default async function ManageProducts({}: Props) {
-  const productData = await getProducts();
-  const products = productData.products;
-
+export default async function ManageProducts({ page }: Props) {
   return (
     <Card className="px-10 py-8 border-border bg-card">
       <div className="flex flex-row justify-between items-center">
@@ -27,10 +28,20 @@ export default async function ManageProducts({}: Props) {
         </Button>
       </div>
 
-      {/* <div className="flex flex-row gap-5"> */}
-      <ProductsInformation totalProducts={productData?.total_items} />
-      {/* </div> */}
-      <ProductsTable products={products} />
+      <Suspense
+        fallback={
+          <>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <StatsSkeletonCard key={i} />
+              ))}
+            </div>
+            <SkeletonGrid variant="list" count={4} columns={1} />
+          </>
+        }
+      >
+        <ProductsContent page={page} />
+      </Suspense>
     </Card>
   );
 }
