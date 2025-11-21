@@ -117,3 +117,12 @@ export function isTokenExpiringSoon(
   if (remaining === null) return true;
   return remaining <= withinSeconds;
 }
+
+export const getInitials = (name: string) => {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+};

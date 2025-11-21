@@ -1,5 +1,7 @@
 "use client";
 import { Product } from "@/app/_lib/types";
+import { getInitials } from "@/app/_lib/utils/utils";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useTheme } from "next-themes";
 import Image from "next/image";
@@ -61,11 +63,11 @@ export default function ProductTableRow({ product }: Props) {
           {image !== "" ? (
             <Image width={40} height={40} src={image} alt={title} />
           ) : (
-            <div
-              className={`${
-                image === "" ? "bg-muted rounded-full w-8 h-8" : ""
-              }`}
-            />
+            <Avatar>
+              <AvatarFallback className="text-xs font-medium">
+                {getInitials(title)}
+              </AvatarFallback>
+            </Avatar>
           )}
         </TableCell>
         <TableCell>{title}</TableCell>

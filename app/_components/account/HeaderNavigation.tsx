@@ -6,6 +6,7 @@ import {
 } from "react-icons/hi";
 import ThemeSwitcher from "./ThemeSwitcher";
 import ToggleSidebar from "./ToggleSidebar";
+import { getInitials } from "@/app/_lib/utils/utils";
 
 interface Props {
   userName?: string;
@@ -15,14 +16,6 @@ interface Props {
 
 const HeaderNavigation: React.FC<Props> = ({ userName = "", userAvatar }) => {
 
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
