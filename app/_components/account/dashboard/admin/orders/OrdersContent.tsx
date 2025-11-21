@@ -1,6 +1,5 @@
-import { Order } from "@/app/_lib/types/order_types";
-import OrdersTable from "./OrdersTable";
 import { getOrders, OrderQueryParam } from "@/app/_lib/services/services";
+import OrdersTable from "./OrdersTable";
 
 interface Props {
   // props here

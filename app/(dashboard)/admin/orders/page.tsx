@@ -20,8 +20,8 @@ export default function page({ searchParams }: Props) {
     status,
     from,
     to,
-    total: total ? Number(total) : 0,
-    user: user ? Number(user) : 0,
+    total: total ,
+    user: user
   };
   return <OrderManagment queries={queries} />;
 }

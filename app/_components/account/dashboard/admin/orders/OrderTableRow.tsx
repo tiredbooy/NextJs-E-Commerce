@@ -1,6 +1,3 @@
-
-// import { getCustomerDataForOrder } from "@/app/_lib/services/services";import { getCustomerDataForOrder } from "@/app/_lib/services/a";
-import { AdminOrder, CustomerDataForAdminOrder } from "@/app/_lib/types";
 import { Order } from "@/app/_lib/types/order_types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,8 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { useQuery } from "@tanstack/react-query";
-import { FiEdit, FiPackage, FiTruck } from "react-icons/fi";
+import { FiEdit } from "react-icons/fi";
 import {
   IoDownload,
   IoEllipsisVertical,

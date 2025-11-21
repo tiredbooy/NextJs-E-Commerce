@@ -1,6 +1,6 @@
 import HeaderNavigation from "@/app/_components/account/HeaderNavigation";
 import SideNavigation from "@/app/_components/account/SideNavigation";
-import { getCurrentUser } from "@/app/_lib/services/authService";
+import { getCurrentSession, getCurrentUser } from "@/app/_lib/services/authService";
 
 interface Props {
   // props here

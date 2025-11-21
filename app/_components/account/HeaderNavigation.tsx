@@ -1,23 +1,11 @@
-"use client";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useSidebar } from "@/components/ui/sidebar";
-import { useTheme } from "next-themes";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import {
-  HiOutlineLogout,
-  HiOutlineMenu,
-  HiOutlineMoon,
-  HiOutlineSun,
+  HiOutlineLogout
 } from "react-icons/hi";
+import ThemeSwitcher from "./ThemeSwitcher";
+import ToggleSidebar from "./ToggleSidebar";
 
 interface Props {
   userName?: string;
@@ -26,14 +14,6 @@ interface Props {
 }
 
 const HeaderNavigation: React.FC<Props> = ({ userName = "", userAvatar }) => {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  const { toggleSidebar } = useSidebar();
-
-  // Prevent hydration mismatch
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const getInitials = (name: string) => {
     return name
@@ -50,15 +30,9 @@ const HeaderNavigation: React.FC<Props> = ({ userName = "", userAvatar }) => {
         {/* Left Section - Mobile Menu + User Info */}
         <div className="flex items-center gap-3">
           {/* Mobile Sidebar Toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden"
-            onClick={toggleSidebar}
-            aria-label="Toggle sidebar"
-          >
-            <HiOutlineMenu className="h-5 w-5" />
-          </Button>
+          
+
+          <ToggleSidebar />
 
           {/* User Profile */}
           <div className="flex items-center gap-3">
@@ -80,39 +54,7 @@ const HeaderNavigation: React.FC<Props> = ({ userName = "", userAvatar }) => {
         {/* Right Section - Theme Switcher + Logout */}
         <div className="flex items-center gap-2">
           {/* Theme Switcher Dropdown */}
-          {mounted && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-9 w-9"
-                  aria-label="Toggle theme"
-                >
-                  {theme === "dark" ? (
-                    <HiOutlineMoon className="h-5 w-5" />
-                  ) : (
-                    <HiOutlineSun className="h-5 w-5" />
-                  )}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setTheme("light")}>
-                  <HiOutlineSun className="mr-2 h-4 w-4" />
-                  Light
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("dark")}>
-                  <HiOutlineMoon className="mr-2 h-4 w-4" />
-                  Dark
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("system")}>
-                  <HiOutlineMenu className="mr-2 h-4 w-4" />
-                  System
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
-
+            <ThemeSwitcher />
           {/* Logout Button */}
           <Link href="/auth">
             <Button

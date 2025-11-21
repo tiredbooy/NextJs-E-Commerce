@@ -1,13 +1,11 @@
-import { getOrders, OrderQueryParam } from "@/app/_lib/services/services";
-import { Button } from "@/components/ui/button";
+import {
+    SkeletonGrid,
+    StatsSkeletonCard,
+} from "@/app/_components/reusable/SkeletonCard";
+import { OrderQueryParam } from "@/app/_lib/services/services";
 import { Card } from "@/components/ui/card";
 import { Suspense } from "react";
 import { FaBoxes } from "react-icons/fa";
-import ProductsContent from "../products/ProductsContent";
-import {
-  SkeletonGrid,
-  StatsSkeletonCard,
-} from "@/app/_components/reusable/SkeletonCard";
 import OrdersContent from "./OrdersContent";
 
 interface Props {
