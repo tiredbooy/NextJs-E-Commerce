@@ -58,10 +58,6 @@ export type RevenueData = {
   revenue: number;
 };
 
-
-
-
-
 export interface Message {
   id: number;
   content: string;
@@ -85,8 +81,8 @@ export interface QueryParams {
   limit?: number;
   page?: number;
   status?: string;
-  total?: string;
-  user?: string;
+  total?: number;
+  user?: number;
   from?: string;
   to?: string;
   search?: string;
@@ -98,4 +94,20 @@ export interface QueryParams {
   minPrice?: string;
   maxPrice?: string;
   sortOrder?: string;
+}
+
+export interface AdminOrder {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  total_price: number;
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+}
+
+export interface CustomerDataForAdminOrder {
+  id: number
+  first_name: string;
+  last_name : string
+  email: string;
+  phone: string | undefined
 }

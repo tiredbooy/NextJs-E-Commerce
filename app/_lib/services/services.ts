@@ -1,10 +1,10 @@
-import { QueryParams } from "../types";
+import { AdminOrder, CustomerDataForAdminOrder, QueryParams } from "../types";
 import { OrdersResponse } from "../types/order_types";
-import { PaginatedUserResponse } from "../types/user_types";
+import { PaginatedUserResponse, User } from "../types/user_types";
 import { buildQuery } from "../utils/utils";
 import { authenticatedRequest } from "./authService";
 
-type OrderQueryParam = Pick<
+export type OrderQueryParam = Pick<
   QueryParams,
   "limit" | "page" | "status" | "total" | "user" | "from" | "to"
 >;
@@ -63,9 +63,6 @@ export async function getUserOrders(
 export async function getProducts(params: ProductQueryParam = {}) {
   try {
     const query = buildQuery(params);
-    await new Promise((res) => {
-      setTimeout(() => res,5000)
-    })
 
     const data = await authenticatedRequest({
       method: "GET",
@@ -92,5 +89,19 @@ export async function getUsers(
     return data;
   } catch (e: any) {
     throw new Error(e.message || "Could not get Users at this time.");
+  }
+}
+
+export async function getUser(userId: number): Promise<User> {
+  try {
+    const data = await authenticatedRequest({
+      method : "GET",
+      url : `/api/admin/users/${userId}`
+    })
+
+    return data
+  }
+  catch(e : any) {
+    throw new Error(e.message || "Could not get user at this time.")
   }
 }

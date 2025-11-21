@@ -7,7 +7,7 @@ const protectedRoutes = ["/account", "/admin"];
 
 const authRoutes = ["/auth/login", "/auth/signup"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const response = NextResponse.next();

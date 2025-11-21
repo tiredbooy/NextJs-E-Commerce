@@ -1,7 +1,9 @@
-"use client";
+
+// import { getCustomerDataForOrder } from "@/app/_lib/services/services";import { getCustomerDataForOrder } from "@/app/_lib/services/a";
+import { AdminOrder, CustomerDataForAdminOrder } from "@/app/_lib/types";
+import { Order } from "@/app/_lib/types/order_types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TableCell, TableRow } from "@/components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,21 +12,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { TableCell, TableRow } from "@/components/ui/table";
+import { useQuery } from "@tanstack/react-query";
+import { FiEdit, FiPackage, FiTruck } from "react-icons/fi";
 import {
-  IoEye,
-  IoTrash,
   IoDownload,
   IoEllipsisVertical,
+  IoEye,
+  IoTrash,
 } from "react-icons/io5";
-import { FiEdit, FiPackage, FiTruck } from "react-icons/fi";
-import { AdminOrder } from "./OrdersTable";
 
 interface Props {
-  order: AdminOrder;
-  onView?: (order: AdminOrder) => void;
-  onEdit?: (order: AdminOrder) => void;
-  onDelete?: (orderId: string) => void;
-  onDownloadInvoice?: (orderId: string) => void;
+  order: Order;
+  onView?: (order: Order) => void;
+  onEdit?: (order: Order) => void;
+  onDelete?: (orderId: number) => void;
+  onDownloadInvoice?: (orderId: number) => void;
 }
 
 export default function OrderTableRow({
@@ -34,7 +37,10 @@ export default function OrderTableRow({
   onDelete,
   onDownloadInvoice,
 }: Props) {
-  // Format date to readable format
+
+
+  
+  
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
@@ -45,14 +51,8 @@ export default function OrderTableRow({
   };
 
   // Get status badge variant and styling
-  const getStatusConfig = (status: AdminOrder["status"]) => {
+  const getStatusConfig = (status: Order["status"]) => {
     switch (status) {
-      case "delivered":
-        return {
-          variant: "default" as const,
-          className:
-            "bg-success hover:bg-success-hover text-success-foreground",
-        };
       case "shipped":
         return {
           variant: "default" as const,
@@ -81,57 +81,8 @@ export default function OrderTableRow({
         };
     }
   };
-
-  // Get payment status badge
-  const getPaymentStatusConfig = (
-    paymentStatus: AdminOrder["paymentStatus"]
-  ) => {
-    switch (paymentStatus) {
-      case "paid":
-        return {
-          variant: "default" as const,
-          className:
-            "bg-success hover:bg-success-hover text-success-foreground",
-          label: "Paid",
-        };
-      case "pending":
-        return {
-          variant: "secondary" as const,
-          className:
-            "bg-warning hover:bg-warning-hover text-warning-foreground",
-          label: "Pending",
-        };
-      case "failed":
-        return {
-          variant: "destructive" as const,
-          className: "",
-          label: "Failed",
-        };
-      default:
-        return {
-          variant: "secondary" as const,
-          className: "",
-          label: paymentStatus,
-        };
-    }
-  };
-
-  // Get payment method icon/label
-  const getPaymentMethodLabel = (method: AdminOrder["paymentMethod"]) => {
-    switch (method) {
-      case "credit_card":
-        return "Card";
-      case "paypal":
-        return "PayPal";
-      case "cod":
-        return "COD";
-      default:
-        return method;
-    }
-  };
-
   const statusConfig = getStatusConfig(order.status);
-  const paymentConfig = getPaymentStatusConfig(order.paymentStatus);
+
 
   return (
     <TableRow key={order.id} className="hover:bg-muted/50">
@@ -144,49 +95,27 @@ export default function OrderTableRow({
       <TableCell>
         <div className="flex flex-col">
           <span className="font-medium text-foreground">
-            {order.customer.name}
+            {order.customer?.first_name} - {order.customer?.first_name}
           </span>
           <span className="text-xs text-muted-foreground">
-            {order.customer.email}
+            {order.customer?.email}
           </span>
         </div>
+      </TableCell>
+
+      <TableCell className="text-muted-foreground">
+        {order.customer?.phone}
       </TableCell>
 
       {/* Date */}
       <TableCell className="text-muted-foreground">
-        {formatDate(order.date)}
-      </TableCell>
-
-      {/* Items Count */}
-      <TableCell>
-        <div className="flex items-center gap-1">
-          <FiPackage className="w-4 h-4 text-muted-foreground" />
-          <span>
-            {order.items} item{order.items !== 1 ? "s" : ""}
-          </span>
-        </div>
+        {formatDate(order.created_at)}
       </TableCell>
 
       {/* Total Amount */}
       <TableCell className="font-semibold text-foreground">
-        ${order.total.toFixed(2)}
+        ${order.total_price.toFixed(2)}
       </TableCell>
-
-      {/* Payment Method & Status */}
-      <TableCell>
-        <div className="flex flex-col gap-1">
-          <span className="text-sm text-muted-foreground">
-            {getPaymentMethodLabel(order.paymentMethod)}
-          </span>
-          <Badge
-            variant={paymentConfig.variant}
-            className={`w-fit text-xs ${paymentConfig.className}`}
-          >
-            {paymentConfig.label}
-          </Badge>
-        </div>
-      </TableCell>
-
       {/* Order Status */}
       <TableCell>
         <Badge
@@ -241,12 +170,6 @@ export default function OrderTableRow({
                 <FiEdit className="w-4 h-4 mr-2" />
                 Edit Order
               </DropdownMenuItem>
-              {order.trackingNumber && (
-                <DropdownMenuItem>
-                  <FiTruck className="w-4 h-4 mr-2" />
-                  Track Shipment
-                </DropdownMenuItem>
-              )}
               <DropdownMenuItem onClick={() => onDownloadInvoice?.(order.id)}>
                 <IoDownload className="w-4 h-4 mr-2" />
                 Download Invoice

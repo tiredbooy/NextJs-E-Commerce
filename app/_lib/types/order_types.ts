@@ -1,3 +1,5 @@
+import { CustomerDataForAdminOrder } from "../types";
+
 export interface OrderItem {
   id: 1;
   order_id: number;
@@ -13,6 +15,7 @@ export interface Order {
   user_id: number;
   total_price: number;
   shipping_address_id: string;
+  customer: CustomerDataForAdminOrder
   coupon_id?: number;
   discount_applied?: number;
   status: "pending" | "processing" | "completed" | "cancelled" | "shipped";
