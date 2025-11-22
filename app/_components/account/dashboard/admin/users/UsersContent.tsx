@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default async function UsersContent({ page = 1 }: Props) {
-  const usersData = await getUsers({ limit: 20, page });
+  const usersData = await getUsers({ limit: 10, page });
   return (
     <>
       <UsersTable users={usersData.users || []} />

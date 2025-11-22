@@ -5,37 +5,38 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
 } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import HeaderLogo from "../header/Logo";
 import {
-  HiOutlineHome,
-  HiOutlineShoppingBag,
-  HiOutlineCube,
-  HiOutlineUsers,
-  HiOutlineUser,
-  HiOutlineHeart,
+  HiOutlineChatAlt2,
   HiOutlineCog,
+  HiOutlineCube,
+  HiOutlineHeart,
+  HiOutlineHome,
   HiOutlineLogout,
   HiOutlineNewspaper,
-  HiOutlineChatAlt2,
+  HiOutlineShoppingBag,
+  HiOutlineUser,
+  HiOutlineUsers,
 } from "react-icons/hi";
-import { cn } from "@/lib/utils";
-
+import { CiRouter } from "react-icons/ci";
+import HeaderLogo from "../header/Logo";
 
 export const sideBarItems: SideBar<dashboardRole> = {
   admin: [
     { title: "Dashboard", href: "/admin", icon: HiOutlineHome },
     { title: "Orders", href: "/admin/orders", icon: HiOutlineShoppingBag },
     { title: "Products", href: "/admin/products", icon: HiOutlineCube },
+    { title: "Api Monitoring", href: "/admin/api-monitor", icon: CiRouter },
     { title: "Blogs", href: "/admin/blogs", icon: HiOutlineNewspaper },
     { title: "Users", href: "/admin/users", icon: HiOutlineUsers },
     { title: "Tickets", href: "/admin/tickets", icon: HiOutlineChatAlt2 },

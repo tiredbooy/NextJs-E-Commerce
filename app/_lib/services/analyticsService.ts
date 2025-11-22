@@ -1,6 +1,6 @@
 import { PopularChartItem } from "../types";
-import { StatData } from "../types/analytics_types";
-import { authenticatedRequest } from "./authService";
+import { EndpointStat, StatData } from "../types/analytics_types";
+import { authenticatedRequest, getCurrentSession } from "./authService";
 
 export async function getRevenueStats(): Promise<StatData> {
   const response = await authenticatedRequest({
@@ -69,4 +69,29 @@ export async function getPopularProducts(): Promise<PopularChartItem[]> {
     name: item.product_name,
     value: item.current_sold,
   }));
+}
+
+export async function getApiEndPointsAnalytics(): Promise<EndpointStat[]> {
+  try {
+    const res = await authenticatedRequest({
+      method: "GET",
+      url: "/api/admin/analytics/endpoints",
+    });
+
+    return res.data;
+  } catch (e: any) {
+    throw new Error(e.message || "Could not fetch Endpoints analytics.");
+  }
+}
+
+export async function getApiDailyTrends() {
+  try {
+    const res = await authenticatedRequest({
+      method: "GET",
+      url: "/api/admin/analytics/trends",
+    });
+    return res.data;
+  } catch (e: any) {
+    throw new Error(e.message || "Could not fetch Endpoints analytics.");
+  }
 }
