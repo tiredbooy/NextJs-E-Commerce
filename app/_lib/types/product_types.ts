@@ -1,4 +1,3 @@
-
 export interface Color {
   id: number;
   title: string;
@@ -13,7 +12,7 @@ export interface Image {
   id: number;
   url: string;
   product_id: number;
-  name: string
+  name: string;
 }
 
 export interface Category {
@@ -22,8 +21,8 @@ export interface Category {
 }
 
 export interface Brand {
-    id: number
-    title: string
+  id: number;
+  title: string;
 }
 
 export interface ProductItem {
@@ -33,6 +32,7 @@ export interface ProductItem {
   discount_price?: number | null;
   description: string;
   stock: number;
+  slug: string;
   brand: number;
   sales: number;
   created_at: string;
@@ -52,6 +52,7 @@ export interface CreateProductRequest {
   description: string;
   stock: number;
   brand: number;
+  slug: string;
   category_ids: number[];
   color_ids: number[];
   size_ids: number[];
@@ -68,10 +69,10 @@ export interface PaginatedProductsResponse {
 }
 
 export interface Review {
-    id: number
-    user_id: number
-    product_id: number
-    rating: number
-    comment: string
-    created_at: string
+  id: number;
+  user_id: number;
+  product_id: number;
+  rating: number;
+  comment: string;
+  created_at: string;
 }

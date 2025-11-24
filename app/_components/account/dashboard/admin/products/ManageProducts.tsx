@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Suspense } from "react";
 import { FaBoxes } from "react-icons/fa";
 import ProductsContent from "./ProductsContent";
+import Link from "next/link";
 
 interface Props {
   // props here
@@ -23,9 +24,11 @@ export default async function ManageProducts({ page }: Props) {
             Manage Products
           </h1>
         </div>
-        <Button className="font-semibold text-background cursor-pointer">
-          Add Product
-        </Button>
+        <Link href={"/admin/products/new"}>
+          <Button className="font-semibold text-background cursor-pointer">
+            Add Product
+          </Button>
+        </Link>
       </div>
 
       <Suspense

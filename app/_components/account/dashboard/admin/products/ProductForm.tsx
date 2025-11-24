@@ -13,58 +13,32 @@ import { ProductVariants } from "./ProductVariants";
 
 export interface ProductFormData {
   // Basic Info
-  name: string;
+  title: string;
   description: string;
-  shortDescription: string;
   category: string;
-  brand: string;
-  sku: string;
-  barcode: string;
+  brand: number;
   slug: string;
-
   // Pricing
   price: string;
   compareAtPrice: string;
   costPerItem: string;
-  taxable: boolean;
+  include_tax: boolean;
 
   // Images
   images: Array<{
-    id: string;
-    file: File | null;
-    preview: string;
-    alt: string;
-    isPrimary: boolean;
-  }>;
-
-  // Inventory
-  trackInventory: boolean;
-  stock: string;
-  lowStockThreshold: string;
-  allowBackorder: boolean;
-  weight: string;
-  dimensions: {
-    length: string;
-    width: string;
-    height: string;
-  };
-
-  // Variants
-  hasVariants: boolean;
-  variants: Array<{
-    id: string;
+    id: number;
+    product_id: number;
+    url: string;
     name: string;
-    options: string[];
   }>;
 
-  // SEO
-  metaTitle: string;
-  metaDescription: string;
-  keywords: string;
+  stock: number;
 
-  // Status
-  status: "draft" | "active" | "archived";
-  featured: boolean;
+  meta_description: string;
+  meta_tags: string[];
+
+  is_featured: boolean;
+  is_active: boolean;
 }
 
 interface Props {
@@ -74,6 +48,7 @@ interface Props {
   isLoading?: boolean;
 }
 
+
 export default function ProductForm({
   mode = "create",
   initialData,
@@ -81,36 +56,21 @@ export default function ProductForm({
   isLoading = false,
 }: Props) {
   const [formData, setFormData] = useState<ProductFormData>({
-    name: initialData?.name || "",
-    description: initialData?.description || "",
-    shortDescription: initialData?.shortDescription || "",
-    category: initialData?.category || "",
-    brand: initialData?.brand || "",
-    sku: initialData?.sku || "",
-    barcode: initialData?.barcode || "",
-    slug: initialData?.slug || "",
+    title: initialData?.title || "",
     price: initialData?.price || "",
+    description: initialData?.description || "",
+    stock: initialData?.stock || 0,
+    category: initialData?.category || "",
+    brand: initialData?.brand || 1,
+    slug: initialData?.slug || "",
     compareAtPrice: initialData?.compareAtPrice || "",
     costPerItem: initialData?.costPerItem || "",
-    taxable: initialData?.taxable ?? true,
+    include_tax: initialData?.include_tax ?? true,
     images: initialData?.images || [],
-    trackInventory: initialData?.trackInventory ?? true,
-    stock: initialData?.stock || "",
-    lowStockThreshold: initialData?.lowStockThreshold || "5",
-    allowBackorder: initialData?.allowBackorder ?? false,
-    weight: initialData?.weight || "",
-    dimensions: initialData?.dimensions || {
-      length: "",
-      width: "",
-      height: "",
-    },
-    hasVariants: initialData?.hasVariants ?? false,
-    variants: initialData?.variants || [],
-    metaTitle: initialData?.metaTitle || "",
-    metaDescription: initialData?.metaDescription || "",
-    keywords: initialData?.keywords || "",
-    status: initialData?.status || "draft",
-    featured: initialData?.featured ?? false,
+    meta_description: initialData?.meta_description || "",
+    meta_tags: initialData?.meta_tags || [],
+    is_featured: initialData?.is_featured ?? false,
+    is_active: initialData?.is_active ?? false,
   });
 
   const [activeTab, setActiveTab] = useState<string>("basic");
@@ -119,8 +79,12 @@ export default function ProductForm({
     setFormData((prev) => ({ ...prev, ...updates }));
   };
 
-  const handleSubmit = (status: "draft" | "active") => {
-    onSubmit({ ...formData, status });
+  const handleSubmit = () => {
+
+    const {compareAtPrice , costPerItem, images, ...requestData} = formData;
+    console.log('...formData:', formData);
+    console.log('requestData:', requestData);
+    
   };
 
   const calculateProfit = () => {
@@ -156,14 +120,14 @@ export default function ProductForm({
           <Button
             variant="outline"
             disabled={isLoading}
-            onClick={() => handleSubmit("draft")}
+            onClick={() => handleSubmit()}
             className="cursor-pointer"
           >
             Save as Draft
           </Button>
           <Button
             disabled={isLoading}
-            onClick={() => handleSubmit("active")}
+            onClick={() => handleSubmit()}
             className="gap-2 text-background font-semibold cursor-pointer"
           >
             <MdSave />

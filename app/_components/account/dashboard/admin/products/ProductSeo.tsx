@@ -11,7 +11,7 @@ interface Props {
 }
 
 export function ProductSEO({ data, onChange }: Props) {
-  const previewUrl = `https://yourstore.com/products/${
+  const previewUrl = `https://velisse.com/products/${
     data.slug || "product-name"
   }`;
 
@@ -25,46 +25,32 @@ export function ProductSEO({ data, onChange }: Props) {
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="metaTitle">Meta Title</Label>
-          <Input
-            id="metaTitle"
-            value={data.metaTitle}
-            onChange={(e) => onChange({ metaTitle: e.target.value })}
-            placeholder={data.name || "Product meta title"}
-            maxLength={60}
-          />
-          <p className="text-xs text-gray-500">
-            {data.metaTitle.length}/60 characters - Appears in search results
-          </p>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="metaDescription">Meta Description</Label>
+          <Label htmlFor="meta_description">Meta Description</Label>
           <Textarea
-            id="metaDescription"
-            value={data.metaDescription}
-            onChange={(e) => onChange({ metaDescription: e.target.value })}
+            id="meta_description"
+            value={data.meta_description}
+            onChange={(e) => onChange({ meta_description: e.target.value })}
             placeholder="Brief description that appears in search engine results"
             rows={3}
             maxLength={160}
           />
           <p className="text-xs text-gray-500">
-            {data.metaDescription.length}/160 characters - Encourage clicks with
-            compelling copy
+            {data.meta_description.length}/160 characters - Encourage clicks
+            with compelling copy
           </p>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="keywords">SEO Keywords</Label>
+          <Label htmlFor="meta_tags">SEO Meta Tags</Label>
           <Input
-            id="keywords"
-            value={data.keywords}
-            onChange={(e) => onChange({ keywords: e.target.value })}
+            id="meta_tags"
+            value={data.meta_tags}
+            onChange={(e) => onChange({ meta_tags: [e.target.value] })}
             placeholder="wireless headphones, bluetooth, noise cancelling"
           />
           <p className="text-xs text-gray-500">
-            Separate keywords with commas - helps search engines understand your
-            product
+            Separate meta_tags with commas - helps search engines understand
+            your product
           </p>
         </div>
 
@@ -74,13 +60,9 @@ export function ProductSEO({ data, onChange }: Props) {
             SEARCH ENGINE PREVIEW
           </p>
           <div className="space-y-1">
-            <p className="text-foreground text-lg hover:underline cursor-pointer">
-              {data.metaTitle || data.name || "Your Product Title"}
-            </p>
             <p className="text-green-700 text-sm">{previewUrl}</p>
             <p className="text-gray-600 text-sm">
-              {data.metaDescription ||
-                data.shortDescription ||
+              {data.meta_description ||
                 "Your product description will appear here in search results. Make it compelling to increase click-through rates."}
             </p>
           </div>

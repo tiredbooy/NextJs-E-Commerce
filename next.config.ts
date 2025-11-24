@@ -1,9 +1,19 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
-    remotePatterns: [new URL('https://avatar.iran.liara.run/**')],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'avatar.iran.liara.run',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        pathname: '/**', // More permissive
+      }
+    ],
   },
 };
 

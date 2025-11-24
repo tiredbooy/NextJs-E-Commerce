@@ -26,20 +26,11 @@ export function ProductBasicInfo({ data, onChange }: Props) {
       .replace(/(^-|-$)/g, "");
   };
 
-  const handleNameChange = (name: string) => {
+  const handleNameChange = (title: string) => {
     onChange({
-      name,
-      slug: data.slug || generateSlug(name),
-      metaTitle: data.metaTitle || name,
+      title,
+      slug: generateSlug(title) || data.slug,
     });
-  };
-
-  const generateSKU = () => {
-    const prefix = data.category
-      ? data.category.substring(0, 3).toUpperCase()
-      : "PRD";
-    const random = Math.random().toString(36).substring(2, 8).toUpperCase();
-    onChange({ sku: `${prefix}-${random}` });
   };
 
   return (
@@ -54,27 +45,11 @@ export function ProductBasicInfo({ data, onChange }: Props) {
             <Label htmlFor="name">Product Name *</Label>
             <Input
               id="name"
-              value={data.name}
+              value={data.title}
               onChange={(e) => handleNameChange(e.target.value)}
               placeholder="e.g., Premium Wireless Headphones"
               required
             />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="shortDescription">Short Description *</Label>
-            <Textarea
-              id="shortDescription"
-              value={data.shortDescription}
-              onChange={(e) => onChange({ shortDescription: e.target.value })}
-              placeholder="A brief, compelling description (appears in product listings)"
-              rows={2}
-              maxLength={150}
-              required
-            />
-            <p className="text-xs text-muted-foreground">
-              {data.shortDescription.length}/150 characters
-            </p>
           </div>
 
           <div className="space-y-2">
@@ -121,7 +96,7 @@ export function ProductBasicInfo({ data, onChange }: Props) {
               <Input
                 id="brand"
                 value={data.brand}
-                onChange={(e) => onChange({ brand: e.target.value })}
+                onChange={(e) => onChange({ brand: Number(e.target.value) })}
                 placeholder="e.g., Nike, Apple, Samsung"
               />
             </div>
@@ -130,8 +105,8 @@ export function ProductBasicInfo({ data, onChange }: Props) {
           <div className="flex items-center space-x-2 p-4 bg-card rounded-lg border border-border">
             <Switch
               id="featured"
-              checked={data.featured}
-              onCheckedChange={(checked) => onChange({ featured: checked })}
+              checked={data.is_featured}
+              onCheckedChange={(checked) => onChange({ is_featured: checked })}
             />
             <div className="flex-1">
               <Label htmlFor="featured" className="cursor-pointer">
@@ -168,45 +143,6 @@ export function ProductBasicInfo({ data, onChange }: Props) {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="sku">SKU (Stock Keeping Unit) *</Label>
-                <button
-                  type="button"
-                  onClick={generateSKU}
-                  className="text-xs text-primary hover:underline cursor-pointer"
-                >
-                  Generate SKU
-                </button>
-              </div>
-              <Input
-                id="sku"
-                value={data.sku}
-                onChange={(e) =>
-                  onChange({ sku: e.target.value.toUpperCase() })
-                }
-                placeholder="PRD-XXXXX"
-                required
-              />
-              <p className="text-xs text-muted-foreground">
-                Unique identifier for inventory management
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="barcode">Barcode / UPC</Label>
-              <Input
-                id="barcode"
-                value={data.barcode}
-                onChange={(e) => onChange({ barcode: e.target.value })}
-                placeholder="123456789012"
-              />
-              <p className="text-xs text-muted-foreground">
-                For scanning and POS systems
-              </p>
-            </div>
-          </div>
         </CardContent>
       </Card>
     </div>

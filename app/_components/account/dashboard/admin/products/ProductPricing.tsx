@@ -179,9 +179,9 @@ export function ProductPricing({ data, onChange }: Props) {
               </p>
             </div>
             <Switch
-              id="taxable"
-              checked={data.taxable}
-              onCheckedChange={(checked) => onChange({ taxable: checked })}
+              id="include_tax"
+              checked={data.include_tax}
+              onCheckedChange={(checked) => onChange({ include_tax: checked })}
             />
           </div>
         </CardContent>
