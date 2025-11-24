@@ -9,19 +9,6 @@ export type OrderQueryParam = Pick<
   "limit" | "page" | "status" | "total" | "user" | "from" | "to"
 >;
 
-type ProductQueryParam = Pick<
-  QueryParams,
-  | "limit"
-  | "page"
-  | "category"
-  | "brand"
-  | "search"
-  | "minPrice"
-  | "maxPrice"
-  | "sortBy"
-  | "sortOrder"
->;
-
 type UserQueryParam = Pick<
   QueryParams,
   "page" | "limit" | "search" | "sortBy" | "orderBy" | "joined"
@@ -64,20 +51,6 @@ export async function getUserOrders(
   }
 }
 
-export async function getProducts(params: ProductQueryParam = {}) {
-  try {
-    const query = buildQuery(params);
-
-    const data = await authenticatedRequest({
-      method: "GET",
-      url: `/api/products${query}`,
-    });
-
-    return data;
-  } catch (e: any) {
-    throw new Error(e.message || "Could not get Products at this time.");
-  }
-}
 
 export async function getUsers(
   params: UserQueryParam

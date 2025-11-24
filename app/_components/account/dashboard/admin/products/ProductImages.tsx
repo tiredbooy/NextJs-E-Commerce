@@ -22,7 +22,6 @@ interface ProductFormData {
 
 interface Props {
   data: ProductFormData;
-  onChange: (updates: Partial<ProductFormData>) => void;
 }
 
 export function ProductImages({ data, onChange }: Props) {

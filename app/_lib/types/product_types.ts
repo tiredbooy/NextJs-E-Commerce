@@ -53,6 +53,11 @@ export interface CreateProductRequest {
   stock: number;
   brand: number;
   slug: string;
+  meta_description: string;
+  meta_tags: string[];
+  is_featured: boolean;
+  is_active: boolean;
+  include_tax: boolean;
   category_ids: number[];
   color_ids: number[];
   size_ids: number[];

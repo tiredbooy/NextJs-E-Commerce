@@ -12,7 +12,7 @@ interface Props {
 
 export function ProductPricing({ data, onChange }: Props) {
   const calculateDiscount = () => {
-    const price = parseFloat(data.price) || 0;
+    const price = data.price || 0;
     const compareAt = parseFloat(data.compareAtPrice) || 0;
 
     if (compareAt > price && price > 0) {
@@ -23,13 +23,13 @@ export function ProductPricing({ data, onChange }: Props) {
   };
 
   const profit = () => {
-    const price = parseFloat(data.price) || 0;
+    const price = data.price || 0;
     const cost = parseFloat(data.costPerItem) || 0;
     return (price - cost).toFixed(2);
   };
 
   const margin = () => {
-    const price = parseFloat(data.price) || 0;
+    const price = data.price || 0;
     const cost = parseFloat(data.costPerItem) || 0;
 
     if (price > 0) {
@@ -62,7 +62,7 @@ export function ProductPricing({ data, onChange }: Props) {
                   step="0.01"
                   min="0"
                   value={data.price}
-                  onChange={(e) => onChange({ price: e.target.value })}
+                  onChange={(e) => onChange({ price: Number(e.target.value) })}
                   placeholder="0.00"
                   className="pl-7"
                   required
@@ -97,7 +97,7 @@ export function ProductPricing({ data, onChange }: Props) {
           </div>
 
           {data.compareAtPrice &&
-            parseFloat(data.compareAtPrice) > parseFloat(data.price) && (
+            parseFloat(data.compareAtPrice) > data.price && (
               <div className="p-4 bg-accent/40 rounded-lg border border-accent flex items-center gap-2">
                 <MdLocalOffer className="text-warning/70" size={24} />
                 <div>
@@ -107,7 +107,7 @@ export function ProductPricing({ data, onChange }: Props) {
                   <p className="text-sm text-warning/70">
                     Customers save $
                     {(
-                      parseFloat(data.compareAtPrice) - parseFloat(data.price)
+                      parseFloat(data.compareAtPrice) - data.price
                     ).toFixed(2)}
                   </p>
                 </div>

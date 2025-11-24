@@ -1,25 +1,28 @@
 "use client";
 import { Breadcrumb } from "@/app/_components/reusable/BreadCrump";
+import { createProduct } from "@/app/_lib/actions/productsAction";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useState } from "react";
+import { startTransition, useState } from "react";
 import { MdPreview, MdSave } from "react-icons/md";
 import { ProductBasicInfo } from "./ProductBasicInfo";
 import { ProductImages } from "./ProductImages";
 import { ProductInventory } from "./ProductInventory";
 import { ProductPricing } from "./ProductPricing";
 import { ProductSEO } from "./ProductSeo";
-import { ProductVariants } from "./ProductVariants";
+import ProductAttributes from "./ProductAttributes";
 
 export interface ProductFormData {
   // Basic Info
   title: string;
   description: string;
-  category: string;
+  category_ids: number[];
+  color_ids: number[];
+  size_ids: number[];
   brand: number;
   slug: string;
   // Pricing
-  price: string;
+  price: number;
   compareAtPrice: string;
   costPerItem: string;
   include_tax: boolean;
@@ -48,19 +51,21 @@ interface Props {
   isLoading?: boolean;
 }
 
-
 export default function ProductForm({
   mode = "create",
   initialData,
   onSubmit,
   isLoading = false,
 }: Props) {
+  const [message, setMessage] = useState("");
   const [formData, setFormData] = useState<ProductFormData>({
     title: initialData?.title || "",
-    price: initialData?.price || "",
+    price: initialData?.price || 0,
     description: initialData?.description || "",
     stock: initialData?.stock || 0,
-    category: initialData?.category || "",
+    category_ids: initialData?.category_ids || [1],
+    color_ids: initialData?.color_ids || [],
+    size_ids: initialData?.size_ids || [1],
     brand: initialData?.brand || 1,
     slug: initialData?.slug || "",
     compareAtPrice: initialData?.compareAtPrice || "",
@@ -80,15 +85,17 @@ export default function ProductForm({
   };
 
   const handleSubmit = () => {
-
-    const {compareAtPrice , costPerItem, images, ...requestData} = formData;
-    console.log('...formData:', formData);
-    console.log('requestData:', requestData);
-    
+    const { compareAtPrice, costPerItem, images, ...requestData } = formData;
+    console.log("requestData:", requestData);
+    startTransition(async () => {
+      const result = await createProduct(requestData);
+      setMessage(result.message);
+      console.log("result:", result);
+    });
   };
 
   const calculateProfit = () => {
-    const price: number = parseFloat(formData.price) || 0;
+    const price: number = formData.price || 0;
     const cost: number = parseFloat(formData.costPerItem) || 0;
     const profit: number = price - cost;
     const margin = price > 0 ? ((profit / price) * 100).toFixed(2) : 0;
@@ -113,18 +120,6 @@ export default function ProductForm({
           {mode === "create" ? "Add New Product" : "Edit Product"}
         </h1>
         <div className="flex gap-2">
-          <Button variant="outline" disabled={isLoading}>
-            <MdPreview className="mr-2 cursor-pointer" />
-            Preview
-          </Button>
-          <Button
-            variant="outline"
-            disabled={isLoading}
-            onClick={() => handleSubmit()}
-            className="cursor-pointer"
-          >
-            Save as Draft
-          </Button>
           <Button
             disabled={isLoading}
             onClick={() => handleSubmit()}
@@ -179,7 +174,7 @@ export default function ProductForm({
                 key={tab.id}
                 variant={activeTab === tab.id ? "default" : "ghost"}
                 onClick={() => setActiveTab(tab.id)}
-                className="transition-all cursor-pointer"
+                className={`transition-all cursor-pointer ${activeTab === tab.id ? "text-background" : "text-foreground"}`}
               >
                 {tab.label}
               </Button>
@@ -199,7 +194,7 @@ export default function ProductForm({
         )}
 
         {activeTab === "images" && (
-          <ProductImages data={formData} onChange={updateFormData} />
+          <ProductImages data={formData} />
         )}
 
         {activeTab === "inventory" && (
@@ -207,7 +202,7 @@ export default function ProductForm({
         )}
 
         {activeTab === "variants" && (
-          <ProductVariants data={formData} onChange={updateFormData} />
+          <ProductAttributes data={formData} onChange={updateFormData} />
         )}
 
         {activeTab === "seo" && (
