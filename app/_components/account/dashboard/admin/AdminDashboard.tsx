@@ -1,18 +1,19 @@
+import {
+  ListItemSkeletonCard,
+  StatsSkeletonCard,
+} from "@/app/_components/reusable/SkeletonCard";
 import { Suspense } from "react";
 import PopularChartsSection from "./PopularCharts";
 import RecentOrders from "./RecentOrders";
 import RevenueChart from "./RevenueChart";
 import Stats from "./Stats";
-import {
-  ListItemSkeletonCard,
-  StatsSkeletonCard,
-} from "@/app/_components/reusable/SkeletonCard";
 
 interface Props {
   // Add props if needed later
 }
 
 const AdminDashboard: React.FC<Props> = ({}) => {
+
   return (
     <div className="flex flex-col gap-6 p-4 md:p-6">
       {/* Page Header */}

@@ -1,6 +1,7 @@
 export interface Color {
   id: number;
   title: string;
+  hex: string;
 }
 
 export interface Size {
@@ -9,7 +10,7 @@ export interface Size {
 }
 
 export interface Image {
-  id: number;
+  id?: number;
   url: string;
   product_id: number;
   name: string;

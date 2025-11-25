@@ -1,4 +1,4 @@
-import { getProducts } from "@/app/_lib/services/services";
+import { getProducts } from "@/app/_lib/services/productsService";
 import ProductsInformation from "./ProductsInformation";
 import ProductsTable from "./ProductsTable";
 

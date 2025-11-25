@@ -1,3 +1,4 @@
+import { Color, Size } from "@/app/_lib/types/product_types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,33 +34,6 @@ import {
   MdStraighten,
 } from "react-icons/md";
 
-// Sample data - replace with your actual data fetching
-const AVAILABLE_SIZES = [
-  { id: 1, name: "XS" },
-  { id: 2, name: "S" },
-  { id: 3, name: "M" },
-  { id: 4, name: "L" },
-  { id: 5, name: "XL" },
-  { id: 6, name: "XXL" },
-  { id: 7, name: "3XL" },
-  { id: 8, name: "125ml" },
-];
-
-const AVAILABLE_COLORS = [
-  { id: 1, name: "Black", hex: "#000000" },
-  { id: 2, name: "White", hex: "#FFFFFF" },
-  { id: 3, name: "Red", hex: "#EF4444" },
-  { id: 4, name: "Blue", hex: "#3B82F6" },
-  { id: 5, name: "Green", hex: "#10B981" },
-  { id: 6, name: "Yellow", hex: "#F59E0B" },
-  { id: 7, name: "Purple", hex: "#A855F7" },
-  { id: 8, name: "Pink", hex: "#EC4899" },
-  { id: 9, name: "Gray", hex: "#6B7280" },
-  { id: 10, name: "Navy", hex: "#1E3A8A" },
-  { id: 11, name: "Orange", hex: "#F97316" },
-  { id: 12, name: "Teal", hex: "#14B8A6" },
-];
-
 interface ProductFormData {
   size_ids: number[];
   color_ids: number[];
@@ -68,9 +42,16 @@ interface ProductFormData {
 interface Props {
   data: ProductFormData;
   onChange: (updates: Partial<ProductFormData>) => void;
+  sizes: Size[];
+  colors: Color[];
 }
 
-export default function ProductAttributes({ data, onChange }: Props) {
+export default function ProductAttributes({
+  data,
+  onChange,
+  sizes,
+  colors,
+}: Props) {
   const [sizePopoverOpen, setSizePopoverOpen] = useState(false);
   const [colorPopoverOpen, setColorPopoverOpen] = useState(false);
   const [showAddSize, setShowAddSize] = useState(false);
@@ -79,11 +60,9 @@ export default function ProductAttributes({ data, onChange }: Props) {
   const [newColorName, setNewColorName] = useState("");
   const [newColorHex, setNewColorHex] = useState("#000000");
 
-  const selectedSizes = AVAILABLE_SIZES.filter((size) =>
-    data.size_ids.includes(size.id)
-  );
+  const selectedSizes = sizes.filter((size) => data.size_ids.includes(size.id));
 
-  const selectedColors = AVAILABLE_COLORS.filter((color) =>
+  const selectedColors = colors?.filter((color) =>
     data.color_ids.includes(color.id)
   );
 
@@ -163,7 +142,7 @@ export default function ProductAttributes({ data, onChange }: Props) {
                   key={size.id}
                   className="text-sm px-3 py-1.5 gap-2 bg-primary/40 text-foreground"
                 >
-                  <span className="font-semibold">{size.name}</span>
+                  <span className="font-semibold">{size.size}</span>
                   <button
                     onClick={() => removeSize(size.id)}
                     className="ml-1 hover:bg-primary/20 rounded-full transition-colors cursor-pointer"
@@ -197,7 +176,7 @@ export default function ProductAttributes({ data, onChange }: Props) {
                 <CommandList>
                   <CommandEmpty>No sizes found.</CommandEmpty>
                   <CommandGroup>
-                    {AVAILABLE_SIZES.map((size) => {
+                    {sizes.map((size) => {
                       const isSelected = data.size_ids.includes(size.id);
                       return (
                         <CommandItem
@@ -219,7 +198,7 @@ export default function ProductAttributes({ data, onChange }: Props) {
                                 )}
                               </div>
                               <div>
-                                <div className="font-medium">{size.name}</div>
+                                <div className="font-medium">{size.size}</div>
                               </div>
                             </div>
                           </div>
@@ -310,9 +289,9 @@ export default function ProductAttributes({ data, onChange }: Props) {
                 >
                   <div
                     className="w-4 h-4 rounded-full shadow-sm"
-                    style={{ backgroundColor: color.hex }}
+                    style={{ backgroundColor: `#${color.hex}` }}
                   />
-                  <span className="font-medium">{color.name}</span>
+                  <span className="font-medium">{color.title}</span>
                   <button
                     onClick={() => removeColor(color.id)}
                     className="ml-1 hover:bg-secondary-foreground/20 rounded-full transition-colors"
@@ -347,7 +326,7 @@ export default function ProductAttributes({ data, onChange }: Props) {
                   <CommandEmpty>No colors found.</CommandEmpty>
                   <CommandGroup>
                     <div className="grid grid-cols-2 gap-1 p-2">
-                      {AVAILABLE_COLORS.map((color) => {
+                      {colors?.map((color) => {
                         const isSelected = data.color_ids.includes(color.id);
                         return (
                           <button
@@ -359,10 +338,10 @@ export default function ProductAttributes({ data, onChange }: Props) {
                           >
                             <div
                               className="w-6 h-6 rounded-full border-2 border-border shadow-sm flex-shrink-0"
-                              style={{ backgroundColor: color.hex }}
+                              style={{ backgroundColor: `#${color.hex}` }}
                             />
                             <span className="font-medium text-sm flex-1 text-left">
-                              {color.name}
+                              {color.title}
                             </span>
                             {isSelected && (
                               <MdCheck className="w-4 h-4 text-primary flex-shrink-0" />

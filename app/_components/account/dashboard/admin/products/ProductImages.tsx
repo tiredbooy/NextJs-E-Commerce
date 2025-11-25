@@ -12,7 +12,6 @@ interface ProductImage {
   id: number;
   url: string;
   name: string;
-  isPrimary?: boolean;
 }
 
 interface ProductFormData {
@@ -64,13 +63,12 @@ export function ProductImages({ data, onChange }: Props) {
 
       const results = await res.json();
 
+      console.log('results:', results);
       // Add uploaded images to the data
       const newImages: ProductImage[] = results.urls.map(
         (result: any, index: number) => ({
-          id: Date.now() + index,
           url: result.url,
           name: result.original_name || "",
-          isPrimary: data.images.length === 0 && index === 0,
         })
       );
 
@@ -94,13 +92,6 @@ export function ProductImages({ data, onChange }: Props) {
 
   const handleImageRemove = (id: number) => {
     const filtered = data.images.filter((img) => img.id !== id);
-
-    // If we removed the primary image and there are still images, make the first one primary
-    const hasPrimary = filtered.some((img) => img.isPrimary);
-    if (!hasPrimary && filtered.length > 0) {
-      filtered[0].isPrimary = true;
-    }
-
     onChange({ images: filtered });
   };
 

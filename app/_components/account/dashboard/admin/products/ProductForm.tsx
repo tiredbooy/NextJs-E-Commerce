@@ -1,16 +1,20 @@
 "use client";
 import { Breadcrumb } from "@/app/_components/reusable/BreadCrump";
-import { createProduct } from "@/app/_lib/actions/productsAction";
+import {
+  createProduct,
+  createProductImages,
+} from "@/app/_lib/actions/productsAction";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { startTransition, useState } from "react";
-import { MdPreview, MdSave } from "react-icons/md";
+import { useState, useTransition } from "react";
+import { MdSave } from "react-icons/md";
+import ProductAttributes from "./ProductAttributes";
 import { ProductBasicInfo } from "./ProductBasicInfo";
 import { ProductImages } from "./ProductImages";
 import { ProductInventory } from "./ProductInventory";
 import { ProductPricing } from "./ProductPricing";
 import { ProductSEO } from "./ProductSeo";
-import ProductAttributes from "./ProductAttributes";
+import { Brand, Category, Color, Size } from "@/app/_lib/types/product_types";
 
 export interface ProductFormData {
   // Basic Info
@@ -47,25 +51,33 @@ export interface ProductFormData {
 interface Props {
   mode?: "create" | "edit";
   initialData?: Partial<ProductFormData>;
-  onSubmit: (data: ProductFormData) => void;
+  initialOptions: {
+    categories: Category[];
+    brands: Brand[];
+    sizes: Size[];
+    colors: Color[];
+  };
+  onSubmit?: (data: ProductFormData) => void;
   isLoading?: boolean;
 }
 
 export default function ProductForm({
   mode = "create",
   initialData,
+  initialOptions,
   onSubmit,
   isLoading = false,
 }: Props) {
   const [message, setMessage] = useState("");
+  const [isPending, startTransition] = useTransition();
   const [formData, setFormData] = useState<ProductFormData>({
     title: initialData?.title || "",
     price: initialData?.price || 0,
     description: initialData?.description || "",
     stock: initialData?.stock || 0,
-    category_ids: initialData?.category_ids || [1],
+    category_ids: initialData?.category_ids || [],
     color_ids: initialData?.color_ids || [],
-    size_ids: initialData?.size_ids || [1],
+    size_ids: initialData?.size_ids || [],
     brand: initialData?.brand || 1,
     slug: initialData?.slug || "",
     compareAtPrice: initialData?.compareAtPrice || "",
@@ -86,11 +98,38 @@ export default function ProductForm({
 
   const handleSubmit = () => {
     const { compareAtPrice, costPerItem, images, ...requestData } = formData;
-    console.log("requestData:", requestData);
+
     startTransition(async () => {
-      const result = await createProduct(requestData);
-      setMessage(result.message);
-      console.log("result:", result);
+      try {
+        const result = await createProduct(requestData);
+        if (!result.success || !result.productId) {
+          setMessage(result.message);
+          return;
+        }
+        console.log("result:", result);
+
+        if (images.length > 0) {
+          const imagesData = images.map((img, index) => ({
+            product_id: result.productId,
+            url: img.url,
+            name: img.name,
+          }));
+          console.log('form images:', images);
+
+          const imageResult = await createProductImages(imagesData);
+
+          if (!imageResult.success) {
+            setMessage("Product created but failed to save images");
+            return;
+          }
+        }
+
+        setMessage("Product Created successfully with images!");
+        console.log("Product ID:", result.productId);
+      } catch (error) {
+        console.error("Error:", error);
+        setMessage("Failed to create product");
+      }
     });
   };
 
@@ -121,12 +160,12 @@ export default function ProductForm({
         </h1>
         <div className="flex gap-2">
           <Button
-            disabled={isLoading}
+            disabled={isPending}
             onClick={() => handleSubmit()}
             className="gap-2 text-background font-semibold cursor-pointer"
           >
             <MdSave />
-            {isLoading ? "Publishing..." : "Publish Product"}
+            {isPending ? "Publishing..." : "Publish Product"}
           </Button>
         </div>
       </div>
@@ -174,7 +213,10 @@ export default function ProductForm({
                 key={tab.id}
                 variant={activeTab === tab.id ? "default" : "ghost"}
                 onClick={() => setActiveTab(tab.id)}
-                className={`transition-all cursor-pointer ${activeTab === tab.id ? "text-background" : "text-foreground"}`}
+                disabled={isPending}
+                className={`transition-all cursor-pointer ${
+                  activeTab === tab.id ? "text-background" : "text-foreground"
+                }`}
               >
                 {tab.label}
               </Button>
@@ -186,7 +228,12 @@ export default function ProductForm({
       {/* Tab Content */}
       <div className="space-y-6">
         {activeTab === "basic" && (
-          <ProductBasicInfo data={formData} onChange={updateFormData} />
+          <ProductBasicInfo
+            data={formData}
+            onChange={updateFormData}
+            categories={initialOptions.categories}
+            brands={initialOptions.brands}
+          />
         )}
 
         {activeTab === "pricing" && (
@@ -194,7 +241,7 @@ export default function ProductForm({
         )}
 
         {activeTab === "images" && (
-          <ProductImages data={formData} />
+          <ProductImages data={formData} onChange={updateFormData} />
         )}
 
         {activeTab === "inventory" && (
@@ -202,7 +249,12 @@ export default function ProductForm({
         )}
 
         {activeTab === "variants" && (
-          <ProductAttributes data={formData} onChange={updateFormData} />
+          <ProductAttributes
+            data={formData}
+            onChange={updateFormData}
+            sizes={initialOptions.sizes}
+            colors={initialOptions.colors}
+          />
         )}
 
         {activeTab === "seo" && (

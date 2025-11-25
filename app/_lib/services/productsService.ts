@@ -1,5 +1,6 @@
+import { serverApi } from "../server_api";
 import { QueryParams } from "../types";
-import { CreateProductRequest } from "../types/product_types";
+import { CreateProductRequest, Image } from "../types/product_types";
 import { buildQuery } from "../utils/utils";
 import { authenticatedRequest } from "./authService";
 
@@ -32,18 +33,92 @@ export async function getProducts(params: ProductQueryParam = {}) {
 }
 
 export async function createProductReq(req: CreateProductRequest) {
-    try {
-        const response = await authenticatedRequest({
-            method : "POST",
-            url: "/api/admin/products"
-        })
+  try {
+    const response = await authenticatedRequest({
+      method: "POST",
+      url: "/api/admin/products",
+      data: req,
+    });
 
-        if (!response.ok) throw new Error("Could not Create Product")
+    return response;
+  } catch (e: any) {
+    console.log("e:", e);
+    throw new Error("Something went worng!", e.message);
+  }
+}
 
-        return response
+export async function getCategories() {
+  try {
+    const response = await serverApi.get(`/api/categories`);
 
+    if (response.status != 200) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    catch(e: any) {
-        throw new Error("Something went worng!", e.message)
+
+    console.log('response:', response);
+    return await response?.data;
+  } catch (e: any) {
+    console.log("e:", e);
+    throw e;
+  }
+}
+
+export async function getColors() {
+  try {
+    const response = await serverApi.get(`/api/colors`);
+
+    if (response.status != 200) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+
+    return await response.data;
+  } catch (e: any) {
+    console.log("e:", e);
+    throw e;
+  }
+}
+
+export async function getBrands() {
+  try {
+    const response = await serverApi.get(`/api/brands`);
+
+    if (response.status != 200) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.data;
+  } catch (e: any) {
+    console.log("e:", e);
+    throw e;
+  }
+}
+
+export async function getSizes() {
+  try {
+    const response = await serverApi.get(`/api/sizes`);
+
+    if (response.status != 200) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await await response.data;
+  } catch (e: any) {
+    console.log("e:", e);
+    throw e;
+  }
+}
+
+export async function createProductImagesReq(images: Image[]) {
+  try {
+    const response = await authenticatedRequest({
+      url : "/api/admin/images",
+      method: "POST",
+      data : JSON.stringify({ images })
+    })
+
+    return response
+  }
+  catch(e: any) {
+    throw new Error(e)
+  }  
 }

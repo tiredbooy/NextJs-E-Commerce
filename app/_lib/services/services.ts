@@ -19,14 +19,10 @@ export async function getOrders(
 ): Promise<OrdersResponse> {
   try {
     const query = buildQuery(params);
-    console.log('query:', query);
-
     const data = await authenticatedRequest({
       method: "GET",
       url: `/api/admin/orders${query}`,
     });
-
-    console.log('url:', `/api/admin/orders${query}`);
 
     return data;
   } catch (e: any) {

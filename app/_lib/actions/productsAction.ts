@@ -1,6 +1,11 @@
 "use server";
 
 import { z } from "zod";
+import {
+  createProductImagesReq,
+  createProductReq,
+} from "../services/productsService";
+import { Image } from "../types/product_types";
 
 const productSchema = z.object({
   title: z.string().min(1, "Title is required").max(200),
@@ -16,7 +21,7 @@ const productSchema = z.object({
   price: z.number().positive("Please enter a valid price"),
   include_tax: z.boolean(),
   stock: z.number().int().nonnegative(),
-  meta_description: z.string().max(160).optional(),
+  meta_description: z.string().max(160),
   meta_tags: z.array(z.string()),
   is_featured: z.boolean().default(false),
   is_active: z.boolean().default(true),
@@ -34,9 +39,26 @@ export async function createProduct(data: unknown) {
   }
 
   const validatedData = dataResult.data;
-  console.log("validatedData:", validatedData);
 
-  // Save to database here
+  try {
+    const res = await createProductReq(validatedData);
+    console.log("res:", res);
+    return {
+      success: true,
+      message: "Product created successfully",
+      productId: res?.product?.id,
+    };
+  } catch (e: any) {
+    return { success: false, message: e.message || "Failed to create product" };
+  }
+}
 
-  return { success: true, message: "Product created successfully" };
+export async function createProductImages(images: Image[]) {
+  try {
+    const results = await createProductImagesReq(images)
+
+    return { success: true, message: "Image Saved successfully." };
+  } catch (e) {
+    return { success: false, message: "Failed to save images" };
+  }
 }

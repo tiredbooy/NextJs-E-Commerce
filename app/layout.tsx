@@ -3,7 +3,7 @@ import { ThemeProvider } from "next-themes";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import Providers from "./_lib/providers";
+import Providers from "./_lib/providers/providers";
 
 const poppins = Poppins({
   subsets: ["latin"],
