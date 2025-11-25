@@ -2,10 +2,12 @@
 
 import { z } from "zod";
 import {
+  createBrandReq,
   createProductImagesReq,
   createProductReq,
 } from "../services/productsService";
 import { Image } from "../types/product_types";
+import { revalidatePath } from "next/cache";
 
 const productSchema = z.object({
   title: z.string().min(1, "Title is required").max(200),
@@ -55,10 +57,32 @@ export async function createProduct(data: unknown) {
 
 export async function createProductImages(images: Image[]) {
   try {
-    const results = await createProductImagesReq(images)
+    const results = await createProductImagesReq(images);
 
     return { success: true, message: "Image Saved successfully." };
   } catch (e) {
     return { success: false, message: "Failed to save images" };
+  }
+}
+
+export async function createBrand(title: string) {
+  try {
+    const results = await createBrandReq(title);
+
+    if (!results?.brand?.id) {
+      console.error(
+        "Brand creation succeeded but no brand data was returned:",
+        results
+      );
+      throw new Error("Brand created, but failed to retrieve data.");
+    }
+
+    const brand = results.brand;
+
+    revalidatePath("/admin/products/new");
+    return brand;
+  } catch (e: any) {
+    console.error("Error in createBrand action:", e.message);
+    throw new Error(e.message || "An unknown error occurred.");
   }
 }

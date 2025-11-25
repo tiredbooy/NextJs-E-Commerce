@@ -42,8 +42,21 @@ export async function createProductReq(req: CreateProductRequest) {
 
     return response;
   } catch (e: any) {
-    console.log("e:", e);
     throw new Error("Something went worng!", e.message);
+  }
+}
+
+export async function createProductImagesReq(images: Image[]) {
+  try {
+    const response = await authenticatedRequest({
+      url: "/api/admin/images",
+      method: "POST",
+      data: JSON.stringify({ images }),
+    });
+
+    return response;
+  } catch (e: any) {
+    throw new Error(e);
   }
 }
 
@@ -54,11 +67,8 @@ export async function getCategories() {
     if (response.status != 200) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
-    console.log('response:', response);
     return await response?.data;
   } catch (e: any) {
-    console.log("e:", e);
     throw e;
   }
 }
@@ -88,8 +98,31 @@ export async function getBrands() {
 
     return await response.data;
   } catch (e: any) {
-    console.log("e:", e);
     throw e;
+  }
+}
+
+export async function createBrandReq(title: string) {
+  try {
+    const response = await authenticatedRequest({
+      url: "/api/admin/brands",
+      method: "POST",
+      data: { title },
+    });
+
+    // Handle non-OK HTTP responses
+    if (response.status && (response.status < 200 || response.status >= 300)) {
+      throw new Error(
+        response.data?.message ||
+          `Request failed with status ${response.status}`
+      );
+    }
+
+    return response;
+  } catch (e: any) {
+    console.error("Error in createBrandReq:", e.message);
+    // Throw the *actual* error message, not the [object Object]
+    throw new Error(e.message || "Failed to create brand request.");
   }
 }
 
@@ -103,22 +136,6 @@ export async function getSizes() {
 
     return await await response.data;
   } catch (e: any) {
-    console.log("e:", e);
     throw e;
   }
-}
-
-export async function createProductImagesReq(images: Image[]) {
-  try {
-    const response = await authenticatedRequest({
-      url : "/api/admin/images",
-      method: "POST",
-      data : JSON.stringify({ images })
-    })
-
-    return response
-  }
-  catch(e: any) {
-    throw new Error(e)
-  }  
 }

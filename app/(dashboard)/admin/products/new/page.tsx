@@ -18,5 +18,6 @@ export default async function page({}: Props) {
     getColors(),
   ]);
 
+
   return <ProductForm initialOptions={{ categories, brands, sizes, colors }} />;
 }
