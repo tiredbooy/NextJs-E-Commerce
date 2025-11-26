@@ -1,4 +1,3 @@
-// components/filter-bar/Checkbox.tsx
 interface CheckboxProps {
   id: string;
   label: string;
