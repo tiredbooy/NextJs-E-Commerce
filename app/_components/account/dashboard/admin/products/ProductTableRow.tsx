@@ -35,7 +35,7 @@ export default function ProductTableRow({ product }: Props) {
   } = useContextMenu();
 
   function handleEditNavigation() {
-    router.push(`/admin/products/${id}`);
+    router.push(`/admin/products/edit/${id}`);
   }
 
   function handleDelete() {

@@ -3,8 +3,15 @@ import { Breadcrumb } from "@/app/_components/reusable/BreadCrump";
 import {
   createProduct,
   createProductImages,
+  editProduct,
 } from "@/app/_lib/actions/productsAction";
-import { Brand, Category, Color, Size } from "@/app/_lib/types/product_types";
+import {
+  Brand,
+  Category,
+  Color,
+  Image,
+  Size,
+} from "@/app/_lib/types/product_types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState, useTransition } from "react";
@@ -19,13 +26,15 @@ import { ProductSEO } from "./ProductSeo";
 import { useRouter } from "next/navigation";
 
 export interface ProductFormData {
+  id?: number;
   // Basic Info
   title: string;
   description: string;
   category_ids: number[];
   color_ids: number[];
   size_ids: number[];
-  brand: number;
+  brand?: number;
+  brand_id?: number;
   slug: string;
   // Pricing
   price: number;
@@ -34,12 +43,7 @@ export interface ProductFormData {
   include_tax: boolean;
 
   // Images
-  images: Array<{
-    id: number;
-    product_id: number;
-    url: string;
-    name: string;
-  }>;
+  images: Image[];
 
   stock: number;
 
@@ -59,20 +63,17 @@ interface Props {
     sizes: Size[];
     colors: Color[];
   };
-  onSubmit?: (data: ProductFormData) => void;
-  isLoading?: boolean;
 }
 
 export default function ProductForm({
   mode = "create",
   initialData,
   initialOptions,
-  onSubmit,
-  isLoading = false,
 }: Props) {
   const route = useRouter();
   const [isPending, startTransition] = useTransition();
   const [formData, setFormData] = useState<ProductFormData>({
+    id: initialData?.id,
     title: initialData?.title || "",
     price: initialData?.price || 0,
     description: initialData?.description || "",
@@ -80,7 +81,7 @@ export default function ProductForm({
     category_ids: initialData?.category_ids || [],
     color_ids: initialData?.color_ids || [],
     size_ids: initialData?.size_ids || [],
-    brand: initialData?.brand || 1,
+    brand: initialData?.brand_id || 1,
     slug: initialData?.slug || "",
     compareAtPrice: initialData?.compareAtPrice || "",
     costPerItem: initialData?.costPerItem || "",
@@ -93,7 +94,6 @@ export default function ProductForm({
   });
 
   const [activeTab, setActiveTab] = useState<string>("basic");
-
   const updateFormData = (updates: Partial<ProductFormData>) => {
     setFormData((prev) => ({ ...prev, ...updates }));
   };
@@ -101,37 +101,64 @@ export default function ProductForm({
   const handleSubmit = () => {
     const { compareAtPrice, costPerItem, images, ...requestData } = formData;
 
-    startTransition(async () => {
-      try {
-        const result = await createProduct(requestData);
-        if (!result.success || !result.productId) {
-          return;
-        }
-
-        if (images.length > 0) {
-          const imagesData = images.map((img, index) => ({
-            product_id: result.productId,
-            url: img.url,
-            name: img.name,
-          }));
-
-          const imageResult = await createProductImages(imagesData);
-
-          if (!imageResult.success) {
+    if (mode === "create") {
+      startTransition(async () => {
+        try {
+          const result = await createProduct(requestData);
+          if (!result.success || !result.productId) {
             return;
           }
-        }
 
-        if (result.productId) {
-          toast.success(
-            `Product With id #${result.productId} Created Successfully!`
-          );
-          route.back();
+          if (images.length > 0) {
+            const imagesData = images.map((img, index) => ({
+              product_id: result.productId,
+              url: img.url,
+              name: img.name,
+            }));
+
+            const imageResult = await createProductImages(imagesData);
+
+            if (!imageResult.success) {
+              return;
+            }
+          }
+
+          if (result.productId) {
+            toast.success(
+              `Product With id #${result.productId} Created Successfully!`
+            );
+            route.back();
+          }
+        } catch (error) {
+          toast.error("Failed to create product");
         }
-      } catch (error) {
-        toast.error("Failed to create product")
-      }
-    });
+      });
+    } else {
+      startTransition(async () => {
+        try {
+          const newImages = images.filter((img) => !img.product_id);
+          const result = await editProduct(requestData, Number(formData.id));
+
+          if (newImages.length > 0) {
+            const imagesData = newImages.map((img, index) => ({
+              product_id: Number(formData.id),
+              url: img.url,
+              name: img.name,
+            }));
+
+            const imageResult = await createProductImages(imagesData);
+
+            if (!imageResult.success) {
+              return;
+            }
+          }
+
+          route.back()
+        } catch (e: any) {
+          toast.error(e.message || "Failed to edit product");
+        }
+      });
+    }
   };
 
   const calculateProfit = () => {

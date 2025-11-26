@@ -1,6 +1,8 @@
 import { getProducts } from "@/app/_lib/services/productsService";
 import ProductsInformation from "./ProductsInformation";
 import ProductsTable from "./ProductsTable";
+import { Suspense } from "react";
+import { TableRowSkeleton } from "@/app/_components/reusable/SkeletonCard";
 
 interface Props {
   // props here
@@ -9,11 +11,11 @@ interface Props {
 
 export default async function ProductsContent({ page = 1 }: Props) {
   const productData = await getProducts({ limit: 10, page });
-  const products = productData.products;
+  const products = productData?.products;
   return (
     <>
       <ProductsInformation totalProducts={productData?.total_items} />
-      <ProductsTable products={products} />
+        <ProductsTable products={products} />
     </>
   );
 }

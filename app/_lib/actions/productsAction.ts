@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import {
   createBrandReq,
@@ -8,10 +9,11 @@ import {
   createProductImagesReq,
   createProductReq,
   createSizeReq,
+  deleteProductImageReq,
   deleteProductReq,
+  editProductReq,
 } from "../services/productsService";
 import { Image } from "../types/product_types";
-import { revalidatePath } from "next/cache";
 
 const productSchema = z.object({
   title: z.string().min(1, "Title is required").max(200),
@@ -48,8 +50,8 @@ export async function createProduct(data: unknown) {
 
   try {
     const res = await createProductReq(validatedData);
-    revalidatePath("/admin/products")
-    revalidatePath("/admin/products/new")
+    revalidatePath("/admin/products");
+    revalidatePath("/admin/products/new");
     return {
       success: true,
       message: "Product created successfully",
@@ -57,6 +59,33 @@ export async function createProduct(data: unknown) {
     };
   } catch (e: any) {
     return { success: false, message: e.message || "Failed to create product" };
+  }
+}
+
+export async function editProduct(data: unknown, id: number) {
+  const dataResult = productSchema.safeParse(data);
+
+  if (!dataResult.success) {
+    console.log("Validation errors:", dataResult.error);
+    return {
+      success: false,
+      message: dataResult.error.message,
+    };
+  }
+
+  const validatedData = dataResult.data;
+
+  try {
+    const res = await editProductReq(validatedData, id);
+    revalidatePath("/admin/products");
+    revalidatePath(`/admin/products/edit/${id}`);
+    return {
+      success: true,
+      message: "Product edited successfully",
+      productId: res?.product?.id,
+    };
+  } catch (e: any) {
+    return { success: false, message: e.message || "Failed to edit product" };
   }
 }
 
@@ -122,7 +151,6 @@ export async function createSize(size: string) {
     revalidatePath("/admin/products/new");
     return sizeResult;
   } catch (e: any) {
-
     throw new Error(e.message || "An unknown error occurred.");
   }
 }
@@ -146,14 +174,27 @@ export async function createColor(title: string, hex: string) {
 
 export async function deleteProduct(id: number) {
   try {
-    const result = await deleteProductReq(id)
-    if (!result) throw new Error("something went wrong!")
-    console.log('result:', result);
+    const result = await deleteProductReq(id);
+    if (!result) throw new Error("something went wrong!");
+    console.log("result:", result);
 
-    revalidatePath("/admin/products")
-    return result
+    revalidatePath("/admin/products");
+    return result;
+  } catch (e: any) {
+    throw new Error(e.message || "Could not delete product");
   }
-  catch(e: any) {
-    throw new Error(e.message || "Could not delete product")
+}
+
+export async function deleteProductImage(id: number, productId: number) {
+  try {
+    const result = await deleteProductImageReq(id);
+    if (!result) throw new Error("something went wrong!");
+    console.log("result:", result);
+
+    revalidatePath("/admin/products");
+    revalidatePath(`/admin/products/edit/${productId}`);
+    return result;
+  } catch (e: any) {
+    throw new Error(e.message || "Could not delete image");
   }
 }

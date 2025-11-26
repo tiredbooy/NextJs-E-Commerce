@@ -17,18 +17,35 @@ type ProductQueryParam = Pick<
   | "sortOrder"
 >;
 
+
+// ---- PRODUCTS ----
+
 export async function getProducts(params: ProductQueryParam = {}) {
   try {
     const query = buildQuery(params);
 
-    const data = await authenticatedRequest({
+    const res = await serverApi({
       method: "GET",
       url: `/api/products${query}`,
     });
 
-    return data;
+    return res.data;
   } catch (e: any) {
     throw new Error(e.message || "Could not get Products at this time.");
+  }
+}
+
+export async function getProductById(id : number) {
+  try {
+    const res = await serverApi({
+      method : "GET",
+      url : `/api/products/${id}`
+    })
+
+    return await res?.data
+  }
+  catch(e: any) {
+    throw new Error(e.message || "Something went wrong")
   }
 }
 
@@ -72,6 +89,35 @@ export async function createProductImagesReq(images: Image[]) {
     throw new Error(e);
   }
 }
+
+export async function deleteProductImageReq(imageId: number) {
+  try {
+    const response = await authenticatedRequest({
+      method: "DELETE",
+      url: `/api/admin/images/${imageId}`,
+    });
+
+    return response;
+  } catch (e: any) {
+    throw new Error("Something went worng!", e.message);
+  }
+}
+
+export async function editProductReq(req: CreateProductRequest, id: number) {
+  try {
+    const response = await authenticatedRequest({
+      method: "PATCH",
+      url: `/api/admin/products/${id}`,
+      data: req,
+    });
+
+    return response;
+  } catch (e: any) {
+    throw new Error("Something went worng!", e.message);
+  }
+}
+
+// ---- PRODUCTS ----
 
 export async function getCategories() {
   try {

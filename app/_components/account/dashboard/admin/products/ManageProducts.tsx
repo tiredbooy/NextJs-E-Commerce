@@ -1,14 +1,11 @@
-import {
-  SkeletonGrid,
-  StatsSkeletonCard,
-  TableSkeleton,
-} from "@/app/_components/reusable/SkeletonCard";
+
+import { StatsSkeletonCard, TableSkeleton } from "@/app/_components/reusable/SkeletonCard";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import Link from "next/link";
 import { Suspense } from "react";
 import { FaBoxes } from "react-icons/fa";
 import ProductsContent from "./ProductsContent";
-import Link from "next/link";
 
 interface Props {
   page?: number;
@@ -43,7 +40,7 @@ export default async function ManageProducts({ page }: Props) {
           </>
         }
       >
-        <ProductsContent page={page} />
+      <ProductsContent page={page} />
       </Suspense>
     </Card>
   );

@@ -1,6 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Table } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 // Base skeleton card wrapper
 interface SkeletonCardProps {
@@ -221,7 +220,7 @@ export function TableSkeleton({ rowCount = 10 }: { rowCount?: number }) {
           <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>
+      <TableBody >
         {Array.from({ length: rowCount }).map((_, i) => (
           <TableRowSkeleton key={i} />
         ))}

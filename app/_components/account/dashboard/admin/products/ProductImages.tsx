@@ -1,10 +1,13 @@
+import { deleteProductImage } from "@/app/_lib/actions/productsAction";
+import { Image as ImageType } from "@/app/_lib/types/product_types";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { MdAdd, MdDelete, MdImage } from "react-icons/md";
-import { useState } from "react";
 import Image from "next/image";
+import { useState, useTransition } from "react";
+import { MdAdd, MdDelete, MdImage } from "react-icons/md";
+import { toast } from "sonner";
 
 const API_URL = process.env.API_URL || "http://localhost:8080/api";
 
@@ -15,8 +18,9 @@ interface ProductImage {
 }
 
 interface ProductFormData {
+  id: number;
   title: string;
-  images: ProductImage[];
+  images: ProductImage[] | ImageType[];
 }
 
 interface Props {
@@ -24,6 +28,7 @@ interface Props {
 }
 
 export function ProductImages({ data, onChange }: Props) {
+  const [isPending, startTransition] = useTransition();
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,7 +59,6 @@ export function ProductImages({ data, onChange }: Props) {
       });
 
       const uploadTime = ((Date.now() - startTime) / 1000).toFixed(1);
-      console.log(`✅ Upload completed in ${uploadTime}s`);
 
       if (!res.ok) {
         const errorText = await res.text();
@@ -63,8 +67,6 @@ export function ProductImages({ data, onChange }: Props) {
 
       const results = await res.json();
 
-      console.log("results:", results);
-      // Add uploaded images to the data
       const newImages: ProductImage[] = results.urls.map(
         (result: any, index: number) => ({
           url: result.url,
@@ -92,6 +94,25 @@ export function ProductImages({ data, onChange }: Props) {
 
   const handleImageRemove = (id: number) => {
     const filtered = data.images.filter((img) => img.id !== id);
+    const oldImages = data.images.filter((img) => img.product_id);
+    const filteredOldImages = oldImages.find((img) => img.id === id);
+    const productId = data?.id;
+
+    if (filteredOldImages) {
+      startTransition(async () => {
+        try {
+          const res = await deleteProductImage(
+            Number(filteredOldImages.id),
+            productId
+          );
+          console.log("res:", res);
+          toast.success("image deleted successfully!");
+        } catch (e) {
+          toast.error("Failed to delete image");
+        }
+      });
+    }
+
     onChange({ images: filtered });
   };
 
@@ -189,7 +210,7 @@ export function ProductImages({ data, onChange }: Props) {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {data.images.map((image, index) => (
                 <div
-                  key={image.id || index + 1}
+                  key={index + 1}
                   draggable
                   onDragStart={() => handleDragStart(index)}
                   onDragOver={(e) => handleDragOver(e, index)}
@@ -225,7 +246,7 @@ export function ProductImages({ data, onChange }: Props) {
                       type="button"
                       size="sm"
                       variant="destructive"
-                      onClick={() => handleImageRemove(image.id)}
+                      onClick={() => handleImageRemove(Number(image.id))}
                       title="Remove image"
                     >
                       <MdDelete />
