@@ -4,17 +4,19 @@ import {
   createProduct,
   createProductImages,
 } from "@/app/_lib/actions/productsAction";
+import { Brand, Category, Color, Size } from "@/app/_lib/types/product_types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState, useTransition } from "react";
 import { MdSave } from "react-icons/md";
+import { toast } from "sonner";
 import ProductAttributes from "./attributes/ProductAttributes";
 import { ProductBasicInfo } from "./ProductBasicInfo";
 import { ProductImages } from "./ProductImages";
 import { ProductInventory } from "./ProductInventory";
 import { ProductPricing } from "./ProductPricing";
 import { ProductSEO } from "./ProductSeo";
-import { Brand, Category, Color, Size } from "@/app/_lib/types/product_types";
+import { useRouter } from "next/navigation";
 
 export interface ProductFormData {
   // Basic Info
@@ -69,6 +71,7 @@ export default function ProductForm({
   isLoading = false,
 }: Props) {
   const [message, setMessage] = useState("");
+  const route = useRouter();
   const [isPending, startTransition] = useTransition();
   const [formData, setFormData] = useState<ProductFormData>({
     title: initialData?.title || "",
@@ -106,7 +109,6 @@ export default function ProductForm({
           setMessage(result.message);
           return;
         }
-        console.log("result:", result);
 
         if (images.length > 0) {
           const imagesData = images.map((img, index) => ({
@@ -114,7 +116,6 @@ export default function ProductForm({
             url: img.url,
             name: img.name,
           }));
-          console.log("form images:", images);
 
           const imageResult = await createProductImages(imagesData);
 
@@ -125,9 +126,13 @@ export default function ProductForm({
         }
 
         setMessage("Product Created successfully with images!");
-        console.log("Product ID:", result.productId);
+        if (result.productId) {
+          toast.success(
+            `Product With id #${result.productId} Created Successfully!`
+          );
+          route.back();
+        }
       } catch (error) {
-        console.error("Error:", error);
         setMessage("Failed to create product");
       }
     });

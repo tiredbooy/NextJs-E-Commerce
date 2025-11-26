@@ -1,4 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table } from "lucide-react";
 
 // Base skeleton card wrapper
 interface SkeletonCardProps {
@@ -167,3 +169,63 @@ export function CustomSkeletonCard({
   );
 }
 
+// Table row skeleton specifically for your products table
+export function TableRowSkeleton() {
+  return (
+    <TableRow className="animate-pulse">
+      <TableCell>
+        <Skeleton className="h-4 w-12" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-8 w-8 rounded-full" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-32" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-16" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-12" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-12" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-20" />
+      </TableCell>
+      <TableCell>
+        <div className="flex flex-row gap-1 items-center text-base">
+          <Skeleton className="h-4 w-4 rounded-sm" />
+          <Skeleton className="h-4 w-4 rounded-sm" />
+          <Skeleton className="h-4 w-4 rounded-sm" />
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+}
+
+// Full table skeleton with header
+export function TableSkeleton({ rowCount = 10 }: { rowCount?: number }) {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>ID</TableHead>
+          <TableHead>Image</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>Price</TableHead>
+          <TableHead>Stock</TableHead>
+          <TableHead>Sales</TableHead>
+          <TableHead>Created At</TableHead>
+          <TableHead>Actions</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {Array.from({ length: rowCount }).map((_, i) => (
+          <TableRowSkeleton key={i} />
+        ))}
+      </TableBody>
+    </Table>
+  );
+}

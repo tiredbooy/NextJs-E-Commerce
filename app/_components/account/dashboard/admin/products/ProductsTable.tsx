@@ -1,4 +1,4 @@
-import { products } from "@/app/_components/new-arrivals/NewArrivals";
+import { Product } from "@/app/_lib/types/product_types";
 import {
   Table,
   TableBody,
@@ -7,18 +7,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import ProductTableRow from "./ProductTableRow";
-import { getProducts } from "@/app/_lib/services/services";
-import { PaginatedProductsResponse, Product } from "@/app/_lib/types/product_types";
 
 interface Props {
   // props here
-  products: Product[]
+  products: Product[];
 }
 
-export default async function ProductsTable({products}: Props) {
-
-  
-
+export default async function ProductsTable({ products }: Props) {
   return (
     <Table>
       <TableHeader>

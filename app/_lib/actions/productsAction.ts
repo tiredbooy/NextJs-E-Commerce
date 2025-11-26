@@ -8,6 +8,7 @@ import {
   createProductImagesReq,
   createProductReq,
   createSizeReq,
+  deleteProductReq,
 } from "../services/productsService";
 import { Image } from "../types/product_types";
 import { revalidatePath } from "next/cache";
@@ -47,7 +48,8 @@ export async function createProduct(data: unknown) {
 
   try {
     const res = await createProductReq(validatedData);
-    console.log("res:", res);
+    revalidatePath("/admin/products")
+    revalidatePath("/admin/products/new")
     return {
       success: true,
       message: "Product created successfully",
@@ -139,5 +141,19 @@ export async function createColor(title: string, hex: string) {
     return color;
   } catch (e: any) {
     throw new Error(e.message || "An unknown error occurred.");
+  }
+}
+
+export async function deleteProduct(id: number) {
+  try {
+    const result = await deleteProductReq(id)
+    if (!result) throw new Error("something went wrong!")
+    console.log('result:', result);
+
+    revalidatePath("/admin/products")
+    return result
+  }
+  catch(e: any) {
+    throw new Error(e.message || "Could not delete product")
   }
 }

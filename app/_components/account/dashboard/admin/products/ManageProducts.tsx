@@ -1,6 +1,7 @@
 import {
   SkeletonGrid,
   StatsSkeletonCard,
+  TableSkeleton,
 } from "@/app/_components/reusable/SkeletonCard";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -10,7 +11,6 @@ import ProductsContent from "./ProductsContent";
 import Link from "next/link";
 
 interface Props {
-  // props here
   page?: number;
 }
 
@@ -39,7 +39,7 @@ export default async function ManageProducts({ page }: Props) {
                 <StatsSkeletonCard key={i} />
               ))}
             </div>
-            <SkeletonGrid variant="list" count={4} columns={1} />
+            <TableSkeleton rowCount={4} />
           </>
         }
       >

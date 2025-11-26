@@ -63,7 +63,7 @@ export function ProductImages({ data, onChange }: Props) {
 
       const results = await res.json();
 
-      console.log('results:', results);
+      console.log("results:", results);
       // Add uploaded images to the data
       const newImages: ProductImage[] = results.urls.map(
         (result: any, index: number) => ({
@@ -189,7 +189,7 @@ export function ProductImages({ data, onChange }: Props) {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {data.images.map((image, index) => (
                 <div
-                  key={image.id}
+                  key={image.id || index + 1}
                   draggable
                   onDragStart={() => handleDragStart(index)}
                   onDragOver={(e) => handleDragOver(e, index)}

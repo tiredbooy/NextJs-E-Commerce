@@ -4,11 +4,11 @@ import ProductsTable from "./ProductsTable";
 
 interface Props {
   // props here
-  page?: number
+  page?: number;
 }
 
-export default async function ProductsContent({page = 1}: Props) {
-  const productData = await getProducts({limit: 10, page});
+export default async function ProductsContent({ page = 1 }: Props) {
+  const productData = await getProducts({ limit: 10, page });
   const products = productData.products;
   return (
     <>

@@ -46,6 +46,19 @@ export async function createProductReq(req: CreateProductRequest) {
   }
 }
 
+export async function deleteProductReq(id: number) {
+  try {
+    const response = await authenticatedRequest({
+      method: "DELETE",
+      url: `/api/admin/products/${id}`,
+    });
+
+    return response;
+  } catch (e: any) {
+    throw new Error("Something went worng!", e.message);
+  }
+}
+
 export async function createProductImagesReq(images: Image[]) {
   try {
     const response = await authenticatedRequest({
