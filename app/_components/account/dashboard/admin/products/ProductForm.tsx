@@ -70,7 +70,6 @@ export default function ProductForm({
   onSubmit,
   isLoading = false,
 }: Props) {
-  const [message, setMessage] = useState("");
   const route = useRouter();
   const [isPending, startTransition] = useTransition();
   const [formData, setFormData] = useState<ProductFormData>({
@@ -106,7 +105,6 @@ export default function ProductForm({
       try {
         const result = await createProduct(requestData);
         if (!result.success || !result.productId) {
-          setMessage(result.message);
           return;
         }
 
@@ -120,12 +118,10 @@ export default function ProductForm({
           const imageResult = await createProductImages(imagesData);
 
           if (!imageResult.success) {
-            setMessage("Product created but failed to save images");
             return;
           }
         }
 
-        setMessage("Product Created successfully with images!");
         if (result.productId) {
           toast.success(
             `Product With id #${result.productId} Created Successfully!`
@@ -133,7 +129,7 @@ export default function ProductForm({
           route.back();
         }
       } catch (error) {
-        setMessage("Failed to create product");
+        toast.error("Failed to create product")
       }
     });
   };
