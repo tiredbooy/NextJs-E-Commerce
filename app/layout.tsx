@@ -4,6 +4,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import Providers from "./_lib/providers/providers";
+import { TokenRefreshHandler } from "./_lib/ClientTokenRefresh";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -34,6 +35,7 @@ export default function MainLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <TokenRefreshHandler />
             {children}
           </ThemeProvider>
           <Toaster />

@@ -73,6 +73,26 @@ export async function getCategories() {
   }
 }
 
+export async function createCategoryReq(title: string) {
+  try {
+    const response = await authenticatedRequest({
+      url: "/api/admin/categories",
+      method: "POST",
+      data: { title },
+    });
+    if (response.status && (response.status < 200 || response.status >= 300)) {
+      throw new Error(
+        response.data?.message ||
+          `Request failed with status ${response.status}`
+      );
+    }
+
+    return response;
+  } catch (e: any) {
+    throw new Error(e.message || "Failed to create category request.");
+  }
+}
+
 export async function getColors() {
   try {
     const response = await serverApi.get(`/api/colors`);
@@ -85,6 +105,26 @@ export async function getColors() {
   } catch (e: any) {
     console.log("e:", e);
     throw e;
+  }
+}
+
+export async function createColorReq(title: string, hex: string) {
+  try {
+    const response = await authenticatedRequest({
+      url: "/api/admin/colors",
+      method: "POST",
+      data: { title, hex },
+    });
+    if (response.status && (response.status < 200 || response.status >= 300)) {
+      throw new Error(
+        response.data?.message ||
+          `Request failed with status ${response.status}`
+      );
+    }
+
+    return response;
+  } catch (e: any) {
+    throw new Error(e.message || "Failed to create color request.");
   }
 }
 
@@ -109,8 +149,6 @@ export async function createBrandReq(title: string) {
       method: "POST",
       data: { title },
     });
-
-    // Handle non-OK HTTP responses
     if (response.status && (response.status < 200 || response.status >= 300)) {
       throw new Error(
         response.data?.message ||
@@ -120,8 +158,6 @@ export async function createBrandReq(title: string) {
 
     return response;
   } catch (e: any) {
-    console.error("Error in createBrandReq:", e.message);
-    // Throw the *actual* error message, not the [object Object]
     throw new Error(e.message || "Failed to create brand request.");
   }
 }
@@ -137,5 +173,26 @@ export async function getSizes() {
     return await await response.data;
   } catch (e: any) {
     throw e;
+  }
+}
+
+export async function createSizeReq(size: string) {
+  try {
+    const response = await authenticatedRequest({
+      url: "/api/admin/sizes",
+      method: "POST",
+      data: { size },
+    });
+
+    if (response.status && (response.status < 200 || response.status >= 300)) {
+      throw new Error(
+        response.data?.message ||
+          `Request failed with status ${response.status}`
+      );
+    }
+
+    return response;
+  } catch (e: any) {
+    throw new Error(e.message || "Failed to create size request.");
   }
 }

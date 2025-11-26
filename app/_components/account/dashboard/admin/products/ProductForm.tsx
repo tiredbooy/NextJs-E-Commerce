@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState, useTransition } from "react";
 import { MdSave } from "react-icons/md";
-import ProductAttributes from "./ProductAttributes";
+import ProductAttributes from "./attributes/ProductAttributes";
 import { ProductBasicInfo } from "./ProductBasicInfo";
 import { ProductImages } from "./ProductImages";
 import { ProductInventory } from "./ProductInventory";
@@ -114,7 +114,7 @@ export default function ProductForm({
             url: img.url,
             name: img.name,
           }));
-          console.log('form images:', images);
+          console.log("form images:", images);
 
           const imageResult = await createProductImages(imagesData);
 
@@ -146,7 +146,7 @@ export default function ProductForm({
     { id: "pricing", label: "Pricing" },
     { id: "images", label: "Images" },
     { id: "inventory", label: "Inventory" },
-    { id: "variants", label: "Variants" },
+    { id: "attributes", label: "Attributes" },
     { id: "seo", label: "SEO" },
   ];
 
@@ -171,7 +171,7 @@ export default function ProductForm({
       </div>
 
       {/* Profit Calculator Card */}
-      {formData.price && formData.costPerItem && (
+      {formData.price > 1 && formData.costPerItem && (
         <Card className="bg-card border-card">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
@@ -248,7 +248,7 @@ export default function ProductForm({
           <ProductInventory data={formData} onChange={updateFormData} />
         )}
 
-        {activeTab === "variants" && (
+        {activeTab === "attributes" && (
           <ProductAttributes
             data={formData}
             onChange={updateFormData}

@@ -1,3 +1,4 @@
+import { createCategory } from "@/app/_lib/actions/productsAction";
 import { Category } from "@/app/_lib/types/product_types";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,8 +17,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useCallback, useMemo, useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
+import { useCallback, useMemo, useState, useTransition } from "react";
 import { MdAdd, MdCheck, MdExpandMore } from "react-icons/md";
+import { toast } from "sonner";
 
 interface Props {
   categories: Category[];
@@ -28,7 +31,9 @@ interface Props {
 export function CategorySelector({ categories, selectedIds, onChange }: Props) {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
+  const [categoryName, setCategoryName] = useState("")
   const [newName, setNewName] = useState("");
+  const [isPending, startTransition] = useTransition();
 
   const toggleCategory = useCallback(
     (categoryId: number) => {
@@ -42,19 +47,20 @@ export function CategorySelector({ categories, selectedIds, onChange }: Props) {
 
   const handleAddCategory = useCallback(() => {
     if (!newName.trim()) return;
-    // TODO: Add logic here to actually create the category via API
-    // and then update the parent component's list.
-    // The original code didn't have this, so I've left it as-is.
-    // Example: await createCategory({ title: newName.trim() });
-    setNewName("");
-    setShowAdd(false);
+    startTransition(async () => {
+      try {
+        const newCategory = await createCategory(newName.trim());
+        setNewName("");
+        setShowAdd(false);
+      } catch (error: any) {
+        toast.error("Failed to created Category!");
+      }
+    });
   }, [newName, onChange]);
 
   const selectedTitles = useMemo(
     () =>
-      categories
-        ?.filter((c) => selectedIds.includes(c.id))
-        .map((c) => c.title),
+      categories?.filter((c) => selectedIds.includes(c.id)).map((c) => c.title),
     [categories, selectedIds]
   );
 
@@ -67,10 +73,10 @@ export function CategorySelector({ categories, selectedIds, onChange }: Props) {
     <div className="space-y-2">
       <Label>Categories *</Label>
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-        <PopoverTrigger asChild>
+        <PopoverTrigger asChild disabled={isPending}>
           <Button variant="outline" className="w-full justify-between">
             <span className="truncate text-muted-foreground">
-              {displayText}
+              {isPending ? <Spinner /> : displayText}
             </span>
             <MdExpandMore className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -79,8 +85,8 @@ export function CategorySelector({ categories, selectedIds, onChange }: Props) {
           <Command>
             <CommandInput
               placeholder="Search categories..."
-              value={showAdd ? newName : undefined}
-              onValueChange={showAdd ? setNewName : undefined}
+              value={categoryName}
+              onValueChange={setCategoryName}
             />
             <CommandList>
               <CommandEmpty>
@@ -141,17 +147,18 @@ export function CategorySelector({ categories, selectedIds, onChange }: Props) {
                   <div className="flex gap-2">
                     <Button
                       onClick={handleAddCategory}
-                      disabled={!newName.trim()}
+                      disabled={!newName.trim() || isPending}
                       className="flex-1"
                       size="sm"
                     >
-                      Create
+                      {isPending ? <Spinner /> : "Create"}
                     </Button>
                     <Button
                       onClick={() => {
                         setShowAdd(false);
                         setNewName("");
                       }}
+                      disabled={isPending}
                       variant="outline"
                       size="sm"
                     >

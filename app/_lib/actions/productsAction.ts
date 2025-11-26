@@ -3,8 +3,11 @@
 import { z } from "zod";
 import {
   createBrandReq,
+  createCategoryReq,
+  createColorReq,
   createProductImagesReq,
   createProductReq,
+  createSizeReq,
 } from "../services/productsService";
 import { Image } from "../types/product_types";
 import { revalidatePath } from "next/cache";
@@ -83,6 +86,58 @@ export async function createBrand(title: string) {
     return brand;
   } catch (e: any) {
     console.error("Error in createBrand action:", e.message);
+    throw new Error(e.message || "An unknown error occurred.");
+  }
+}
+
+export async function createCategory(title: string) {
+  try {
+    const results = await createCategoryReq(title);
+
+    if (!results?.category?.id) {
+      throw new Error("Brand created, but failed to retrieve data.");
+    }
+
+    const category = results.category;
+
+    revalidatePath("/admin/products/new");
+    return category;
+  } catch (e: any) {
+    throw new Error(e.message || "An unknown error occurred.");
+  }
+}
+
+export async function createSize(size: string) {
+  try {
+    const results = await createSizeReq(size);
+
+    if (!results?.size?.id) {
+      throw new Error("size created, but failed to retrieve data.");
+    }
+
+    const sizeResult = results.size;
+
+    revalidatePath("/admin/products/new");
+    return sizeResult;
+  } catch (e: any) {
+
+    throw new Error(e.message || "An unknown error occurred.");
+  }
+}
+
+export async function createColor(title: string, hex: string) {
+  try {
+    const results = await createColorReq(title, hex);
+
+    if (!results?.color?.id) {
+      throw new Error("Color created, but failed to retrieve data.");
+    }
+
+    const color = results.color;
+
+    revalidatePath("/admin/products/new");
+    return color;
+  } catch (e: any) {
     throw new Error(e.message || "An unknown error occurred.");
   }
 }

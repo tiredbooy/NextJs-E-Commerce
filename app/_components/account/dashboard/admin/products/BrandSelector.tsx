@@ -24,27 +24,21 @@ import { toast } from "sonner";
 
 interface Props {
   brands: Brand[];
-  selectedId?: number; // Optional, as one might not be selected
+  selectedId?: number;
   onChange: (id: number) => void;
-  onBrandCreated: (newBrand: Brand) => void;
 }
 
-export function BrandSelector({
-  brands,
-  selectedId,
-  onChange,
-  onBrandCreated,
-}: Props) {
+export function BrandSelector({ brands, selectedId, onChange }: Props) {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [showAddBrand, setShowAddBrand] = useState(false);
-  const [brandName, setBrandName] = useState("")
+  const [brandName, setBrandName] = useState("");
   const [newBrandName, setNewBrandName] = useState("");
   const [isPending, startTransition] = useTransition();
 
   const handleSelectBrand = useCallback(
     (brandId: number) => {
       onChange(brandId);
-      setPopoverOpen(false); // Close popover on selection
+      setPopoverOpen(false);
     },
     [onChange]
   );
@@ -54,17 +48,14 @@ export function BrandSelector({
     startTransition(async () => {
       try {
         const newBrand = await createBrand(newBrandName.trim());
-        // onBrandCreated(newBrand);
 
         setNewBrandName("");
         setShowAddBrand(false);
       } catch (error: any) {
-        console.log("FULL CLIENT-SIDE ERROR:", error);
-  
-  toast.error(`Failed to create brand: ${error.message}`);
+        toast.error(`Failed to create brand: ${error.message}`);
       }
     });
-  }, [newBrandName, onBrandCreated]);
+  }, [newBrandName]);
 
   const selectedBrand = useMemo(
     () => brands?.find((b) => b.id === selectedId),
@@ -89,8 +80,8 @@ export function BrandSelector({
           <Command>
             <CommandInput
               placeholder="Search brands..."
-              value={ brandName}
-              onValueChange={ setBrandName}
+              value={brandName}
+              onValueChange={setBrandName}
             />
             <CommandList>
               <CommandEmpty>

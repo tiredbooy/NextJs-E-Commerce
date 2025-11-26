@@ -24,7 +24,7 @@ export function TokenRefreshHandler() {
       } catch (error) {
         console.error("Token refresh error:", error);
       }
-    }, 120 * 60 * 1000); // 5 minutes
+    }, 120 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, [pathname, router]);
