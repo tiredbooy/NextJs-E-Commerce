@@ -1,10 +1,9 @@
-import { getCurrentUser, getCurrentUserReadOnly } from "@/app/_lib/services/authService";
+import { getCurrentUser } from "@/app/_lib/services/authService";
 import Link from "next/link";
 import { FaShoppingBasket, FaUser } from "react-icons/fa";
 
 async function HeaderUserMenu() {
   const user = await getCurrentUser();
-  console.log('user:', user);
   const path = user?.role === "admin" ? "/admin" : "/account";
 
   return (

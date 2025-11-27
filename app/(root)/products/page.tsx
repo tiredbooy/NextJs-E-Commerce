@@ -17,6 +17,7 @@ interface Props {
 }
 
 const page: React.FC<Props> = async ({ searchParams }) => {
+  const {categoriesParam, maxPrice, minPrice, brandsParam, sizesParam, colorsParam, onSale, onStock, sortBy, orderBy} = await searchParams;
   const [productsData, categories, sizes, colors, brands] = await Promise.all([
     getProducts(),
     getCategories(),

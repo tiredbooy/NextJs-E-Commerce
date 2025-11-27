@@ -1,19 +1,20 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
   siblingCount?: number;
   showFirstLast?: boolean;
   className?: string;
@@ -26,6 +27,8 @@ export default function Pagination({
   siblingCount = 1,
   showFirstLast = true,
   className = "",
+  hasNext,
+  hasPrev,
   preserveSearchParams = true,
 }: PaginationProps) {
   const pathname = usePathname();
@@ -79,8 +82,6 @@ export default function Pagination({
   };
 
   const pages = generatePageNumbers();
-  const isFirstPage = currentPage === 1;
-  const isLastPage = currentPage === totalPages;
 
   if (totalPages <= 1) return null;
 
@@ -95,20 +96,20 @@ export default function Pagination({
     >
       {showFirstLast && (
         <motion.div
-          whileHover={!isFirstPage ? { scale: 1.05 } : {}}
-          whileTap={!isFirstPage ? { scale: 0.95 } : {}}
+          whileHover={!hasNext ? { scale: 1.05 } : {}}
+          whileTap={!hasNext ? { scale: 0.95 } : {}}
         >
           <Link
             scroll={false}
             href={createPageURL(1)}
             className={`inline-flex items-center justify-center h-9 w-9 rounded-md border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] transition-colors ${
-              isFirstPage
+              hasNext
                 ? "opacity-50 pointer-events-none cursor-not-allowed"
                 : "hover:bg-[var(--accent)] hover:border-[var(--border-hover)]"
             }`}
             aria-label="Go to first page"
-            aria-disabled={isFirstPage}
-            tabIndex={isFirstPage ? -1 : undefined}
+            aria-disabled={hasNext}
+            tabIndex={hasNext ? -1 : undefined}
           >
             <ChevronsLeft className="h-4 w-4" />
           </Link>
@@ -116,20 +117,20 @@ export default function Pagination({
       )}
 
       <motion.div
-        whileHover={!isFirstPage ? { scale: 1.05 } : {}}
-        whileTap={!isFirstPage ? { scale: 0.95 } : {}}
+        whileHover={!hasNext ? { scale: 1.05 } : {}}
+        whileTap={!hasNext ? { scale: 0.95 } : {}}
       >
         <Link
           scroll={false}
           href={createPageURL(currentPage - 1)}
           className={`inline-flex items-center justify-center h-9 w-9 rounded-md border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] transition-colors ${
-            isFirstPage
+            hasNext
               ? "opacity-50 pointer-events-none cursor-not-allowed"
               : "hover:bg-[var(--accent)] hover:border-[var(--border-hover)]"
           }`}
           aria-label="Go to previous page"
-          aria-disabled={isFirstPage}
-          tabIndex={isFirstPage ? -1 : undefined}
+          aria-disabled={hasNext}
+          tabIndex={hasNext ? -1 : undefined}
         >
           <ChevronLeft className="h-4 w-4" />
         </Link>
@@ -201,20 +202,20 @@ export default function Pagination({
       </AnimatePresence>
 
       <motion.div
-        whileHover={!isLastPage ? { scale: 1.05 } : {}}
-        whileTap={!isLastPage ? { scale: 0.95 } : {}}
+        whileHover={!hasPrev ? { scale: 1.05 } : {}}
+        whileTap={!hasPrev ? { scale: 0.95 } : {}}
       >
         <Link
           scroll={false}
           href={createPageURL(currentPage + 1)}
           className={`inline-flex items-center justify-center h-9 w-9 rounded-md border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] transition-colors ${
-            isLastPage
+            hasPrev
               ? "opacity-50 pointer-events-none cursor-not-allowed"
               : "hover:bg-[var(--accent)] hover:border-[var(--border-hover)]"
           }`}
           aria-label="Go to next page"
-          aria-disabled={isLastPage}
-          tabIndex={isLastPage ? -1 : undefined}
+          aria-disabled={hasPrev}
+          tabIndex={hasPrev ? -1 : undefined}
         >
           <ChevronRight className="h-4 w-4" />
         </Link>
@@ -222,20 +223,20 @@ export default function Pagination({
 
       {showFirstLast && (
         <motion.div
-          whileHover={!isLastPage ? { scale: 1.05 } : {}}
-          whileTap={!isLastPage ? { scale: 0.95 } : {}}
+          whileHover={!hasPrev ? { scale: 1.05 } : {}}
+          whileTap={!hasPrev ? { scale: 0.95 } : {}}
         >
           <Link
             scroll={false}
             href={createPageURL(totalPages)}
             className={`inline-flex items-center justify-center h-9 w-9 rounded-md border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] transition-colors ${
-              isLastPage
+              hasPrev
                 ? "opacity-50 pointer-events-none cursor-not-allowed"
                 : "hover:bg-[var(--accent)] hover:border-[var(--border-hover)]"
             }`}
             aria-label="Go to last page"
-            aria-disabled={isLastPage}
-            tabIndex={isLastPage ? -1 : undefined}
+            aria-disabled={hasPrev}
+            tabIndex={hasPrev ? -1 : undefined}
           >
             <ChevronsRight className="h-4 w-4" />
           </Link>

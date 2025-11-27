@@ -36,6 +36,9 @@ export interface ProductItem {
   slug: string;
   brand: number;
   sales: number;
+  is_featured : boolean;
+  include_tax: boolean;
+  is_active: boolean;
   created_at: string;
 }
 
