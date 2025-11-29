@@ -127,6 +127,7 @@ export interface Cart {
 }
 
 export interface CartItem {
+  id? : number
   product_id: number;
   quantity: number;
   size_id: number;

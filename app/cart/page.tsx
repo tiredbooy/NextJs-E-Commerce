@@ -1,8 +1,15 @@
 import { CartItems } from "@/app/_components/cart/CartItems";
 import { CartSummary } from "@/app/_components/cart/CartSummary";
 import { Breadcrumb } from "@/app/_components/reusable/BreadCrump";
+import { getUserCart } from "../_lib/services/userService";
+import EmptyBasket from "../_components/cart/EmptyBasket";
 
 export default async function CartPage() {
+  const cart = await getUserCart();
+  console.log('cart:', cart);
+
+  const cartItems = cart?.items;
+
   return (
     <div className="min-h-screen bg-background py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-3">
@@ -11,17 +18,19 @@ export default async function CartPage() {
           Shopping Cart
         </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Cart Items - Takes 2 columns on large screens */}
-          <div className="lg:col-span-2">
-            <CartItems />
-          </div>
+        {cartItems?.length > 0 ? (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <CartItems items={cartItems} />
+            </div>
 
-          {/* Cart Summary - Takes 1 column on large screens */}
-          <div className="lg:col-span-1">
-            <CartSummary />
+            <div className="lg:col-span-1">
+              <CartSummary />
+            </div>
           </div>
-        </div>
+        ) : (
+          <EmptyBasket />
+        )}
       </div>
     </div>
   );

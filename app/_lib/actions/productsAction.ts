@@ -12,6 +12,7 @@ import {
   deleteProductImageReq,
   deleteProductReq,
   editProductReq,
+  getProductSingleImage,
 } from "../services/productsService";
 import { Image } from "../types/product_types";
 
@@ -196,5 +197,16 @@ export async function deleteProductImage(id: number, productId: number) {
     return result;
   } catch (e: any) {
     throw new Error(e.message || "Could not delete image");
+  }
+}
+
+export async function getProductImage(id: number): Promise<Image> {
+  try {
+    const result = await getProductSingleImage(id);
+    if(!result) throw new Error("Failed to Get the product Image")
+
+    return result
+  }catch(e: any ) {
+    throw new Error(e.message || "Something went wrong!")
   }
 }

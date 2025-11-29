@@ -8,7 +8,7 @@ export async function getUserCart() {
       url: "/api/cart",
     });
 
-    return await result.data();
+    return await result;
   } catch (e: any) {
     throw new Error(e.message || "Something went worng!");
   }

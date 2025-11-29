@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Maximize2, X } from "lucide-react";
-import { ProductImage } from "@/app/_lib/types";
+import { Image as ProductImage } from "@/app/_lib/types/product_types";
 
 interface Props {
-  images: ProductImage[];
+  images: ProductImage[] | undefined;
   productTitle: string;
 }
 
@@ -16,7 +16,7 @@ const ProductThumbnail: React.FC<Props> = ({ images, productTitle }) => {
   const [isZoomed, setIsZoomed] = useState(false);
   const [direction, setDirection] = useState(0);
 
-  const hasMultipleImages = images.length > 1;
+  const hasMultipleImages = images?.length > 1;
 
   const slideVariants = {
     enter: (direction: number) => ({
@@ -44,8 +44,8 @@ const ProductThumbnail: React.FC<Props> = ({ images, productTitle }) => {
     setDirection(newDirection);
     setSelectedIndex((prevIndex) => {
       const newIndex = prevIndex + newDirection;
-      if (newIndex < 0) return images.length - 1;
-      if (newIndex >= images.length) return 0;
+      if (newIndex < 0) return images?.length - 1;
+      if (newIndex >= images?.length) return 0;
       return newIndex;
     });
   };
@@ -132,7 +132,7 @@ const ProductThumbnail: React.FC<Props> = ({ images, productTitle }) => {
         {/* Image Counter */}
         {hasMultipleImages && (
           <div className="absolute bottom-4 right-4 z-10 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-medium">
-            {selectedIndex + 1} / {images.length}
+            {selectedIndex + 1} / {images?.length}
           </div>
         )}
       </div>
@@ -213,7 +213,7 @@ const ProductThumbnail: React.FC<Props> = ({ images, productTitle }) => {
                 className="absolute top-4 right-4 bg-foreground/80 hover:bg-foreground p-3 rounded-full shadow-lg cursor-pointer"
                 aria-label="Close zoom"
               >
-                <X  className="text-background " />
+                <X className="text-background " />
               </button>
             </motion.div>
           </motion.div>

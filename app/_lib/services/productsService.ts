@@ -117,6 +117,16 @@ export async function editProductReq(req: CreateProductRequest, id: number) {
   }
 }
 
+export async function getProductSingleImage(productId: number) {
+  try {
+    const response = await serverApi.get(`/api/products/${productId}/image`);
+
+    return response.data;
+  } catch (e: any) {
+    throw new Error("Something went worng!", e.message);
+  }
+}
+
 // ---- PRODUCTS ----
 
 export async function getCategories() {

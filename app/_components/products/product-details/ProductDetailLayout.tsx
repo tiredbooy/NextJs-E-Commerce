@@ -1,8 +1,8 @@
 // components/product/ProductDetailLayout.tsx (Server Component)
 import ProductThumbnail from "./ProductThumbnail";
 import ProductInformation from "./ProductInformation";
-import { Product } from "@/app/_lib/types";
 import ProductDetailsTabs from "./ProductReviews";
+import { Product } from "@/app/_lib/types/product_types";
 
 interface Props {
   product: Product;
@@ -15,7 +15,7 @@ const ProductDetailLayout: React.FC<Props> = ({ product }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
         <ProductThumbnail
           productTitle={product.title}
-          images={product.images}
+          images={product?.images}
         />
         <ProductInformation product={product} />
       </div>
