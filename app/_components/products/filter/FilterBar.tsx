@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
-import { SlidersHorizontal } from "lucide-react";
 import FilterContent from "@/app/_components/products/filter/FilterContent";
-import { motion, AnimatePresence } from "framer-motion";
 import { Brand, Category, Color, Size } from "@/app/_lib/types/product_types";
 import { Button } from "@/components/ui/button";
+import { AnimatePresence, motion } from "framer-motion";
+import { SlidersHorizontal } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useCallback, useMemo, useState } from "react";
 
 // Store full objects like before
 export interface FilterState {
@@ -17,8 +18,8 @@ export interface FilterState {
     min: number;
     max: number;
   };
-  inStock: boolean;
-  onSale: boolean;
+  // inStock: boolean;
+  // onSale: boolean;
   search: string;
 }
 
@@ -31,31 +32,6 @@ interface Props {
   availableColors?: Color[];
 }
 
-const updateURLParams = (filters: FilterState) => {
-  const params = new URLSearchParams();
-
-  if (filters.search) params.set("search", filters.search);
-  if (filters.categories.length)
-    params.set("categories", filters.categories.map((c) => c.title?.toLowerCase()).join(","));
-  if (filters.brands.length)
-    params.set("brands", filters.brands.map((b) => b.title?.toLowerCase()).join(","));
-  if (filters.sizes.length)
-    params.set("sizes", filters.sizes.map((s) => s.size?.toLowerCase()).join(","));
-  if (filters.colors.length)
-    params.set("colors", filters.colors.map((c) => c.title?.toLowerCase()).join(","));
-  if (filters.priceRange.min > 0)
-    params.set("minPrice", filters.priceRange.min.toString());
-  if (filters.priceRange.max <= 20000)
-    params.set("maxPrice", filters.priceRange.max.toString());
-  if (filters.inStock) params.set("inStock", "true");
-  if (filters.onSale) params.set("onSale", "true");
-
-  const newURL = `${window.location.pathname}${
-    params.toString() ? "?" + params.toString() : ""
-  }`;
-  window.history.pushState({}, "", newURL);
-};
-
 const FilterBar: React.FC<Props> = ({
   onFilterChange,
   initialFilters,
@@ -64,16 +40,56 @@ const FilterBar: React.FC<Props> = ({
   availableSizes = [],
   availableColors = [],
 }) => {
+  const router = useRouter();
   const [filters, setFilters] = useState<FilterState>({
     categories: initialFilters?.categories || [],
     brands: initialFilters?.brands || [],
     sizes: initialFilters?.sizes || [],
     colors: initialFilters?.colors || [],
-    priceRange: initialFilters?.priceRange || { min: 0, max: 20000 },
-    inStock: initialFilters?.inStock || false,
-    onSale: initialFilters?.onSale || false,
+    priceRange: initialFilters?.priceRange || { min: 0, max: 100000 },
+    // inStock: initialFilters?.inStock || false,
+    // onSale: initialFilters?.onSale || false,
     search: initialFilters?.search || "",
   });
+
+  const updateURLParams = (filters: FilterState) => {
+    const params = new URLSearchParams();
+    if (filters.search) params.set("search", filters.search);
+    if (filters.categories.length)
+      params.set(
+        "categories",
+        filters.categories.map((c) => c.title?.toLowerCase()).join(",")
+      );
+    if (filters.brands.length)
+      params.set(
+        "brands",
+        filters.brands.map((b) => b.title?.toLowerCase()).join(",")
+      );
+    if (filters.sizes.length)
+      params.set(
+        "sizes",
+        filters.sizes.map((s) => s.size?.toLowerCase()).join(",")
+      );
+    if (filters.colors.length)
+      params.set(
+        "colors",
+        filters.colors.map((c) => c.title?.toLowerCase()).join(",")
+      );
+
+    if (filters.priceRange.min > 0)
+      params.set("minPrice", filters.priceRange.min.toString());
+    if (filters.priceRange.max < 100000)
+      params.set("maxPrice", filters.priceRange.max.toString());
+
+    // if (filters.inStock) params.set("inStock", "true");
+    // if (filters.onSale) params.set("onSale", "true");
+
+    const newURL = `${window.location.pathname}${
+      params.toString() ? `?${params.toString()}` : ""
+    }`;
+
+    router.push(newURL);
+  };
 
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -104,12 +120,21 @@ const FilterBar: React.FC<Props> = ({
     [filters, updateFilters]
   );
 
-  const toggleBooleanFilter = useCallback(
-    (key: "inStock" | "onSale") => {
-      updateFilters({ ...filters, [key]: !filters[key] });
+  const setSingleFilter = useCallback(
+    (key: "categories" | "brands", item: Category | Brand | null) => {
+      // If item is null, clear the filter. Otherwise, set array to just this one item
+      const newArray = item ? [item] : [];
+      updateFilters({ ...filters, [key]: newArray } as FilterState);
     },
     [filters, updateFilters]
   );
+
+  // const toggleBooleanFilter = useCallback(
+  //   (key: "inStock" | "onSale") => {
+  //     updateFilters({ ...filters, [key]: !filters[key] });
+  //   },
+  //   [filters, updateFilters]
+  // );
 
   const updatePriceRange = useCallback(
     (range: { min: number; max: number }) => {
@@ -131,23 +156,27 @@ const FilterBar: React.FC<Props> = ({
       brands: [],
       sizes: [],
       colors: [],
-      priceRange: { min: 0, max: 20000 },
-      inStock: false,
-      onSale: false,
+      priceRange: { min: 0, max: 100000 },
+      // inStock: false,
+      // onSale: false,
       search: "",
     };
     updateFilters(clearedFilters);
   }, [updateFilters]);
 
   const activeFilterCount = useMemo(() => {
+    const isPriceRangeActive =
+      filters.priceRange.min > 0 ||
+      (filters.priceRange.max > 0 && filters.priceRange.max < 20000);
+
     return (
       filters.categories.length +
       filters.brands.length +
       filters.sizes.length +
       filters.colors.length +
-      (filters.priceRange.min > 0 || filters.priceRange.max <= 20000 ? 1 : 0) +
-      (filters.inStock ? 1 : 0) +
-      (filters.onSale ? 1 : 0) +
+      (isPriceRangeActive ? 1 : 0) +
+      // (filters.inStock ? 1 : 0) +
+      // (filters.onSale ? 1 : 0) +
       (filters.search ? 1 : 0)
     );
   }, [filters]);
@@ -200,7 +229,8 @@ const FilterBar: React.FC<Props> = ({
               activeFilterCount={activeFilterCount}
               clearAllFilters={clearAllFilters}
               toggleArrayFilter={toggleArrayFilter}
-              toggleBooleanFilter={toggleBooleanFilter}
+              setSingleFilter={setSingleFilter}
+              // toggleBooleanFilter={toggleBooleanFilter}
               updatePriceRange={updatePriceRange}
               updateSearch={updateSearch}
               availableCategories={availableCategories}
@@ -222,14 +252,16 @@ const FilterBar: React.FC<Props> = ({
             activeFilterCount={activeFilterCount}
             clearAllFilters={clearAllFilters}
             toggleArrayFilter={toggleArrayFilter}
-            toggleBooleanFilter={toggleBooleanFilter}
+            setSingleFilter={setSingleFilter}
+            // toggleBooleanFilter={toggleBooleanFilter}
             updatePriceRange={updatePriceRange}
             updateSearch={updateSearch}
             availableCategories={availableCategories}
             availableBrands={availableBrands}
             availableSizes={availableSizes}
             availableColors={availableColors}
-            isMobile={false}
+            onClose={() => setIsMobileOpen(false)}
+            isMobile={true}
           />
         </div>
       </div>

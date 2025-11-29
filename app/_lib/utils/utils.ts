@@ -1,3 +1,5 @@
+import { FilterState } from "@/app/_components/products/filter/FilterBar";
+
 export function getStringFromForm(
   formData: FormData,
   key: string,
@@ -125,4 +127,116 @@ export const getInitials = (name: string) => {
     .join("")
     .toUpperCase()
     .slice(0, 2);
+};
+
+
+/**
+ * Converts filter state to URL query string
+ * @param filters - The filter state object
+ * @returns Query string (e.g., "?category=shirts&brand=nike&colors=red&colors=blue")
+ */
+export const filtersToQueryString = (filters: FilterState): string => {
+  const params = new URLSearchParams();
+
+  // Search
+  if (filters.search) {
+    params.set("search", filters.search);
+  }
+
+  // Category (single value)
+  if (filters.categories.length > 0 && filters.categories[0]?.title) {
+    params.set("category", filters.categories[0].title.toLowerCase());
+  }
+
+  // Brand (single value)
+  if (filters.brands.length > 0 && filters.brands[0]?.title) {
+    params.set("brand", filters.brands[0].title.toLowerCase());
+  }
+
+  // Sizes (multiple values - only titles)
+  if (filters.sizes.length > 0) {
+    filters.sizes.forEach((size) => {
+      if (size.size) {
+        params.append("sizes", size.size.toLowerCase());
+      }
+    });
+  }
+
+  // Colors (multiple values - only titles)
+  if (filters.colors.length > 0) {
+    filters.colors.forEach((color) => {
+      if (color.title) {
+        params.append("colors", color.title.toLowerCase());
+      }
+    });
+  }
+
+  // Price range (only if not default)
+  if (filters.priceRange.min > 0) {
+    params.set("minPrice", filters.priceRange.min.toString());
+  }
+  if (filters.priceRange.max > 0 && filters.priceRange.max < 20000) {
+    params.set("maxPrice", filters.priceRange.max.toString());
+  }
+
+  // Boolean filters
+  if (filters.inStock) {
+    params.set("inStock", "true");
+  }
+  if (filters.onSale) {
+    params.set("onSale", "true");
+  }
+
+  const queryString = params.toString();
+  return queryString ? `?${queryString}` : "";
+};
+
+/**
+ * Converts filter state to a plain object with only the values (no IDs)
+ * Useful for API calls that only need the filter values
+ * @param filters - The filter state object
+ * @returns Object with filter values only
+ */
+export const filtersToApiParams = (filters: FilterState) => {
+  const params: Record<string, any> = {};
+
+  if (filters.search) {
+    params.search = filters.search;
+  }
+
+  if (filters.categories.length > 0 && filters.categories[0]?.title) {
+    params.category = filters.categories[0].title.toLowerCase();
+  }
+
+  if (filters.brands.length > 0 && filters.brands[0]?.title) {
+    params.brand = filters.brands[0].title.toLowerCase();
+  }
+
+  if (filters.sizes.length > 0) {
+    params.sizes = filters.sizes
+      .map((size) => size.size?.toLowerCase())
+      .filter(Boolean);
+  }
+
+  if (filters.colors.length > 0) {
+    params.colors = filters.colors
+      .map((color) => color.title?.toLowerCase())
+      .filter(Boolean);
+  }
+
+  if (filters.priceRange.min > 0) {
+    params.minPrice = filters.priceRange.min;
+  }
+  if (filters.priceRange.max > 0 && filters.priceRange.max < 20000) {
+    params.maxPrice = filters.priceRange.max;
+  }
+
+  if (filters.inStock) {
+    params.inStock = true;
+  }
+  if (filters.onSale) {
+    params.onSale = true;
+  }
+
+  return params;
 };

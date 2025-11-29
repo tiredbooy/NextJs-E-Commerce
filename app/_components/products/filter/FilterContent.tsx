@@ -6,8 +6,10 @@ import { Brand, Category, Color, Size } from "@/app/_lib/types/product_types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { useState } from "react";
+import { Label } from "@/components/ui/label";
 
 interface FilterContentProps {
   filters: FilterState;
@@ -17,7 +19,11 @@ interface FilterContentProps {
     key: "categories" | "brands" | "sizes" | "colors",
     item: Category | Brand | Size | Color
   ) => void;
-  toggleBooleanFilter: (key: "inStock" | "onSale") => void;
+  setSingleFilter: (
+    key: "categories" | "brands",
+    item: Category | Brand | null
+  ) => void;
+  // toggleBooleanFilter: (key: "inStock" | "onSale") => void;
   updatePriceRange: (range: { min: number; max: number }) => void;
   updateSearch: (search: string) => void;
   availableCategories: Category[];
@@ -33,7 +39,8 @@ const FilterContent: React.FC<FilterContentProps> = ({
   activeFilterCount,
   clearAllFilters,
   toggleArrayFilter,
-  toggleBooleanFilter,
+  setSingleFilter,
+  // toggleBooleanFilter,
   updatePriceRange,
   updateSearch,
   availableCategories,
@@ -47,6 +54,26 @@ const FilterContent: React.FC<FilterContentProps> = ({
 
   const handleSearch = () => {
     updateSearch(searchInput);
+  };
+
+  const handleCategoryChange = (categoryId: string) => {
+    const category = availableCategories.find(
+      (c) => c.id === Number(categoryId)
+    );
+    if (category) {
+      // If clicking the same category, deselect it
+      const isSameCategory = filters.categories[0]?.id === Number(categoryId);
+      setSingleFilter("categories", isSameCategory ? null : category);
+    }
+  };
+
+  const handleBrandChange = (brandId: string) => {
+    const brand = availableBrands.find((b) => b.id === Number(brandId));
+    if (brand) {
+      // If clicking the same brand, deselect it
+      const isSameBrand = filters.brands[0]?.id === Number(brandId);
+      setSingleFilter("brands", isSameBrand ? null : brand);
+    }
   };
 
   return (
@@ -139,7 +166,7 @@ const FilterContent: React.FC<FilterContentProps> = ({
               <Badge key={cat.id} variant="secondary" className="gap-1">
                 {cat.title}
                 <button
-                  onClick={() => toggleArrayFilter("categories", cat)}
+                  onClick={() => setSingleFilter("categories", null)}
                   className="ml-1 hover:bg-muted-foreground/20 rounded-full"
                 >
                   <X className="w-3 h-3" />
@@ -151,7 +178,7 @@ const FilterContent: React.FC<FilterContentProps> = ({
               <Badge key={brand.id} variant="secondary" className="gap-1">
                 {brand.title}
                 <button
-                  onClick={() => toggleArrayFilter("brands", brand)}
+                  onClick={() => setSingleFilter("brands", null)}
                   className="ml-1 hover:bg-muted-foreground/20 rounded-full"
                 >
                   <X className="w-3 h-3" />
@@ -185,7 +212,7 @@ const FilterContent: React.FC<FilterContentProps> = ({
 
             {(filters.priceRange.min > 0 || filters.priceRange.max < 20000) && (
               <Badge variant="secondary" className="gap-1">
-                ${filters.priceRange.min}-${filters.priceRange.max}
+                ${filters.priceRange.min} - ${filters.priceRange.max}
                 <button
                   onClick={() => updatePriceRange({ min: 0, max: 20000 })}
                   className="ml-1 hover:bg-muted-foreground/20 rounded-full"
@@ -195,7 +222,7 @@ const FilterContent: React.FC<FilterContentProps> = ({
               </Badge>
             )}
 
-            {filters.inStock && (
+            {/* {filters.inStock && (
               <Badge variant="secondary" className="gap-1">
                 In Stock
                 <button
@@ -217,7 +244,7 @@ const FilterContent: React.FC<FilterContentProps> = ({
                   <X className="w-3 h-3" />
                 </button>
               </Badge>
-            )}
+            )} */}
           </div>
         </div>
       )}
@@ -225,7 +252,7 @@ const FilterContent: React.FC<FilterContentProps> = ({
       {/* Filter Options - Scrollable */}
       <div className="flex-1 overflow-y-auto px-4">
         {/* Quick Filters */}
-        <CollapsibleSection title="Quick Filters">
+        {/* <CollapsibleSection title="Quick Filters">
           <Checkbox
             id="in-stock"
             label="In Stock Only"
@@ -238,35 +265,52 @@ const FilterContent: React.FC<FilterContentProps> = ({
             checked={filters.onSale}
             onChange={() => toggleBooleanFilter("onSale")}
           />
-        </CollapsibleSection>
+        </CollapsibleSection> */}
 
-        {/* Categories */}
+        {/* Categories - Radio Group */}
         {availableCategories.length > 0 && (
           <CollapsibleSection title="Categories">
-            {availableCategories.map((category) => (
-              <Checkbox
-                key={category.id}
-                id={`cat-${category.id}`}
-                label={category.title}
-                checked={filters.categories.some((c) => c.id === category.id)}
-                onChange={() => toggleArrayFilter("categories", category)}
-              />
-            ))}
+            <RadioGroup
+              value={filters.categories[0]?.id || ""}
+              onValueChange={handleCategoryChange}
+            >
+              {availableCategories.map((category) => (
+                <div key={category.id} className="flex items-center space-x-2">
+                  <RadioGroupItem
+                    value={category.id}
+                    id={`cat-${category.id}`}
+                  />
+                  <Label
+                    htmlFor={`cat-${category.id}`}
+                    className="cursor-pointer flex-1"
+                  >
+                    {category.title}
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
           </CollapsibleSection>
         )}
 
-        {/* Brands */}
+        {/* Brands - Radio Group */}
         {availableBrands.length > 0 && (
           <CollapsibleSection title="Brands">
-            {availableBrands.map((brand) => (
-              <Checkbox
-                key={brand.id}
-                id={`brand-${brand.id}`}
-                label={brand.title}
-                checked={filters.brands.some((b) => b.id === brand.id)}
-                onChange={() => toggleArrayFilter("brands", brand)}
-              />
-            ))}
+            <RadioGroup
+              value={filters.brands[0]?.id || ""}
+              onValueChange={handleBrandChange}
+            >
+              {availableBrands.map((brand) => (
+                <div key={brand.id} className="flex items-center space-x-2">
+                  <RadioGroupItem value={brand.id} id={`brand-${brand.id}`} />
+                  <Label
+                    htmlFor={`brand-${brand.id}`}
+                    className="cursor-pointer flex-1"
+                  >
+                    {brand.title}
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
           </CollapsibleSection>
         )}
 

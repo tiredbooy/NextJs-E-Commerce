@@ -91,6 +91,8 @@ export interface QueryParams {
   joined?: string;
   category?: string;
   brand?: string;
+  colors?: string;
+  sizes?: string;
   minPrice?: string;
   maxPrice?: string;
   sortOrder?: string;
@@ -105,9 +107,9 @@ export interface AdminOrder {
 }
 
 export interface CustomerDataForAdminOrder {
-  id: number
+  id: number;
   first_name: string;
-  last_name : string
+  last_name: string;
   email: string;
-  phone: string | undefined
+  phone: string | undefined;
 }

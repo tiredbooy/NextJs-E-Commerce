@@ -23,7 +23,7 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
       >
         <span className="font-medium text-foreground text-sm">{title}</span>
         <ChevronDown
-          className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${
+          className={`w-4 h-4 text-muted-foreground transition-transform duration-200 cursor-pointer ${
             isOpen ? "rotate-180" : ""
           }`}
         />

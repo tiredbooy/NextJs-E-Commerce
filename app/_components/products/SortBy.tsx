@@ -1,10 +1,10 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Check, ChevronDown, ArrowUpDown } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 // Types
 export type SortOption =
-  | "relevance"
   | "price-asc"
   | "price-desc"
   | "name-asc"
@@ -28,9 +28,8 @@ interface Props {
 
 // Sort options configuration
 const SORT_OPTIONS: SortConfig[] = [
-  { value: "relevance", label: "Relevance" },
-  { value: "popular", label: "Most Popular" },
   { value: "newest", label: "Newest First" },
+  { value: "popular", label: "Most Popular" },
   { value: "price-asc", label: "Price: Low to High" },
   { value: "price-desc", label: "Price: High to Low" },
   { value: "name-asc", label: "Name: A to Z" },
@@ -38,26 +37,10 @@ const SORT_OPTIONS: SortConfig[] = [
   { value: "rating", label: "Highest Rated" },
 ];
 
-// Update URL with sort parameter
-const updateURLWithSort = (sortValue: SortOption) => {
-  const params = new URLSearchParams(window?.location?.search);
-
-  if (sortValue === "relevance") {
-    params.delete("sort");
-  } else {
-    params.set("sort", sortValue);
-  }
-
-  const newURL = `${location.pathname}${
-    params.toString() ? "?" + params.toString() : ""
-  }`;
-  history.pushState({}, "", newURL);
-};
-
 // Get sort from URL
 const getSortFromURL = (): SortOption | null => {
   const params = new URLSearchParams(location.search);
-  const sortParam = params.get("sort");
+  const sortParam = params.get("sortBy");
 
   if (sortParam && SORT_OPTIONS.some((opt) => opt.value === sortParam)) {
     return sortParam as SortOption;
@@ -67,7 +50,7 @@ const getSortFromURL = (): SortOption | null => {
 };
 
 const SortBy: React.FC<Props> = ({
-  defaultSort = "relevance",
+  defaultSort = "newest",
   onSortChange,
   className = "",
   compact = false,
@@ -77,6 +60,29 @@ const SortBy: React.FC<Props> = ({
     getSortFromURL() || defaultSort
   );
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  const updateURLWithSort = (sortValue: SortOption) => {
+    const params = new URLSearchParams(window?.location?.search);
+    const sort = sortValue.split("-");
+    const sortBy = sort[0];
+    const orderBy = sort[1];
+
+    if (sortValue === "newest") {
+      params.delete("sortBy");
+    } else {
+      params.set("sortBy", sortBy);
+      sort.length > 1
+        ? params.set("orderBy", orderBy)
+        : params.delete("orderBy");
+    }
+
+    const newURL = `${location.pathname}${
+      params.toString() ? "?" + params.toString() : ""
+    }`;
+    // history.pushState({}, "", newURL);
+    router.push(newURL)
+  };
 
   // Get current sort label
   const currentSortLabel =

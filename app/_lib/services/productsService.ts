@@ -15,15 +15,16 @@ type ProductQueryParam = Pick<
   | "maxPrice"
   | "sortBy"
   | "sortOrder"
+  | "colors"
+  | "sizes"
 >;
-
 
 // ---- PRODUCTS ----
 
 export async function getProducts(params: ProductQueryParam = {}) {
   try {
     const query = buildQuery(params);
-
+    console.log("`api url`:", `/api/products${query}`);
     const res = await serverApi({
       method: "GET",
       url: `/api/products${query}`,
@@ -35,17 +36,16 @@ export async function getProducts(params: ProductQueryParam = {}) {
   }
 }
 
-export async function getProductById(id : number) {
+export async function getProductById(id: number) {
   try {
     const res = await serverApi({
-      method : "GET",
-      url : `/api/products/${id}`
-    })
+      method: "GET",
+      url: `/api/products/${id}`,
+    });
 
-    return await res?.data
-  }
-  catch(e: any) {
-    throw new Error(e.message || "Something went wrong")
+    return await res?.data;
+  } catch (e: any) {
+    throw new Error(e.message || "Something went wrong");
   }
 }
 
