@@ -1,5 +1,6 @@
 import { StaticImageData } from "next/image";
 import { IconType } from "react-icons/lib";
+import { Product } from "./types/product_types";
 
 export interface Announcment {
   announcmentTxt: string;
@@ -113,3 +114,29 @@ export interface CustomerDataForAdminOrder {
   email: string;
   phone: string | undefined;
 }
+
+export interface FavoriteProduct {
+  product_id: number;
+  user_id: number;
+}
+
+export interface Cart {
+  id: number;
+  items: CartItem[];
+  updated_at: string;
+}
+
+export interface CartItem {
+  product_id: number;
+  quantity: number;
+  size_id: number;
+  color_id: number;
+  product: Product;
+  created_at: string;
+  updated_at: string;
+}
+
+export type CartItemReq = Pick<
+  CartItem,
+  "product_id" | "quantity" | "color_id" | "size_id"
+>;

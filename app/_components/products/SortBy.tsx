@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Check, ChevronDown, ArrowUpDown } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // Types
 export type SortOption =
@@ -39,8 +39,8 @@ const SORT_OPTIONS: SortConfig[] = [
 
 // Get sort from URL
 const getSortFromURL = (): SortOption | null => {
-  const params = new URLSearchParams(location.search);
-  const sortParam = params.get("sortBy");
+  const params = useSearchParams();
+  const sortParam = params.get("sortBy")
 
   if (sortParam && SORT_OPTIONS.some((opt) => opt.value === sortParam)) {
     return sortParam as SortOption;

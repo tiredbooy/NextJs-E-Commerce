@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useState, useTransition } from "react";
 import { MdAdd, MdDelete, MdImage } from "react-icons/md";
 import { toast } from "sonner";
+import { ProductFormData } from "./ProductForm";
 
 const API_URL = process.env.API_URL || "http://localhost:8080/api";
 
@@ -17,14 +18,15 @@ interface ProductImage {
   name: string;
 }
 
-interface ProductFormData {
-  id: number;
-  title: string;
-  images: ProductImage[] | ImageType[];
-}
+// interface ProductFormData {
+//   id: number;
+//   title: string;
+//   images: ProductImage[] | ImageType[];
+// }
 
 interface Props {
   data: ProductFormData;
+  onChange: (updates: Partial<ProductFormData>) => void;
 }
 
 export function ProductImages({ data, onChange }: Props) {

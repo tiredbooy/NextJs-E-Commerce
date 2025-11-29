@@ -180,12 +180,12 @@ export const filtersToQueryString = (filters: FilterState): string => {
   }
 
   // Boolean filters
-  if (filters.inStock) {
-    params.set("inStock", "true");
-  }
-  if (filters.onSale) {
-    params.set("onSale", "true");
-  }
+  // if (filters.inStock) {
+  //   params.set("inStock", "true");
+  // }
+  // if (filters.onSale) {
+  //   params.set("onSale", "true");
+  // }
 
   const queryString = params.toString();
   return queryString ? `?${queryString}` : "";

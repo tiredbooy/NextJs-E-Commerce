@@ -1,9 +1,7 @@
 import { Image as ImageType, Product } from "@/app/_lib/types/product_types";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { FiEye, FiHeart, FiShoppingCart } from "react-icons/fi";
 import ProductOverlayBtns from "./ProductOverlayBtns";
 
 interface Props {
@@ -21,17 +19,15 @@ const ProductCard: React.FC<Props> = ({ product, usage }) => {
     discount_price,
     price,
     is_featured,
+    created_at,
   } = product;
   const image: ImageType | undefined = images?.[0];
 
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // Add to cart logic here
-    console.log("Add to cart:", product.id);
-  };
 
-  
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+  const isOnSale =  discount_price ? true : false
+
   return (
     <Link href={`products/${slug}`}>
       <article
@@ -40,18 +36,19 @@ const ProductCard: React.FC<Props> = ({ product, usage }) => {
         className="p-4 flex flex-col bg-card group hover:bg-card-hover gap-4 md:p-8 rounded-xl shadow-lg text-white relative overflow-hidden"
       >
         {/* Badges */}
-        {usage === "New" && (
-          <Badge className="absolute bg-new-badge top-2 left-2 text-background z-10 font-semibold">
-            New
-          </Badge>
-        )}
+        {usage === "New" || 
+          (new Date(created_at) > oneMonthAgo && !is_featured && (
+            <Badge className="absolute bg-new-badge top-2 left-2 text-background z-10 font-semibold">
+              New
+            </Badge>
+          ))}
         {usage === "Featured" ||
-          (is_featured && (
+          (is_featured &&  !isOnSale && (
             <Badge className="absolute top-2 left-2 z-10 bg-featured-badge text-featured-badge-foreground font-semibold">
               Featured
             </Badge>
           ))}
-        {usage === "Sale" && (
+        {usage === "Sale" || isOnSale && (
           <Badge className="absolute top-2 left-2 z-10 bg-sale-badge text-background font-semibold">
             Sale
           </Badge>
@@ -71,7 +68,7 @@ const ProductCard: React.FC<Props> = ({ product, usage }) => {
 
           {/* Hover Overlay */}
           <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-            <ProductOverlayBtns />
+            <ProductOverlayBtns productId={id} slug={slug} />
           </div>
         </div>
 
