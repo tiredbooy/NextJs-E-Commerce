@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import ProductOptions from "./ProductOptions";
-import { Product } from "@/app/_lib/types";
+import { Category, Color, Product } from "@/app/_lib/types/product_types";
 
 interface Props {
   product: Product;
@@ -16,20 +16,20 @@ const ProductInformation: React.FC<Props> = ({ product }) => {
       )
     : 0;
 
-  const isOutOfStock = product.stock_quantity === 0;
+  const isOutOfStock = product.stock === 0;
 
   return (
     <div className="flex flex-col gap-6">
       {/* Header Section */}
       <div className="flex flex-col gap-4 pb-6 border-b">
         {/* Categories */}
-        {product.category.length > 0 && (
+        {product?.categories?.length && product?.categories?.length > 0 && (
           <div className="flex gap-2 flex-wrap">
-            {product.category.map((cat) => (
+            {product?.categories?.map((cat: Category) => (
               <Badge
                 key={cat.id}
                 variant="secondary"
-                className="text-xs bg-badge-primary text-badge-primary-foreground"
+                className="text-xs bg-badge-primary text-background font-medium"
               >
                 {cat.title}
               </Badge>
@@ -66,12 +66,12 @@ const ProductInformation: React.FC<Props> = ({ product }) => {
         <div className="flex items-center gap-2">
           {isOutOfStock ? (
             <Badge variant="destructive">Out of Stock</Badge>
-          ) : product.stock_quantity <= 5 ? (
+          ) : product.stock <= 5 ? (
             <Badge
               variant="outline"
               className="text-orange-600 border-orange-600"
             >
-              Only {product.stock_quantity} left in stock
+              Only {product.stock} left in stock
             </Badge>
           ) : (
             <Badge

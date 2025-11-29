@@ -13,12 +13,10 @@ import { FiEye, FiHeart, FiShoppingCart } from "react-icons/fi";
 import { toast } from "sonner";
 
 interface Props {
-  // props here
   productId: number;
-  slug: string;
 }
 
-export default function ProductOverlayBtns({ productId, slug }: Props) {
+export default function ProductOverlayBtns({ productId }: Props) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -64,7 +62,7 @@ export default function ProductOverlayBtns({ productId, slug }: Props) {
   const handleQuickView = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    router.push(`/products/${slug}`);
+    router.push(`/products/${productId}`);
   };
   return (
     <>

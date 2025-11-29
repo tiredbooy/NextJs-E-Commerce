@@ -3,10 +3,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Maximize2, X } from "lucide-react";
 import { ProductImage } from "@/app/_lib/types";
-
-
 
 interface Props {
   images: ProductImage[];
@@ -93,6 +91,10 @@ const ProductThumbnail: React.FC<Props> = ({ images, productTitle }) => {
               fill
               className="object-cover"
               priority={selectedIndex === 0}
+              quality={85}
+              unoptimized={images[selectedIndex]?.url?.startsWith(
+                "http://localhost"
+              )}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           </motion.div>
@@ -103,14 +105,14 @@ const ProductThumbnail: React.FC<Props> = ({ images, productTitle }) => {
           <>
             <button
               onClick={() => paginate(-1)}
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 cursor-pointer hover:bg-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-5 h-5 text-gray-900" />
             </button>
             <button
               onClick={() => paginate(1)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 cursor-pointer hover:bg-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
               aria-label="Next image"
             >
               <ChevronRight className="w-5 h-5 text-gray-900" />
@@ -121,7 +123,7 @@ const ProductThumbnail: React.FC<Props> = ({ images, productTitle }) => {
         {/* Zoom Button */}
         <button
           onClick={() => setIsZoomed(!isZoomed)}
-          className="absolute top-4 right-4 z-10 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          className="absolute top-4 right-4 z-10 bg-white/90 cursor-pointer hover:bg-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"
           aria-label="Toggle zoom"
         >
           <Maximize2 className="w-5 h-5 text-gray-900" />
@@ -147,8 +149,8 @@ const ProductThumbnail: React.FC<Props> = ({ images, productTitle }) => {
                 transition-all duration-200
                 ${
                   selectedIndex === index
-                    ? "ring-2 ring-gray-900 ring-offset-2"
-                    : "ring-1 ring-gray-200 hover:ring-gray-400"
+                    ? "ring-3 ring-info"
+                    : "ring-1 ring-muted hover:muted-foreground/60"
                 }
               `}
               whileHover={{ scale: 1.05 }}
@@ -167,6 +169,10 @@ const ProductThumbnail: React.FC<Props> = ({ images, productTitle }) => {
                       : "opacity-60 hover:opacity-100"
                   }
                 `}
+                quality={85}
+                unoptimized={images[selectedIndex]?.url?.startsWith(
+                  "http://localhost"
+                )}
                 sizes="(max-width: 768px) 25vw, (max-width: 1200px) 20vw, 15vw"
               />
             </motion.button>
@@ -196,24 +202,18 @@ const ProductThumbnail: React.FC<Props> = ({ images, productTitle }) => {
                 alt={`${productTitle} - Zoomed view`}
                 fill
                 className="object-contain"
+                quality={85}
+                unoptimized={images[selectedIndex]?.url?.startsWith(
+                  "http://localhost"
+                )}
                 sizes="100vw"
               />
               <button
                 onClick={() => setIsZoomed(false)}
-                className="absolute top-4 right-4 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg"
+                className="absolute top-4 right-4 bg-foreground/80 hover:bg-foreground p-3 rounded-full shadow-lg cursor-pointer"
                 aria-label="Close zoom"
               >
-                <svg
-                  className="w-6 h-6 text-gray-900"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
+                <X  className="text-background " />
               </button>
             </motion.div>
           </motion.div>
@@ -223,4 +223,4 @@ const ProductThumbnail: React.FC<Props> = ({ images, productTitle }) => {
   );
 };
 
-export default ProductThumbnail
+export default ProductThumbnail;

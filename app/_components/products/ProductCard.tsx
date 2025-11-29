@@ -29,7 +29,7 @@ const ProductCard: React.FC<Props> = ({ product, usage }) => {
   const isOnSale =  discount_price ? true : false
 
   return (
-    <Link href={`products/${slug}`}>
+    <Link href={`products/${id}`}>
       <article
         key={id}
         aria-label={`product ${title}`}
@@ -68,7 +68,7 @@ const ProductCard: React.FC<Props> = ({ product, usage }) => {
 
           {/* Hover Overlay */}
           <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-            <ProductOverlayBtns productId={id} slug={slug} />
+            <ProductOverlayBtns productId={id}/>
           </div>
         </div>
 

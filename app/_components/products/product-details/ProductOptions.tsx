@@ -1,28 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Check, Plus, Minus } from "lucide-react";
-import { Product } from "@/app/_lib/types";
+import { Color, Product, Size } from "@/app/_lib/types/product_types";
+import Loading from "../../reusable/Loading";
+import { Spinner } from "@/components/ui/spinner";
+import { CartItemReq } from "@/app/_lib/types";
+import { addCartItem } from "@/app/_lib/actions/userActions";
+import { toast } from "sonner";
 
 interface ProductOptionsProps {
   product: Product;
 }
 
 const ProductOptions: React.FC<ProductOptionsProps> = ({ product }) => {
+  const [isPending, startTransition] = useTransition();
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
 
-  const isOutOfStock = product.stock_quantity === 0;
+  const isOutOfStock = product.stock === 0;
 
   const handleQuantityChange = (value: number) => {
-    const newQuantity = Math.max(1, Math.min(value, product.stock_quantity));
+    const newQuantity = Math.max(1, Math.min(value, product.stock));
     setQuantity(newQuantity);
   };
 
   const incrementQuantity = () => {
-    if (quantity < product.stock_quantity) {
+    if (quantity < product.stock) {
       setQuantity(quantity + 1);
     }
   };
@@ -48,24 +54,29 @@ const ProductOptions: React.FC<ProductOptionsProps> = ({ product }) => {
   };
 
   const handleAddToCart = async () => {
-    // TODO: Implement server action or API call
-    const cartData = {
-      productId: product.id,
-      size: selectedSize,
-      color: selectedColor,
+    const cartData: CartItemReq = {
+      product_id: product.id,
+      size_id: Number(selectedSize),
+      color_id: Number(selectedColor),
       quantity: quantity,
     };
 
-    localStorage.setItem("cartBasket", JSON.stringify(cartData));
+    startTransition(async () => {
+      try {
+        const result = await addCartItem(cartData);
+        toast.success(result.message);
+      } catch (e: any) {
+        toast.error(e.message || "Failed to add product to cart");
+      }
+    });
 
-    console.log("Add to cart:", cartData);
-    // await addToCartAction(cartData);
+    localStorage.setItem("cart", JSON.stringify(cartData));
   };
 
   return (
     <>
       {/* Colors Section */}
-      {product.colros && product.colros.length > 0 && (
+      {product?.colors && product?.colors?.length > 0 && (
         <div className="flex flex-col gap-3 pb-6 border-b">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-foreground">Color</h3>
@@ -76,24 +87,25 @@ const ProductOptions: React.FC<ProductOptionsProps> = ({ product }) => {
             )}
           </div>
           <div className="flex flex-wrap gap-3">
-            {product.colros &&
-              product.colros.map((color) => {
+            {product?.colors &&
+              product?.colors.map((color: Color) => {
                 const isSelected = selectedColor === color.title;
-                const colorClass =
-                  colorMap[color.title.toLowerCase()] || "bg-gray-400";
-
+                // const colorClass =
+                //   colorMap[color.title.toLowerCase()] || "bg-gray-400";
+                // // ${colorClass}
                 return (
                   <button
                     key={color.id}
                     onClick={() => setSelectedColor(color.title)}
                     disabled={isOutOfStock}
+                    style={{ backgroundColor: `#${color?.hex}` }}
                     className={`
                     relative w-12 h-12 rounded-full transition-all
-                    ${colorClass}
+                    
                     ${
                       isSelected
                         ? "ring-2 ring-offset-2 ring-foreground"
-                        : "ring-1 ring-gray-200"
+                        : "ring-1 ring-muted"
                     }
                     ${
                       isOutOfStock
@@ -122,17 +134,19 @@ const ProductOptions: React.FC<ProductOptionsProps> = ({ product }) => {
       )}
 
       {/* Sizes Section */}
-      {product.sizes && product.sizes.length > 0 && (
+      {product?.sizes && product?.sizes.length > 0 && (
         <div className="flex flex-col gap-3 pb-6 border-b">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-foreground">Size</h3>
             {selectedSize && (
-              <span className="text-sm text-muted-foreground">{selectedSize}</span>
+              <span className="text-sm text-muted-foreground">
+                {selectedSize}
+              </span>
             )}
           </div>
           <div className="flex flex-wrap gap-2">
-            {product.sizes &&
-              product.sizes.map((sizeOption) => {
+            {product?.sizes &&
+              product?.sizes.map((sizeOption: Size) => {
                 const isSelected = selectedSize === sizeOption.size;
 
                 return (
@@ -180,7 +194,7 @@ const ProductOptions: React.FC<ProductOptionsProps> = ({ product }) => {
                 }
                 disabled={isOutOfStock}
                 min="1"
-                max={product.stock_quantity}
+                max={product.stock}
                 className="w-16 h-12 text-center border-x border-divider focus:outline-none focus:ring-2 focus:ring-foreground focus:ring-inset disabled:bg-gray-50 disabled:text-gray-500"
                 aria-label="Quantity"
               />
@@ -188,16 +202,16 @@ const ProductOptions: React.FC<ProductOptionsProps> = ({ product }) => {
                 variant="ghost"
                 size="icon"
                 onClick={incrementQuantity}
-                disabled={isOutOfStock || quantity >= product.stock_quantity}
+                disabled={isOutOfStock || quantity >= product.stock}
                 className="h-12 w-12 rounded-none hover:bg-divider"
                 aria-label="Increase quantity"
               >
                 <Plus className="w-4 h-4" />
               </Button>
             </div>
-            {product.stock_quantity > 0 && (
-              <span className="text-sm text-muted-foreground">
-                {product.stock_quantity} available
+            {product.stock > 0 && product.stock <= 10 && (
+              <span className="text-sm  text-muted-foreground">
+                Only {product.stock} Lefts
               </span>
             )}
           </div>
@@ -208,13 +222,22 @@ const ProductOptions: React.FC<ProductOptionsProps> = ({ product }) => {
           size="lg"
           onClick={handleAddToCart}
           disabled={
+            isPending ||
             isOutOfStock ||
             (product.sizes && product.sizes.length > 0 && !selectedSize)
           }
-          className="w-full text-base font-semibold h-12"
+          className={`w-full text-background font-semibold h-12 ${
+            isOutOfStock ? "cursor-not-allowed" : ""
+          } ${isPending ? "bg-muted-foreground scale-95 cursor-progress" : ""}`}
         >
-          <ShoppingCart className="w-5 h-5 mr-2" />
-          {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+          {isPending ? (
+            <Spinner className="text-background" />
+          ) : (
+            <>
+              <ShoppingCart className="w-5 h-5 mr-2" />
+              {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+            </>
+          )}
         </Button>
 
         {product.sizes &&
