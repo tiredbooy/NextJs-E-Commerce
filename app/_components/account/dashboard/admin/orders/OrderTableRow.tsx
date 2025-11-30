@@ -1,24 +1,7 @@
-"use client"
 import { Order } from "@/app/_lib/types/order_types";
 import { formatDate } from "@/app/_lib/utils/utils";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { FiEdit } from "react-icons/fi";
-import {
-  IoDownload,
-  IoEllipsisVertical,
-  IoEye,
-  IoTrash,
-} from "react-icons/io5";
 import OrderActionBtns from "./OrderActionBtns";
 
 interface Props {
@@ -29,11 +12,6 @@ export default function OrderTableRow({
   order,
 }: Props) {
 
-
-  
-  
-  
-  // Get status badge variant and styling
   const getStatusConfig = (status: Order["status"]) => {
     switch (status) {
       case "shipped":
@@ -65,8 +43,6 @@ export default function OrderTableRow({
     }
   };
   const statusConfig = getStatusConfig(order.status);
-
- 
 
   return (
     <TableRow key={order.id} className="hover:bg-muted/50">

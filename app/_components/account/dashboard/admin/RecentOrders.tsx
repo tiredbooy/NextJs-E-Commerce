@@ -1,5 +1,4 @@
 import { getOrders } from "@/app/_lib/services/services";
-import { RecentOrder } from "@/app/_lib/types";
 import { formatDate } from "@/app/_lib/utils/utils";
 import {
   Table,
@@ -10,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { IoEye } from "react-icons/io5";
 import OrderActionBtns from "./orders/OrderActionBtns";
 
 interface Props {

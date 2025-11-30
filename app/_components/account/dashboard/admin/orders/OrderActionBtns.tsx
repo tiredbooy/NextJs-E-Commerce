@@ -1,23 +1,19 @@
 "use client";
-import { Order } from "@/app/_lib/types/order_types";
-import { formatDate } from "@/app/_lib/utils/utils";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { TableCell, TableRow } from "@/components/ui/table";
 import { FiEdit } from "react-icons/fi";
 import {
-  IoDownload,
-  IoEllipsisVertical,
-  IoEye,
-  IoTrash,
+    IoDownload,
+    IoEllipsisVertical,
+    IoEye,
+    IoTrash,
 } from "react-icons/io5";
 
 interface Props {
