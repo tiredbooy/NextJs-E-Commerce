@@ -3,6 +3,8 @@ import { revalidatePath } from "next/cache";
 import {
   addCartItemReq,
   addProductToFavoriteReq,
+  removeCartItemReq,
+  updateQuantityReq,
 } from "../services/userService";
 import { CartItemReq } from "../types";
 
@@ -31,5 +33,27 @@ export async function addProductToFavorites(productId: number) {
   } catch (e: any) {
     console.log('e:', e.message);
     return { success: false, message: "Failed to Add Product to favorites!" };
+  }
+}
+
+export async function removeCartItem(id: number) {
+  try {
+    const result = await removeCartItemReq(id)
+
+    revalidatePath("/cart")
+    return {success: true, message: result}
+  }catch(e: any) {
+    return {success: false, message: e.message || "somethign went wrong"}
+  }
+}
+
+export async function updateQuantity(id: number, quantity: number) {
+  try {
+    const result = await updateQuantityReq(id, quantity)
+
+    revalidatePath("/cart")
+    return {success: true, message: result}
+  }catch(e: any) {
+    return {success: false, message: e.message || "somethign went wrong"}
   }
 }

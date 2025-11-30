@@ -20,7 +20,7 @@ async function HeaderUserMenu() {
           Login/Signup
         </Link>
       )}
-      <Link href="cart">
+      <Link href="/cart">
         <FaShoppingBasket className="h-5 w-5 text-muted-foreground hover:text-foreground" />
       </Link>
     </div>

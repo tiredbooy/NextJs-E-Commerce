@@ -29,16 +29,42 @@ export async function addCartItemReq(req: CartItemReq) {
 }
 
 export async function addProductToFavoriteReq(productId: number) {
-    try {
-        const response = await authenticatedRequest({
-            method: "POST",
-            url: "/api/favorites",
-            data: {product_id: productId}
-        })
+  try {
+    const response = await authenticatedRequest({
+      method: "POST",
+      url: "/api/favorites",
+      data: { product_id: productId },
+    });
 
-        return response;
-    }
-    catch(e: any) {
-        throw new Error( e.message)
-    }
+    return response;
+  } catch (e: any) {
+    throw new Error(e.message);
+  }
+}
+
+export async function removeCartItemReq(id: number) {
+  try {
+    const result = await authenticatedRequest({
+      method: "DELETE",
+      url: `/api/cart/items/${id}`,
+    });
+
+    return result.message;
+  } catch (e: any) {
+    throw new Error("Could not remove item");
+  }
+}
+
+export async function updateQuantityReq(id: number, quantity: number) {
+  try {
+    const result = await authenticatedRequest({
+      method: "PATCH",
+      url: `/api/cart/items/${id}`,
+      data: {quantity}
+    });
+
+    return result.message;
+  } catch (e: any) {
+    throw new Error("Could not remove item");
+  }
 }

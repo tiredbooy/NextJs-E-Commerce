@@ -13,8 +13,13 @@ import {
   Check,
   X,
 } from "lucide-react";
+import { CartItem } from "@/app/_lib/types";
 
-export function CartSummary() {
+interface Params {
+  items: CartItem[];
+}
+
+export function CartSummary({ items }: Params) {
   const [promoCode, setPromoCode] = useState("");
   const [isApplyingPromo, setIsApplyingPromo] = useState(false);
   const [promoError, setPromoError] = useState("");
@@ -23,11 +28,22 @@ export function CartSummary() {
     discount: number;
   } | null>(null);
 
-  // Mock data - replace with actual cart totals
-  const subtotal = 1049.97;
+  // const products = items.map(item => item.product)
+
+  const subtotal = items.reduce((acc, item) => {
+    const price = item?.product?.price;
+    return acc + price * item.quantity;
+  }, 0);
+
   const discount = appliedPromo?.discount || 0;
-  const shipping = subtotal > 500 ? 0 : 15.0;
-  const tax = (subtotal - discount) * 0.1;
+  const shipping = subtotal > 1000 ? 0 : 15.0;
+  const tax = items.reduce((acc, item) => {
+    if (item.product.include_tax) {
+      const price = item.product.discount_price || item.product.price;
+      return acc + price * item.quantity * 0.1;
+    }
+    return acc;
+  }, 0);
   const total = subtotal - discount + shipping + tax;
 
   const handleApplyPromo = async () => {
@@ -289,18 +305,10 @@ export function CartSummary() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleCheckout}
-            className="w-full py-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover active:bg-primary-active font-semibold transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2 group"
+            className="w-full py-4 bg-primary text-background cursor-pointer rounded-lg hover:bg-primary-hover active:bg-primary-active font-semibold transition-colors shadow-md hover:shadow-lg flex items-center justify-center"
           >
-            <Lock className="w-5 h-5" />
-            Proceed to Checkout
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            Submit Order
           </motion.button>
-
-          {/* Security Badge */}
-          <div className="mt-4 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <ShieldCheck className="w-5 h-5 text-success" />
-            <span>256-bit Secure Checkout</span>
-          </div>
         </div>
 
         {/* Trust Badges */}

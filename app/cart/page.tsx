@@ -3,12 +3,13 @@ import { CartSummary } from "@/app/_components/cart/CartSummary";
 import { Breadcrumb } from "@/app/_components/reusable/BreadCrump";
 import { getUserCart } from "../_lib/services/userService";
 import EmptyBasket from "../_components/cart/EmptyBasket";
+import { CartItem } from "../_lib/types";
 
 export default async function CartPage() {
   const cart = await getUserCart();
-  console.log('cart:', cart);
 
-  const cartItems = cart?.items;
+  console.log('cart:', cart);
+  const cartItems: CartItem[] = cart?.items || [];
 
   return (
     <div className="min-h-screen bg-background py-8 px-4 sm:px-6 lg:px-8">
@@ -25,7 +26,7 @@ export default async function CartPage() {
             </div>
 
             <div className="lg:col-span-1">
-              <CartSummary />
+              <CartSummary items={cartItems} />
             </div>
           </div>
         ) : (

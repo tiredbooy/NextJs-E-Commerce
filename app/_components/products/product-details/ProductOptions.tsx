@@ -16,8 +16,8 @@ interface ProductOptionsProps {
 
 const ProductOptions: React.FC<ProductOptionsProps> = ({ product }) => {
   const [isPending, startTransition] = useTransition();
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedSize, setSelectedSize] = useState<number | null>(null);
+  const [selectedColor, setSelectedColor] = useState<number | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
 
   const isOutOfStock = product.stock === 0;
@@ -61,6 +61,9 @@ const ProductOptions: React.FC<ProductOptionsProps> = ({ product }) => {
       quantity: quantity,
     };
 
+    console.log('selectedSize:', selectedSize);
+    console.log('selectedColor:', selectedColor);
+
     startTransition(async () => {
       try {
         const result = await addCartItem(cartData);
@@ -89,14 +92,14 @@ const ProductOptions: React.FC<ProductOptionsProps> = ({ product }) => {
           <div className="flex flex-wrap gap-3">
             {product?.colors &&
               product?.colors.map((color: Color) => {
-                const isSelected = selectedColor === color.title;
+                const isSelected = selectedColor === color.id;
                 // const colorClass =
                 //   colorMap[color.title.toLowerCase()] || "bg-gray-400";
                 // // ${colorClass}
                 return (
                   <button
                     key={color.id}
-                    onClick={() => setSelectedColor(color.title)}
+                    onClick={() => setSelectedColor(color.id)}
                     disabled={isOutOfStock}
                     style={{ backgroundColor: `#${color?.hex}` }}
                     className={`
@@ -147,14 +150,14 @@ const ProductOptions: React.FC<ProductOptionsProps> = ({ product }) => {
           <div className="flex flex-wrap gap-2">
             {product?.sizes &&
               product?.sizes.map((sizeOption: Size) => {
-                const isSelected = selectedSize === sizeOption.size;
+                const isSelected = selectedSize === sizeOption.id;
 
                 return (
                   <Button
                     key={sizeOption.id}
                     variant={isSelected ? "default" : "outline"}
                     size="lg"
-                    onClick={() => setSelectedSize(sizeOption.size)}
+                    onClick={() => setSelectedSize(sizeOption.id)}
                     disabled={isOutOfStock}
                     className={`
                     min-w-[4rem] font-semibold
