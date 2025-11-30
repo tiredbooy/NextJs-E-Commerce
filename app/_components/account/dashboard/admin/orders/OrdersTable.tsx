@@ -22,10 +22,10 @@ export default async function OrdersTable({ orders }: Props) {
             <TableRow>
               <TableHead>Order ID</TableHead>
               <TableHead>Customer</TableHead>
+              <TableHead>Phone</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Items</TableHead>
               <TableHead>Total</TableHead>
-              <TableHead>Payment</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>

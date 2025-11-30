@@ -231,12 +231,22 @@ export const filtersToApiParams = (filters: FilterState) => {
     params.maxPrice = filters.priceRange.max;
   }
 
-  if (filters.inStock) {
-    params.inStock = true;
-  }
-  if (filters.onSale) {
-    params.onSale = true;
-  }
+  // if (filters.inStock) {
+  //   params.inStock = true;
+  // }
+  // if (filters.onSale) {
+  //   params.onSale = true;
+  // }
 
   return params;
 };
+
+
+export const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };

@@ -23,7 +23,7 @@ export default async function OrdersContent({
     user,
     total,
   });
-  const orders = ordersRes.orders;
+  const orders = ordersRes?.orders;
 
   return (
     <div className="">

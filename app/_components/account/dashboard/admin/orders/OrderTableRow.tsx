@@ -1,4 +1,6 @@
+"use client"
 import { Order } from "@/app/_lib/types/order_types";
+import { formatDate } from "@/app/_lib/utils/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,35 +19,20 @@ import {
   IoEye,
   IoTrash,
 } from "react-icons/io5";
+import OrderActionBtns from "./OrderActionBtns";
 
 interface Props {
   order: Order;
-  onView?: (order: Order) => void;
-  onEdit?: (order: Order) => void;
-  onDelete?: (orderId: number) => void;
-  onDownloadInvoice?: (orderId: number) => void;
 }
 
 export default function OrderTableRow({
   order,
-  onView,
-  onEdit,
-  onDelete,
-  onDownloadInvoice,
 }: Props) {
 
 
   
   
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
-
+  
   // Get status badge variant and styling
   const getStatusConfig = (status: Order["status"]) => {
     switch (status) {
@@ -79,6 +66,7 @@ export default function OrderTableRow({
   };
   const statusConfig = getStatusConfig(order.status);
 
+ 
 
   return (
     <TableRow key={order.id} className="hover:bg-muted/50">
@@ -108,6 +96,10 @@ export default function OrderTableRow({
         {formatDate(order.created_at)}
       </TableCell>
 
+      <TableCell className="font-semibold text-foreground">
+        {Number(order?.items)}
+      </TableCell>
+
       {/* Total Amount */}
       <TableCell className="font-semibold text-foreground">
         ${order.total_price.toFixed(2)}
@@ -124,63 +116,7 @@ export default function OrderTableRow({
 
       {/* Actions */}
       <TableCell>
-        <div className="flex items-center gap-2">
-          {/* Quick Actions */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => onView?.(order)}
-            className="h-8 w-8 text-primary hover:text-primary-hover hover:bg-primary/10"
-          >
-            <IoEye className="w-4 h-4" />
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => onDelete?.(order.id)}
-            className="h-8 w-8 text-destructive hover:text-destructive-hover hover:bg-destructive/10"
-          >
-            <IoTrash className="w-4 h-4" />
-          </Button>
-
-          {/* More Actions Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 hover:bg-muted"
-              >
-                <IoEllipsisVertical className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => onView?.(order)}>
-                <IoEye className="w-4 h-4 mr-2" />
-                View Details
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onEdit?.(order)}>
-                <FiEdit className="w-4 h-4 mr-2" />
-                Edit Order
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onDownloadInvoice?.(order.id)}>
-                <IoDownload className="w-4 h-4 mr-2" />
-                Download Invoice
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => onDelete?.(order.id)}
-                className="text-destructive focus:text-destructive focus:bg-destructive/10"
-              >
-                <IoTrash className="w-4 h-4 mr-2" />
-                Delete Order
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <OrderActionBtns orderId={order.id} />
       </TableCell>
     </TableRow>
   );

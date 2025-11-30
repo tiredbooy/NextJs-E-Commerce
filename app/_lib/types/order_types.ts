@@ -19,7 +19,7 @@ export interface Order {
   coupon_id?: number;
   discount_applied?: number;
   status: "pending" | "processing" | "completed" | "cancelled" | "shipped";
-  items: OrderItem[];
+  items?: OrderItem[] | number;
   created_at: string;
   updated_at: string;
 }

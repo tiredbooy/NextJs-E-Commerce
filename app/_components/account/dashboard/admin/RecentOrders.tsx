@@ -1,5 +1,6 @@
 import { getOrders } from "@/app/_lib/services/services";
 import { RecentOrder } from "@/app/_lib/types";
+import { formatDate } from "@/app/_lib/utils/utils";
 import {
   Table,
   TableBody,
@@ -9,6 +10,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { IoEye } from "react-icons/io5";
+import OrderActionBtns from "./orders/OrderActionBtns";
 
 interface Props {
   // props here
@@ -45,25 +48,37 @@ const RecentOrders: React.FC<Props> = async ({}) => {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">#Order ID</TableHead>
-              <TableHead>UserName</TableHead>
-              <TableHead>Amount</TableHead>
+              <TableHead>username</TableHead>
+              <TableHead>phone</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {orders.map((order) => (
               <TableRow className="cursor-pointer" key={order.id}>
                 <TableCell className="font-medium">#{order.id}</TableCell>
-                <TableCell className="first-letter:uppercase">{}</TableCell>
+                <TableCell className="first-letter:uppercase">
+                  {order?.customer?.first_name}-{order?.customer?.last_name}
+                </TableCell>
+                <TableCell>{order.customer.phone}</TableCell>
                 <TableCell>{order.status}</TableCell>
                 <TableCell className="">${order.total_price}</TableCell>
+                <TableCell>
+                  {formatDate(order.created_at)} -{" "}
+                  {new Date(order.created_at).toLocaleTimeString()}
+                </TableCell>
+                <TableCell>
+                  <OrderActionBtns orderId={order.id} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
     </>
-
   );
 };
 
