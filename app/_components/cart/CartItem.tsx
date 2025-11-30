@@ -24,9 +24,11 @@ export function CartItem({ item }: CartItemProps) {
   const [quantity, setQuantity] = useState(item.quantity);
   const [image, setImage] = useState<Image>();
 
+  const product = item.product;
+
   const handleQuantityChange = (newQuantity: number) => {
     if (newQuantity < 1) return;
-    if (newQuantity > 99) return;
+    if (newQuantity > product?.stock) return;
     setQuantity(newQuantity);
     startQuantityTransition(async () => {
       await updateQuantity(Number(item?.id), Number(newQuantity));
@@ -51,8 +53,6 @@ export function CartItem({ item }: CartItemProps) {
       setImage(productImg);
     });
   }, []);
-
-  const product = item.product;
 
   const subtotal = product?.price * quantity;
   const savings = product.discount_price
@@ -146,7 +146,9 @@ export function CartItem({ item }: CartItemProps) {
                 <QuantitySelector
                   quantity={quantity}
                   onChange={handleQuantityChange}
-                  disabled={!product.stock}
+                  min={1}
+                  max={product.stock}
+                  disabled={isRemoving}
                 />
                 <button
                   onClick={handleRemove}
@@ -194,6 +196,8 @@ export function CartItem({ item }: CartItemProps) {
             <QuantitySelector
               quantity={quantity}
               onChange={handleQuantityChange}
+              min={1}
+              max={product.stock}
               disabled={!product.stock || isQuantityUpdating}
             />
             <button

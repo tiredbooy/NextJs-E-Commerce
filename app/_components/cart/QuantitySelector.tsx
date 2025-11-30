@@ -1,36 +1,32 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { FaMinus, FaPlus } from "react-icons/fa";
+
 // Quantity Selector Component
 interface QuantitySelectorProps {
   quantity: number;
   onChange: (quantity: number) => void;
+  min: number;
+  max: number;
   disabled?: boolean;
 }
 
 export default function QuantitySelector({
   quantity,
   onChange,
+  max,
+  min,
   disabled,
 }: QuantitySelectorProps) {
   return (
-    <div className="flex items-center border border-[var(--border)] rounded-md overflow-hidden">
+    <div className="flex items-center border border-border rounded-md overflow-hidden">
       <button
+        disabled={quantity <= min || disabled}
         onClick={() => onChange(quantity - 1)}
-        disabled={disabled || quantity <= 1}
-        className="px-3 py-2 hover:bg-[var(--muted)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-3 cursor-pointer py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-transparent disabled:text-muted-foreground/70"
         aria-label="Decrease quantity"
       >
-        <svg
-          className="w-4 h-4 text-[var(--foreground)]"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M20 12H4"
-          />
-        </svg>
+        <FaMinus size={14} />
       </button>
 
       <input
@@ -41,30 +37,18 @@ export default function QuantitySelector({
           onChange(val);
         }}
         disabled={disabled}
-        className="w-16 text-center py-2 bg-transparent text-[var(--foreground)] focus:outline-none focus:bg-[var(--input-focus)] disabled:opacity-50"
-        min="1"
-        max="99"
+        className="w-16 text-center py-2 outline-none text-foreground focus:outline-none focus:bg-input-focus disabled:opacity-50"
+        min={min}
+        max={max}
       />
 
       <button
+        disabled={disabled  || quantity > max}
         onClick={() => onChange(quantity + 1)}
-        disabled={disabled || quantity >= 99}
-        className="px-3 py-2 hover:bg-[var(--muted)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className={`px-3 cursor-pointer py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-transparent disabled:text-muted-foreground/70`}
         aria-label="Increase quantity"
       >
-        <svg
-          className="w-4 h-4 text-[var(--foreground)]"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 4v16m8-8H4"
-          />
-        </svg>
+        <FaPlus size={14}  />
       </button>
     </div>
   );

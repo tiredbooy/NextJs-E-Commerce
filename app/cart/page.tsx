@@ -8,7 +8,6 @@ import { CartItem } from "../_lib/types";
 export default async function CartPage() {
   const cart = await getUserCart();
 
-  console.log('cart:', cart);
   const cartItems: CartItem[] = cart?.items || [];
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 // components/cart/CartSummary.tsx
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Tag,
@@ -14,12 +14,20 @@ import {
   X,
 } from "lucide-react";
 import { CartItem } from "@/app/_lib/types";
+import { createOrder } from "@/app/_lib/actions/orderAction";
+import {
+  CreateOrderItemReq,
+  CreateOrderReq,
+} from "@/app/_lib/types/order_types";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
 interface Params {
   items: CartItem[];
 }
 
 export function CartSummary({ items }: Params) {
+  const [isOrderPending, startOrderTransition] = useTransition();
   const [promoCode, setPromoCode] = useState("");
   const [isApplyingPromo, setIsApplyingPromo] = useState(false);
   const [promoError, setPromoError] = useState("");
@@ -75,8 +83,29 @@ export function CartSummary({ items }: Params) {
   };
 
   const handleCheckout = () => {
-    // TODO: Navigate to checkout
-    console.log("Proceeding to checkout");
+    startOrderTransition(async () => {
+      const orderItems: CreateOrderItemReq[] = items.map((item) => {
+        return {
+          product_id: item.product_id,
+          quantity: item.quantity,
+          size_id: item.size_id,
+          color_id: item.color_id,
+        };
+      });
+
+      const order: CreateOrderReq = {
+        shipping_address_id: 1,
+        items: orderItems,
+      };
+      const result = await createOrder(order);
+      if (result.success) {
+        toast.message(
+          `Order Created Successfully!, ORDER ID #${result.orderID}`
+        );
+      } else {
+        toast.error(result.message);
+      }
+    });
   };
 
   return (
@@ -307,7 +336,7 @@ export function CartSummary({ items }: Params) {
             onClick={handleCheckout}
             className="w-full py-4 bg-primary text-background cursor-pointer rounded-lg hover:bg-primary-hover active:bg-primary-active font-semibold transition-colors shadow-md hover:shadow-lg flex items-center justify-center"
           >
-            Submit Order
+            {isOrderPending ? <Spinner /> : "Submit Order"}
           </motion.button>
         </div>
 

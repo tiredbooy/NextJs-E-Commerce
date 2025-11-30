@@ -27,8 +27,8 @@ export interface Order {
 export interface CreateOrderItemReq {
     product_id : number
     quantity : number
-    size_id?: number
-    color_id?: number
+    size_id: number
+    color_id: number
 }
 
 export interface CreateOrderReq {
