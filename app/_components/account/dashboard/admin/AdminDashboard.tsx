@@ -13,9 +13,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {
   // Add props if needed later
+  duration: number
 }
 
-const AdminDashboard: React.FC<Props> = ({}) => {
+const AdminDashboard: React.FC<Props> = ({duration}) => {
   return (
     <div className="flex flex-col gap-6 p-4 md:p-6">
       {/* Page Header */}
@@ -62,7 +63,7 @@ const AdminDashboard: React.FC<Props> = ({}) => {
         <Suspense
           fallback={<SkeletonGrid columns={1} count={1} variant="stats" />}
         >
-          <RevenueChartContainer />
+          <RevenueChartContainer duration={duration} />
         </Suspense>
       </div>
     </div>

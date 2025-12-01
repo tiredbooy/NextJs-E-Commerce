@@ -103,6 +103,7 @@ export async function getApiDailyTrends() {
 export async function getIncomeReport(
   duration: number = 12
 ): Promise<RevenueData[]> {
+  if(isNaN(duration)) duration = 12
   try {
     const res = await authenticatedRequest({
       method: "GET",
