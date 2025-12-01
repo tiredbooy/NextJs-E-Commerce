@@ -1,4 +1,4 @@
-import { PopularChartItem } from "../types";
+import { PopularChartItem, RevenueData } from "../types";
 import { EndpointStat, StatData } from "../types/analytics_types";
 import { authenticatedRequest, getCurrentSession } from "./authService";
 
@@ -46,10 +46,12 @@ export async function getSalesStats(): Promise<StatData> {
   return { value: data?.current_count, change: data?.change_percent };
 }
 
-export async function getPopularCategories(): Promise<PopularChartItem[]> {
+export async function getPopularCategories(
+  limit: number = 5
+): Promise<PopularChartItem[]> {
   const response = await authenticatedRequest({
     method: "GET",
-    url: "/api/admin/analytics/categories?limit=5",
+    url: `/api/admin/analytics/categories?limit=${limit}`,
   });
 
   const data: { title: string; sales: number }[] = await response;
@@ -57,10 +59,12 @@ export async function getPopularCategories(): Promise<PopularChartItem[]> {
   return data?.map((item) => ({ name: item.title, value: item.sales }));
 }
 
-export async function getPopularProducts(): Promise<PopularChartItem[]> {
+export async function getPopularProducts(
+  limit: number = 5
+): Promise<PopularChartItem[]> {
   const response = await authenticatedRequest({
     method: "GET",
-    url: "/api/admin/analytics/products?limit=5",
+    url: `/api/admin/analytics/products?limit=${limit}`,
   });
 
   const data: { product_name: string; current_sold: number }[] = await response;
@@ -93,5 +97,19 @@ export async function getApiDailyTrends() {
     return res.data;
   } catch (e: any) {
     throw new Error(e.message || "Could not fetch Endpoints analytics.");
+  }
+}
+
+export async function getIncomeReport(
+  duration: number = 12
+): Promise<RevenueData[]> {
+  try {
+    const res = await authenticatedRequest({
+      method: "GET",
+      url: `/api/admin/analytics/income?duration=${duration}`,
+    });
+    return res
+  } catch (e: any) {
+    throw new Error(e.message || "Could not fetch Income analytics.");
   }
 }

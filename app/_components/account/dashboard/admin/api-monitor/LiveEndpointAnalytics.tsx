@@ -67,7 +67,7 @@ export function RealTimeEndpointAnalytics({ webSocketUrl }: Props) {
   }, [webSocketUrl]);
 
   const formatResponseTime = (ms: number) => {
-    if (ms < 1000) return `${ms}ms`;
+    if (ms < 1000) return `${ms.toFixed(2)}ms`;
     return `${(ms / 1000).toFixed(2)}s`;
   };
 
@@ -102,9 +102,9 @@ export function RealTimeEndpointAnalytics({ webSocketUrl }: Props) {
   // Calculate some stats from the data
   const totalRequests = data?.total_today || 0;
   const avgResponseTime =
-    data?.top_endpoints.reduce((acc, ep) => acc + ep.avg_response_time, 0) /
-      (data?.top_endpoints.length || 1) || 0;
-  const totalEndpoints = data?.top_endpoints.length || 0;
+    data?.top_endpoints?.reduce((acc, ep) => (acc + ep?.avg_response_time ) / 1000, 0) /
+      (data?.top_endpoints?.length || 1) || 0;
+  const totalEndpoints = data?.top_endpoints?.length || 0;
 
   return (
     <Card className="col-span-full mt-6 border-2 border-blue-200 bg-blue-50/20 dark:bg-blue-950/10 dark:border-blue-800">
@@ -242,10 +242,10 @@ export function RealTimeEndpointAnalytics({ webSocketUrl }: Props) {
                   <div className="text-right ml-4">
                     <p
                       className={`text-sm font-bold ${getResponseTimeColor(
-                        endpoint.avg_response_time
+                        endpoint.avg_response_time / 1000
                       )}`}
                     >
-                      {formatResponseTime(endpoint.avg_response_time)}
+                      {formatResponseTime(endpoint.avg_response_time/1000)}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                       avg response

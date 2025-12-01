@@ -37,7 +37,7 @@ export const sideBarItems: SideBar<dashboardRole> = {
     { title: "Orders", href: "/admin/orders", icon: HiOutlineShoppingBag },
     { title: "Products", href: "/admin/products", icon: HiOutlineCube },
     { title: "Api Monitoring", href: "/admin/api-monitor", icon: CiRouter },
-    { title: "Blogs", href: "/admin/blogs", icon: HiOutlineNewspaper },
+    // NO SUPPORT FOR NOW { title: "Blogs", href: "/admin/blogs", icon: HiOutlineNewspaper },
     { title: "Users", href: "/admin/users", icon: HiOutlineUsers },
     { title: "Tickets", href: "/admin/tickets", icon: HiOutlineChatAlt2 },
     { title: "Settings", href: "/admin/settings", icon: HiOutlineCog },

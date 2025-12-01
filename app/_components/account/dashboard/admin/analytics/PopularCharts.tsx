@@ -10,8 +10,8 @@ interface Props {
 
 export default async function PopularChartsSection({}: Props) {
   const [popularCategories, popularProducts] = await Promise.all([
-    getPopularCategories(),
-    getPopularProducts(),
+    getPopularCategories(5),
+    getPopularProducts(5),
   ]);
 
   return (

@@ -1,3 +1,9 @@
+import {
+  getCustomerGrowthStats,
+  getOrderStats,
+  getRevenueStats,
+  getSalesStats,
+} from "@/app/_lib/services/analyticsService";
 import { Stat } from "@/app/_lib/types";
 import {
   HiOutlineCube,
@@ -6,14 +12,6 @@ import {
   HiOutlineUsers,
 } from "react-icons/hi";
 import StatCard from "./StatCard";
-import {
-  getCustomerGrowthStats,
-  getOrderStats,
-  getRevenueStats,
-  getSalesStats,
-} from "@/app/_lib/services/analyticsService";
-import { Suspense } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const Stats = async () => {
   const [revenue, orders, customers, sales] = await Promise.all([

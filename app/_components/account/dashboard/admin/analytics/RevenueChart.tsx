@@ -11,6 +11,7 @@ import {
   YAxis,
 } from "recharts";
 
+/*  SAMLE DATA
 export const revenueOverviewData: RevenueData[] = [
   { month: "Jan", sales: 23, revenue: 18000 },
   { month: "Feb", sales: 28, revenue: 22000 },
@@ -25,12 +26,14 @@ export const revenueOverviewData: RevenueData[] = [
   { month: "Nov", sales: 48, revenue: 42000 },
   { month: "Dec", sales: 50, revenue: 45000 },
 ];
+*/
 
 interface Props {
   // future props here if needed
+  data: RevenueData[];
 }
 
-const RevenueChart: React.FC<Props> = ({}) => {
+const RevenueChart: React.FC<Props> = ({ data }) => {
   const { theme } = useTheme();
   const chartColor =
     theme === "dark" ? "oklch(0.7 0.2 285)" : "oklch(58.417% 0.17002 265.103)";
@@ -40,12 +43,12 @@ const RevenueChart: React.FC<Props> = ({}) => {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <AreaChart
-        data={revenueOverviewData}
+        data={data}
         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="month" />
-        <YAxis />
+        <YAxis dataKey="revenue" />
         <Tooltip
           content={({ active, payload, label }) => {
             if (active && payload && payload.length) {
@@ -71,12 +74,12 @@ const RevenueChart: React.FC<Props> = ({}) => {
             return null;
           }}
         />
-          <Area
-            type="monotone"
-            dataKey="sales"
-            fill={salesChartColor}
-            name="Sales"
-          />
+        <Area
+          type="monotone"
+          dataKey="sales"
+          fill={salesChartColor}
+          name="Sales"
+        />
         <Area
           type="monotone"
           dataKey="revenue"

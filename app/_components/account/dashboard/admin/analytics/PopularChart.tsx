@@ -104,7 +104,7 @@ const PopularChart: React.FC<Props> = ({
 
   return (
     <Card className="flex flex-col">
-      <CardContent className="flex-1 pb-6 pt-6">
+      <CardContent className="flex-1 py-6">
         <div className="text-center mb-4">
           <h3 className="text-lg font-semibold">{title}</h3>
           {description && (
@@ -112,7 +112,7 @@ const PopularChart: React.FC<Props> = ({
           )}
         </div>
 
-        <div className="h-[320px] w-full">
+        <div className="h-[400px] md:h-[340px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie

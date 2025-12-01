@@ -1,19 +1,21 @@
 import {
   ListItemSkeletonCard,
+  SkeletonGrid,
   StatsSkeletonCard,
 } from "@/app/_components/reusable/SkeletonCard";
 import { Suspense } from "react";
-import PopularChartsSection from "./PopularCharts";
+import PopularChartsSection from "./analytics/PopularCharts";
 import RecentOrders from "./RecentOrders";
-import RevenueChart from "./RevenueChart";
-import Stats from "./Stats";
+import RevenueChart from "./analytics/RevenueChart";
+import Stats from "./analytics/Stats";
+import RevenueChartContainer from "./analytics/RevenueChartContainer";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {
   // Add props if needed later
 }
 
 const AdminDashboard: React.FC<Props> = ({}) => {
-
   return (
     <div className="flex flex-col gap-6 p-4 md:p-6">
       {/* Page Header */}
@@ -25,7 +27,7 @@ const AdminDashboard: React.FC<Props> = ({}) => {
       </div>
 
       {/* Stats Grid - 4 cards in a row on desktop, responsive on mobile */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
         <Suspense
           fallback={Array.from({ length: 4 }).map((_, i) => (
             <StatsSkeletonCard key={i} />
@@ -57,19 +59,11 @@ const AdminDashboard: React.FC<Props> = ({}) => {
       </div>
       {/* Chart Section - Full Width */}
       <div className="grid gap-4">
-        <div className="rounded-lg border bg-card">
-          <div className="flex flex-col space-y-1.5 p-6 pb-4">
-            <h3 className="text-xl font-semibold leading-none tracking-tight">
-              Revenue Overview
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Your sales performance over time
-            </p>
-          </div>
-          <div className="p-6 pt-0">
-            <RevenueChart />
-          </div>
-        </div>
+        <Suspense
+          fallback={<SkeletonGrid columns={1} count={1} variant="stats" />}
+        >
+          <RevenueChartContainer />
+        </Suspense>
       </div>
     </div>
   );

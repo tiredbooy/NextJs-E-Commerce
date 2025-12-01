@@ -35,6 +35,8 @@ export async function POST(request: NextRequest) {
     if (!newAccessToken) throw new Error("No access token returned");
 
     session.access = newAccessToken;
+    console.log('newAccessToken:', newAccessToken);
+    console.log('session:', session);
     await session.save();
 
     return NextResponse.json({
