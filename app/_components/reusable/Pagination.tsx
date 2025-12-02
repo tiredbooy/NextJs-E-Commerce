@@ -1,14 +1,10 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useCallback, useTransition } from "react";
 
 interface PaginationProps {
   currentPage: number;
@@ -19,6 +15,7 @@ interface PaginationProps {
   showFirstLast?: boolean;
   className?: string;
   preserveSearchParams?: boolean;
+  onPageChange?: (page: number) => void;
 }
 
 export default function Pagination({
@@ -30,9 +27,37 @@ export default function Pagination({
   hasNext,
   hasPrev,
   preserveSearchParams = true,
+  onPageChange,
 }: PaginationProps) {
+  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+      return params.toString();
+    },
+    [searchParams]
+  );
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      if (page === currentPage || page < 1 || page > totalPages) return;
+
+      startTransition(() => {
+        const newUrl = `${pathname}?${createQueryString(
+          "page",
+          page.toString()
+        )}`;
+        router.push(newUrl, { scroll: false });
+        router.refresh();
+      });
+    },
+    [currentPage, totalPages, pathname, createQueryString, router, onPageChange]
+  );
 
   const createPageURL = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -83,54 +108,38 @@ export default function Pagination({
 
   const pages = generatePageNumbers();
 
-  if (totalPages <= 1) return null;
-
   return (
     <motion.nav
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className={`flex items-center justify-center gap-1 ${className}`}
+      className={`flex items-center justify-center gap-1 ${className} ${
+        isPending ? "opacity-60 pointer-events-none" : ""
+      }`}
       role="navigation"
       aria-label="Pagination"
     >
-      {showFirstLast && (
-        <motion.div
-          whileHover={!hasNext ? { scale: 1.05 } : {}}
-          whileTap={!hasNext ? { scale: 0.95 } : {}}
-        >
-          <Link
-            scroll={false}
-            href={createPageURL(1)}
-            className={`inline-flex items-center justify-center h-9 w-9 rounded-md border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] transition-colors ${
-              hasNext
-                ? "opacity-50 pointer-events-none cursor-not-allowed"
-                : "hover:bg-[var(--accent)] hover:border-[var(--border-hover)]"
-            }`}
-            aria-label="Go to first page"
-            aria-disabled={hasNext}
-            tabIndex={hasNext ? -1 : undefined}
-          >
-            <ChevronsLeft className="h-4 w-4" />
-          </Link>
-        </motion.div>
-      )}
-
       <motion.div
-        whileHover={!hasNext ? { scale: 1.05 } : {}}
-        whileTap={!hasNext ? { scale: 0.95 } : {}}
+        whileHover={hasPrev && !isPending ? { scale: 1.05 } : {}}
+        whileTap={hasPrev && !isPending ? { scale: 0.95 } : {}}
       >
         <Link
           scroll={false}
           href={createPageURL(currentPage - 1)}
-          className={`inline-flex items-center justify-center h-9 w-9 rounded-md border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] transition-colors ${
-            hasNext
+          onClick={(e) => {
+            e.preventDefault();
+            if (hasPrev && !isPending) {
+              handlePageChange(currentPage - 1);
+            }
+          }}
+          className={`inline-flex items-center justify-center h-9 w-9 rounded-md border border-border bg-background text-foreground transition-colors ${
+            !hasPrev || isPending
               ? "opacity-50 pointer-events-none cursor-not-allowed"
-              : "hover:bg-[var(--accent)] hover:border-[var(--border-hover)]"
+              : "hover:bg-accent hover:border-border-hover"
           }`}
           aria-label="Go to previous page"
-          aria-disabled={hasNext}
-          tabIndex={hasNext ? -1 : undefined}
+          aria-disabled={!hasPrev || isPending}
+          tabIndex={!hasPrev || isPending ? -1 : undefined}
         >
           <ChevronLeft className="h-4 w-4" />
         </Link>
@@ -146,7 +155,7 @@ export default function Pagination({
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.2 }}
-                className="inline-flex items-center justify-center h-9 w-9 text-[var(--muted-foreground)]"
+                className="inline-flex items-center justify-center h-9 w-9 text-muted-foreground"
               >
                 ...
               </motion.span>
@@ -169,7 +178,7 @@ export default function Pagination({
                   stiffness: 500,
                   damping: 30,
                 }}
-                className="inline-flex items-center justify-center h-9 min-w-[2.25rem] px-3 rounded-md border bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)] cursor-default font-medium text-sm"
+                className="inline-flex items-center justify-center h-9 min-w-[2.25rem] px-3 rounded-md border bg-primary text-background border-primary cursor-default font-medium text-sm"
                 aria-label={`Page ${pageNumber}`}
                 aria-current="page"
               >
@@ -185,13 +194,19 @@ export default function Pagination({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.2 }}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={!isPending ? { scale: 1.05, y: -2 } : {}}
+              whileTap={!isPending ? { scale: 0.95 } : {}}
             >
               <Link
                 scroll={false}
                 href={createPageURL(pageNumber)}
-                className="inline-flex items-center justify-center h-9 min-w-[2.25rem] px-3 rounded-md border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] hover:bg-[var(--accent)] hover:border-[var(--border-hover)] transition-colors font-medium text-sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (!isPending) {
+                    handlePageChange(pageNumber);
+                  }
+                }}
+                className="inline-flex items-center justify-center h-9 min-w-[2.25rem] px-3 rounded-md border border-border bg-background text-foreground hover:bg-accent hover:border-border-hover transition-colors font-medium text-sm"
                 aria-label={`Go to page ${pageNumber}`}
               >
                 {pageNumber}
@@ -202,46 +217,30 @@ export default function Pagination({
       </AnimatePresence>
 
       <motion.div
-        whileHover={!hasPrev ? { scale: 1.05 } : {}}
-        whileTap={!hasPrev ? { scale: 0.95 } : {}}
+        whileHover={hasNext && !isPending ? { scale: 1.05 } : {}}
+        whileTap={hasNext && !isPending ? { scale: 0.95 } : {}}
       >
         <Link
           scroll={false}
           href={createPageURL(currentPage + 1)}
-          className={`inline-flex items-center justify-center h-9 w-9 rounded-md border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] transition-colors ${
-            hasPrev
+          onClick={(e) => {
+            e.preventDefault();
+            if (hasNext && !isPending) {
+              handlePageChange(currentPage + 1);
+            }
+          }}
+          className={`inline-flex items-center justify-center h-9 w-9 rounded-md border border-border bg-background text-foreground transition-colors ${
+            !hasNext || isPending
               ? "opacity-50 pointer-events-none cursor-not-allowed"
-              : "hover:bg-[var(--accent)] hover:border-[var(--border-hover)]"
+              : "hover:bg-accent hover:border-border-hover"
           }`}
           aria-label="Go to next page"
-          aria-disabled={hasPrev}
-          tabIndex={hasPrev ? -1 : undefined}
+          aria-disabled={!hasNext || isPending}
+          tabIndex={!hasNext || isPending ? -1 : undefined}
         >
           <ChevronRight className="h-4 w-4" />
         </Link>
       </motion.div>
-
-      {showFirstLast && (
-        <motion.div
-          whileHover={!hasPrev ? { scale: 1.05 } : {}}
-          whileTap={!hasPrev ? { scale: 0.95 } : {}}
-        >
-          <Link
-            scroll={false}
-            href={createPageURL(totalPages)}
-            className={`inline-flex items-center justify-center h-9 w-9 rounded-md border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] transition-colors ${
-              hasPrev
-                ? "opacity-50 pointer-events-none cursor-not-allowed"
-                : "hover:bg-[var(--accent)] hover:border-[var(--border-hover)]"
-            }`}
-            aria-label="Go to last page"
-            aria-disabled={hasPrev}
-            tabIndex={hasPrev ? -1 : undefined}
-          >
-            <ChevronsRight className="h-4 w-4" />
-          </Link>
-        </motion.div>
-      )}
     </motion.nav>
   );
 }

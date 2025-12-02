@@ -2,11 +2,10 @@ import ManageUsers from "@/app/_components/account/dashboard/admin/users/ManageU
 
 interface Props {
   // props here
-  searchParams? : {page: string}
+  searchParams?: { page: string };
 }
 
-export default function page ({ searchParams }: Props) {
-  const page = Number(searchParams?.page) || 1
-  return ( <ManageUsers page={page} />
-  );
-};
+export default async function page({ searchParams }: Props) {
+  const { page } = await searchParams;
+  return <ManageUsers page={Number(page)} />;
+}

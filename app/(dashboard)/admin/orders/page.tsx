@@ -13,8 +13,8 @@ interface Props {
   };
 }
 
-export default function page({ searchParams }: Props) {
-  const { page, status, from, to, total, user } = searchParams;
+export default async function page({ searchParams }: Props) {
+  const { page, status, from, to, total, user } = await searchParams;
   const queries: OrderQueryParam = {
     page: Number(page) ?? 1,
     status,

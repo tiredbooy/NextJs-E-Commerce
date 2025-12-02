@@ -32,8 +32,8 @@ export interface PaginatedUserResponse {
   limit: number;
   total_items: number;
   total_pages: number;
-  has_next: number;
-  has_prev: number;
+  has_next: boolean;
+  has_prev: boolean;
 }
 
 export interface Address {
