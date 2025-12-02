@@ -1,9 +1,7 @@
+import Pagination from "@/app/_components/reusable/Pagination";
 import { getProducts } from "@/app/_lib/services/productsService";
 import ProductsInformation from "./ProductsInformation";
 import ProductsTable from "./ProductsTable";
-import { Suspense } from "react";
-import { TableRowSkeleton } from "@/app/_components/reusable/SkeletonCard";
-import Pagination from "@/app/_components/reusable/Pagination";
 
 interface Props {
   // props here

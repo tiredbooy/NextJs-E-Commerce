@@ -145,3 +145,14 @@ export type CartItemReq = Pick<
   CartItem,
   "product_id" | "quantity" | "color_id" | "size_id"
 >;
+
+export interface SettingsData {
+  site_name?: string;
+  site_email?: string;
+  currency?: string;
+  maintenance_mode?: boolean;
+}
+
+export interface UpdateSetting {
+  [key: string]: string | boolean;
+}

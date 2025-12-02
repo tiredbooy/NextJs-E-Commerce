@@ -16,6 +16,7 @@ import {
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { CiRouter } from "react-icons/ci";
 import {
   HiOutlineChatAlt2,
   HiOutlineCog,
@@ -23,12 +24,10 @@ import {
   HiOutlineHeart,
   HiOutlineHome,
   HiOutlineLogout,
-  HiOutlineNewspaper,
   HiOutlineShoppingBag,
   HiOutlineUser,
-  HiOutlineUsers,
+  HiOutlineUsers
 } from "react-icons/hi";
-import { CiRouter } from "react-icons/ci";
 import HeaderLogo from "../header/Logo";
 
 export const sideBarItems: SideBar<dashboardRole> = {
