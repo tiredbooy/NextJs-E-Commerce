@@ -100,9 +100,9 @@ export function EndpointPerformanceChart({ endpoints: data }: Props) {
               <span className="text-muted-foreground">Response Time:</span>
               <span
                 className="font-semibold"
-                style={{ color: getResponseTimeColor(data.responseTime) }}
+                style={{ color: getResponseTimeColor(data.responseTime / 1000) }}
               >
-                {data.responseTime}s
+                {(data.responseTime) > 1000 ? `${data.responseTime}s` : `${data.responseTime}ms`}
               </span>
             </div>
             <div className="flex items-center justify-between gap-4">
@@ -167,7 +167,7 @@ export function EndpointPerformanceChart({ endpoints: data }: Props) {
               </p>
             </div>
             <p className="text-2xl font-bold text-green-600 dark:text-green-400 mt-1">
-              {(avgResponseTime / 1000).toFixed(2)}s
+              {(avgResponseTime/ 1000) > 1000 ? `${(avgResponseTime/ 1000).toFixed(2)}s` : `${(avgResponseTime/ 1000).toFixed(2)}ms`}
             </p>
             <p className="text-xs text-green-600 dark:text-green-400 mt-1">
               Across all endpoints
@@ -212,7 +212,7 @@ export function EndpointPerformanceChart({ endpoints: data }: Props) {
               🚀 Fastest Endpoint
             </p>
             <p className="text-sm font-bold text-success mt-1">
-              {(fastestEndpoint.avg_response_time / 1000).toFixed(2)}s
+              { fastestEndpoint.avg_response_time >  1000 ? `${(fastestEndpoint.avg_response_time).toFixed(2)}s` : `${(fastestEndpoint.avg_response_time).toFixed(1)}ms`}
             </p>
             <p className="text-xs text-success/70 mt-1 truncate">
               {fastestEndpoint.endpoint.split("/").pop()}

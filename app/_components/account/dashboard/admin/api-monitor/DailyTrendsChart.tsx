@@ -34,13 +34,14 @@ export function DailyTrendsChart({ trends: data }: Props) {
       day: "numeric",
     }),
     requests: item.total_request,
-    responseTime: parseFloat(item.avg_response_time.toFixed(2)) / 1000,
+    responseTime: parseFloat((item.avg_response_time / 1000).toFixed(2)) ,
   }));
 
   // Calculate statistics
   const totalRequests = data.reduce((acc, curr) => acc + curr.total_request, 0);
   const avgResponseTime =
-    data.reduce((acc, curr) => acc + curr.avg_response_time, 0) / data.length;
+    data.reduce((acc, curr) => acc + curr.avg_response_time / 1000, 0) /
+    data.length;
 
   return (
     <Card className="col-span-full lg:col-span-1">
@@ -64,7 +65,7 @@ export function DailyTrendsChart({ trends: data }: Props) {
             <p className="text-2xl font-bold text-primary">
               {avgResponseTime < 1000
                 ? `${avgResponseTime.toFixed(0)}ms`
-                : `${(avgResponseTime / 1000).toFixed(2)}s`}
+                : `${avgResponseTime.toFixed(2)}s`}
             </p>
           </div>
         </div>
@@ -91,7 +92,7 @@ export function DailyTrendsChart({ trends: data }: Props) {
                 if (name === "requests")
                   return [value.toLocaleString(), "Requests"];
                 if (name === "responseTime")
-                  return [`${value.toFixed(1)}s`, "Response Time"];
+                  return [`${value.toFixed(1)}ms`, "Response Time"];
                 return [value, name];
               }}
             />
