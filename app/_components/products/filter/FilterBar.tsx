@@ -172,22 +172,21 @@ const FilterBar: React.FC<Props> = ({
 
   return (
     <>
-      {/* Mobile Filter Toggle Button */}
-      <div className="lg:hidden mb-4">
+      {/* Mobile Filter Toggle Button - Sticky Bottom */}
+      <div className="lg:hidden fixed bottom-20 right-4 z-50">
         <Button
           onClick={() => setIsMobileOpen(true)}
-          variant="outline"
-          className="w-full justify-between"
+          variant="default"
+          className="h-14 w-14 rounded-full shadow-lg shadow-black/20 hover:shadow-black/30 transition-all duration-200 hover:scale-105 active:scale-95 text-background font-semibold"
         >
-          <div className="flex items-center gap-2">
-            <SlidersHorizontal className="w-5 h-5" />
-            <span>Filters</span>
+          <div className="flex flex-col items-center justify-center gap-0.5">
+            <SlidersHorizontal className="w-6 h-6" />
+            {activeFilterCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs font-bold min-w-5 h-5 flex items-center justify-center rounded-full px-1">
+                {activeFilterCount}
+              </span>
+            )}
           </div>
-          {activeFilterCount > 0 && (
-            <span className="bg-primary text-primary-foreground text-xs font-medium px-2.5 py-1 rounded-full">
-              {activeFilterCount}
-            </span>
-          )}
         </Button>
       </div>
 
