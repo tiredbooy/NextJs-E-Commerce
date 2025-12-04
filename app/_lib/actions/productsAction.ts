@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
 import {
   createBrandReq,
@@ -133,6 +133,7 @@ export async function createCategory(title: string) {
     const category = results.category;
 
     revalidatePath("/admin/products/new");
+    // revalidateTag("categories", "default");
     return category;
   } catch (e: any) {
     throw new Error(e.message || "An unknown error occurred.");

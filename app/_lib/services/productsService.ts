@@ -4,6 +4,8 @@ import { CreateProductRequest, Image } from "../types/product_types";
 import { buildQuery } from "../utils/utils";
 import { authenticatedRequest } from "./authService";
 
+const BASE_URL = "http://localhost:8080";
+
 type ProductQueryParam = Pick<
   QueryParams,
   | "limit"
@@ -24,13 +26,18 @@ type ProductQueryParam = Pick<
 export async function getProducts(params: ProductQueryParam = {}) {
   try {
     const query = buildQuery(params);
-    console.log("`api url`:", `/api/products${query}`);
-    const res = await serverApi({
-      method: "GET",
-      url: `/api/products${query}`,
+    const res = await fetch(`${BASE_URL}/api/products${query}`, {
+      next: {
+        tags: ["products"],
+        revalidate: 300,
+      },
     });
 
-    return res.data;
+    if (!res.ok) {
+      throw new Error(`Failed to fetch products: ${res.status}`);
+    }
+
+    return res.json();
   } catch (e: any) {
     throw new Error(e.message || "Could not get Products at this time.");
   }
@@ -119,9 +126,19 @@ export async function editProductReq(req: CreateProductRequest, id: number) {
 
 export async function getProductSingleImage(productId: number) {
   try {
-    const response = await serverApi.get(`/api/products/${productId}/image`);
+    // const response = await serverApi.get(`/api/products/${productId}/image`);
+    const response = await fetch(
+      `${BASE_URL}/api/products/${productId}/image`,
+      {
+        next: { tags: [`products/${productId}/image`] },
+      }
+    );
 
-    return response.data;
+    if (!response.ok) {
+      throw new Error(`Failed to fetch image: ${response.status}`);
+    }
+
+    return response.json;
   } catch (e: any) {
     throw new Error("Something went worng!", e.message);
   }
@@ -131,12 +148,16 @@ export async function getProductSingleImage(productId: number) {
 
 export async function getCategories() {
   try {
-    const response = await serverApi.get(`/api/categories`);
+    // const response = await serverApi.get(`/api/categories`);
+    const response = await fetch(`${BASE_URL}/api/categories`, {
+      next: { tags: ["categories"] },
+    });
 
-    if (response.status != 200) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch categories: ${response.status}`);
     }
-    return await response?.data;
+
+    return await response.json();
   } catch (e: any) {
     throw e;
   }
@@ -164,13 +185,15 @@ export async function createCategoryReq(title: string) {
 
 export async function getColors() {
   try {
-    const response = await serverApi.get(`/api/colors`);
+    const response = await fetch(`${BASE_URL}/api/colors`, {
+      next: { tags: ["colors"] },
+    });
 
-    if (response.status != 200) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch colors: ${response.status}`);
     }
 
-    return await response.data;
+    return await response.json();
   } catch (e: any) {
     console.log("e:", e);
     throw e;
@@ -199,13 +222,17 @@ export async function createColorReq(title: string, hex: string) {
 
 export async function getBrands() {
   try {
-    const response = await serverApi.get(`/api/brands`);
+    // const response = await serverApi.get(`/api/brands`);
 
-    if (response.status != 200) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    const response = await fetch(`${BASE_URL}/api/brands`, {
+      next: { tags: ["brands"] },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch brands: ${response.status}`);
     }
 
-    return await response.data;
+    return await response.json();
   } catch (e: any) {
     throw e;
   }
@@ -233,13 +260,16 @@ export async function createBrandReq(title: string) {
 
 export async function getSizes() {
   try {
-    const response = await serverApi.get(`/api/sizes`);
+    // const response = await serverApi.get(`/api/sizes`);
+    const response = await fetch(`${BASE_URL}/api/sizes`, {
+      next: { tags: ["sizes"] },
+    });
 
-    if (response.status != 200) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch sizes: ${response.status}`);
     }
 
-    return await await response.data;
+    return await response.json();
   } catch (e: any) {
     throw e;
   }

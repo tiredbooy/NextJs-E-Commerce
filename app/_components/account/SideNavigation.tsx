@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CiRouter } from "react-icons/ci";
+import { RiCoupon2Line } from "react-icons/ri";
 import {
   HiOutlineChatAlt2,
   HiOutlineCog,
@@ -26,7 +27,7 @@ import {
   HiOutlineLogout,
   HiOutlineShoppingBag,
   HiOutlineUser,
-  HiOutlineUsers
+  HiOutlineUsers,
 } from "react-icons/hi";
 import HeaderLogo from "../header/Logo";
 
@@ -36,6 +37,7 @@ export const sideBarItems: SideBar<dashboardRole> = {
     { title: "Orders", href: "/admin/orders", icon: HiOutlineShoppingBag },
     { title: "Products", href: "/admin/products", icon: HiOutlineCube },
     { title: "Api Monitoring", href: "/admin/api-monitor", icon: CiRouter },
+    { title: "Manage Coupons", href: "/admin/coupons", icon: RiCoupon2Line },
     // NO SUPPORT FOR NOW { title: "Blogs", href: "/admin/blogs", icon: HiOutlineNewspaper },
     { title: "Users", href: "/admin/users", icon: HiOutlineUsers },
     { title: "Tickets", href: "/admin/tickets", icon: HiOutlineChatAlt2 },

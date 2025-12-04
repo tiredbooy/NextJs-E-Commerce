@@ -46,3 +46,18 @@ export interface OrdersResponse {
     has_next: boolean
     has_prev: boolean
 }
+
+export interface Coupon {
+  id: number
+  code: string
+  discount_percentage: number
+  min_purchase: number
+  max_purchase: number
+  max_uses: number
+  current_uses: number
+  is_active: boolean
+  expires_at: string
+  created_at: string
+}
+
+export type createCouponReq = Pick<Coupon, "code" | "discount_percentage" | "min_purchase" | "max_purchase" | "max_uses" | "current_uses" | "is_active" | "expires_at">
