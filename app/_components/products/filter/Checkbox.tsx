@@ -26,7 +26,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
           onChange={(e) => onChange(e.target.checked)}
           className="w-4 h-4 rounded border-border text-primary focus:ring-2 focus:ring-ring focus:ring-offset-0 cursor-pointer"
         />
-        <span className="text-sm text-foreground select-none">{label}</span>
+        <span className="text-sm text-foreground select-none first-letter:uppercase">{label}</span>
       </div>
       {count !== undefined && (
         <span className="text-xs text-muted-foreground">({count})</span>

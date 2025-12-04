@@ -49,7 +49,7 @@ export function CategorySelector({ categories, selectedIds, onChange }: Props) {
     if (!newName.trim()) return;
     startTransition(async () => {
       try {
-        const newCategory = await createCategory(newName.trim());
+        const newCategory = await createCategory(newName.toLowerCase().trim());
         setNewName("");
         setShowAdd(false);
       } catch (error: any) {

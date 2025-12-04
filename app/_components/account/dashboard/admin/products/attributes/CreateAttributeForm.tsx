@@ -6,7 +6,7 @@ import { Spinner } from "@/components/ui/spinner";
 
 interface CreateAttributeFormProps {
   type: "size" | "color";
-  isPending: boolean
+  isPending: boolean;
   onCreate: (name: string, hex?: string) => void;
   onCancel: () => void;
 }
@@ -22,9 +22,9 @@ export function CreateAttributeForm({
 
   const handleSubmit = () => {
     if (type === "color") {
-      onCreate(name, hex);
+      onCreate(name.toLowerCase().trim(), hex);
     } else {
-      onCreate(name);
+      onCreate(name.toLowerCase().trim());
     }
     setName("");
     setHex("#000000");
@@ -81,7 +81,12 @@ export function CreateAttributeForm({
         >
           {isPending ? <Spinner /> : "Create"}
         </Button>
-        <Button disabled={isPending} onClick={handleCancel} variant="outline" size="sm">
+        <Button
+          disabled={isPending}
+          onClick={handleCancel}
+          variant="outline"
+          size="sm"
+        >
           Cancel
         </Button>
       </div>

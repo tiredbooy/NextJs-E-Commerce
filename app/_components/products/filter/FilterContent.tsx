@@ -235,14 +235,14 @@ const FilterContent: React.FC<FilterContentProps> = ({
               onValueChange={handleCategoryChange}
             >
               {availableCategories.map((category) => (
-                <div key={category.id} className="flex items-center space-x-2">
+                <div key={category.id} className="flex items-center space-x-2 ">
                   <RadioGroupItem
                     value={category.id}
                     id={`cat-${category.id}`}
                   />
                   <Label
                     htmlFor={`cat-${category.id}`}
-                    className="cursor-pointer flex-1"
+                    className="cursor-pointer flex-1 first-letter:uppercase block"
                   >
                     {category.title}
                   </Label>
@@ -264,7 +264,7 @@ const FilterContent: React.FC<FilterContentProps> = ({
                   <RadioGroupItem value={brand.id} id={`brand-${brand.id}`} />
                   <Label
                     htmlFor={`brand-${brand.id}`}
-                    className="cursor-pointer flex-1"
+                    className="cursor-pointer flex-1 first-letter:uppercase block"
                   >
                     {brand.title}
                   </Label>
@@ -285,7 +285,7 @@ const FilterContent: React.FC<FilterContentProps> = ({
         {/* Sizes */}
         {availableSizes.length > 0 && (
           <CollapsibleSection title="Sizes" defaultOpen={false}>
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-4 gap-2">
               {availableSizes.map((size) => (
                 <Button
                   key={size.id}
@@ -296,7 +296,7 @@ const FilterContent: React.FC<FilterContentProps> = ({
                       : "outline"
                   }
                   size="sm"
-                  className="h-auto py-2"
+                  className="h-auto py-2 uppercase"
                 >
                   {size.size}
                 </Button>

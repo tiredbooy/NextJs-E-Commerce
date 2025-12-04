@@ -47,7 +47,7 @@ export function BrandSelector({ brands, selectedId, onChange }: Props) {
     if (!newBrandName.trim()) return;
     startTransition(async () => {
       try {
-        const newBrand = await createBrand(newBrandName.trim());
+        const newBrand = await createBrand(newBrandName.toLowerCase().trim());
 
         setNewBrandName("");
         setShowAddBrand(false);
