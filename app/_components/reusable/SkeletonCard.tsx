@@ -228,3 +228,40 @@ export function TableSkeleton({ rowCount = 10 }: { rowCount?: number }) {
     </Table>
   );
 }
+
+
+export function FilterBarSkeletonMinimal() {
+  return (
+    <div className="h-full flex flex-col space-y-4 p-4">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <Skeleton className="w-32 h-6" />
+        <Skeleton className="w-8 h-8 rounded-md" />
+      </div>
+
+      {/* Search */}
+      <Skeleton className="w-full h-10 rounded-md" />
+
+      {/* Active Filters */}
+      <div className="flex flex-wrap gap-2">
+        {[1, 2, 3].map((i) => (
+          <Skeleton key={i} className="w-16 h-6 rounded-full" />
+        ))}
+      </div>
+
+      {/* Filter Sections */}
+      <div className="space-y-4">
+        {[1, 2, 3, 4, 5].map((section) => (
+          <div key={section} className="space-y-2">
+            <Skeleton className="w-24 h-5" />
+            <div className="space-y-1">
+              {[1, 2, 3, 4].map((item) => (
+                <Skeleton key={item} className="w-full h-4" />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

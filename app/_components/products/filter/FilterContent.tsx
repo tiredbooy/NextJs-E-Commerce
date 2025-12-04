@@ -221,52 +221,12 @@ const FilterContent: React.FC<FilterContentProps> = ({
                 </button>
               </Badge>
             )}
-
-            {/* {filters.inStock && (
-              <Badge variant="secondary" className="gap-1">
-                In Stock
-                <button
-                  onClick={() => toggleBooleanFilter("inStock")}
-                  className="ml-1 hover:bg-muted-foreground/20 rounded-full"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </Badge>
-            )}
-
-            {filters.onSale && (
-              <Badge variant="secondary" className="gap-1">
-                On Sale
-                <button
-                  onClick={() => toggleBooleanFilter("onSale")}
-                  className="ml-1 hover:bg-muted-foreground/20 rounded-full"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </Badge>
-            )} */}
           </div>
         </div>
       )}
 
       {/* Filter Options - Scrollable */}
       <div className="flex-1 overflow-y-auto px-4">
-        {/* Quick Filters */}
-        {/* <CollapsibleSection title="Quick Filters">
-          <Checkbox
-            id="in-stock"
-            label="In Stock Only"
-            checked={filters.inStock}
-            onChange={() => toggleBooleanFilter("inStock")}
-          />
-          <Checkbox
-            id="on-sale"
-            label="On Sale"
-            checked={filters.onSale}
-            onChange={() => toggleBooleanFilter("onSale")}
-          />
-        </CollapsibleSection> */}
-
         {/* Categories - Radio Group */}
         {availableCategories.length > 0 && (
           <CollapsibleSection title="Categories">
@@ -373,3 +333,4 @@ const FilterContent: React.FC<FilterContentProps> = ({
 };
 
 export default FilterContent;
+

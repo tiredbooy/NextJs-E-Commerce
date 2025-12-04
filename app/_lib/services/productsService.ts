@@ -25,6 +25,7 @@ type ProductQueryParam = Pick<
 
 export async function getProducts(params: ProductQueryParam = {}) {
   try {
+    await new Promise(resolve => setTimeout(resolve, 5000));
     const query = buildQuery(params);
     const res = await fetch(`${BASE_URL}/api/products${query}`, {
       next: {

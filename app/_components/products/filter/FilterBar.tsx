@@ -88,7 +88,7 @@ const FilterBar: React.FC<Props> = ({
       params.toString() ? `?${params.toString()}` : ""
     }`;
 
-    router.push(newURL);
+    router.push(newURL, { scroll: false });
   };
 
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -129,13 +129,6 @@ const FilterBar: React.FC<Props> = ({
     [filters, updateFilters]
   );
 
-  // const toggleBooleanFilter = useCallback(
-  //   (key: "inStock" | "onSale") => {
-  //     updateFilters({ ...filters, [key]: !filters[key] });
-  //   },
-  //   [filters, updateFilters]
-  // );
-
   const updatePriceRange = useCallback(
     (range: { min: number; max: number }) => {
       updateFilters({ ...filters, priceRange: range });
@@ -157,8 +150,6 @@ const FilterBar: React.FC<Props> = ({
       sizes: [],
       colors: [],
       priceRange: { min: 0, max: 100000 },
-      // inStock: false,
-      // onSale: false,
       search: "",
     };
     updateFilters(clearedFilters);
@@ -175,8 +166,6 @@ const FilterBar: React.FC<Props> = ({
       filters.sizes.length +
       filters.colors.length +
       (isPriceRangeActive ? 1 : 0) +
-      // (filters.inStock ? 1 : 0) +
-      // (filters.onSale ? 1 : 0) +
       (filters.search ? 1 : 0)
     );
   }, [filters]);
@@ -230,7 +219,6 @@ const FilterBar: React.FC<Props> = ({
               clearAllFilters={clearAllFilters}
               toggleArrayFilter={toggleArrayFilter}
               setSingleFilter={setSingleFilter}
-              // toggleBooleanFilter={toggleBooleanFilter}
               updatePriceRange={updatePriceRange}
               updateSearch={updateSearch}
               availableCategories={availableCategories}
@@ -253,7 +241,6 @@ const FilterBar: React.FC<Props> = ({
             clearAllFilters={clearAllFilters}
             toggleArrayFilter={toggleArrayFilter}
             setSingleFilter={setSingleFilter}
-            // toggleBooleanFilter={toggleBooleanFilter}
             updatePriceRange={updatePriceRange}
             updateSearch={updateSearch}
             availableCategories={availableCategories}

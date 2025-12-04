@@ -81,7 +81,7 @@ const SortBy: React.FC<Props> = ({
       params.toString() ? "?" + params.toString() : ""
     }`;
     // history.pushState({}, "", newURL);
-    router.push(newURL)
+    router.push(newURL, {scroll : false})
   };
 
   // Get current sort label
