@@ -60,4 +60,4 @@ export interface Coupon {
   created_at: string
 }
 
-export type createCouponReq = Pick<Coupon, "code" | "discount_percentage" | "min_purchase" | "max_purchase" | "max_uses" | "current_uses" | "is_active" | "expires_at">
+export type CreateCouponReq = Pick<Coupon, "code" | "discount_percentage" | "min_purchase" | "max_purchase" | "max_uses" | "current_uses" | "is_active" | "expires_at">

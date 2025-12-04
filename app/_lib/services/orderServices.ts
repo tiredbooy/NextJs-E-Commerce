@@ -1,4 +1,4 @@
-import { Coupon, createCouponReq, CreateOrderReq } from "../types/order_types";
+import { Coupon, CreateCouponReq, CreateOrderReq } from "../types/order_types";
 import { authenticatedRequest } from "./authService";
 
 export async function createOrderReq(req: CreateOrderReq) {
@@ -27,7 +27,7 @@ export async function getCoupons(): Promise<Coupon[]> {
   }
 }
 
-export async function createCoupon(req: createCouponReq) {
+export async function createCouponReq(req: CreateCouponReq) {
   try {
     const response = await authenticatedRequest({
       method: "POST",
