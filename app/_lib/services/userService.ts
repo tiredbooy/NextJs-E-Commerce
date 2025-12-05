@@ -69,6 +69,19 @@ export async function removeCartItemReq(id: number) {
   }
 }
 
+export async function clearCart() {
+  try {
+    const result = await authenticatedRequest({
+      method: "DELETE",
+      url: `/api/cart/`,
+    });
+
+    return result.message;
+  } catch (e: any) {
+    throw new Error("Could not remove item");
+  }
+}
+
 export async function updateQuantityReq(id: number, quantity: number) {
   try {
     const result = await authenticatedRequest({

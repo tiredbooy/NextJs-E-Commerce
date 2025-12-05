@@ -1,32 +1,32 @@
 "use client";
 
-// components/cart/CartSummary.tsx
-import { useState, useTransition } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Tag,
-  ShieldCheck,
-  Package,
-  RotateCcw,
-  Lock,
-  ArrowRight,
-  Check,
-  X,
-} from "lucide-react";
+import { createOrder, getCoupon } from "@/app/_lib/actions/orderAction";
 import { CartItem } from "@/app/_lib/types";
-import { createOrder } from "@/app/_lib/actions/orderAction";
 import {
   CreateOrderItemReq,
   CreateOrderReq,
 } from "@/app/_lib/types/order_types";
-import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ArrowRight,
+  Check,
+  Package,
+  RotateCcw,
+  ShieldCheck,
+  Tag,
+  X,
+} from "lucide-react";
+import { redirect, useRouter } from "next/navigation";
+import { startTransition, useState, useTransition } from "react";
+import { toast } from "sonner";
 
 interface Params {
   items: CartItem[];
 }
 
 export function CartSummary({ items }: Params) {
+  const router = useRouter();
   const [isOrderPending, startOrderTransition] = useTransition();
   const [promoCode, setPromoCode] = useState("");
   const [isApplyingPromo, setIsApplyingPromo] = useState(false);
@@ -60,21 +60,25 @@ export function CartSummary({ items }: Params) {
     setIsApplyingPromo(true);
     setPromoError("");
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    startTransition(async () => {
+      const result = await getCoupon(promoCode.trim());
 
-    // Mock validation - replace with actual API call
-    if (promoCode.toUpperCase() === "SAVE10") {
+      if (!result.success) {
+        setPromoError(result?.message);
+        setIsApplyingPromo(false);
+        return; // Exit early on error
+      }
+
       setAppliedPromo({
-        code: promoCode.toUpperCase(),
-        discount: subtotal * 0.1,
+        code: result.result?.code || promoCode.toUpperCase(),
+        discount: result.result?.discount_percentage
+          ? subtotal * (result.result.discount_percentage / 100)
+          : 0,
       });
-      setPromoCode("");
-    } else {
-      setPromoError("Invalid promo code");
-    }
 
-    setIsApplyingPromo(false);
+      setPromoCode("");
+      setIsApplyingPromo(false);
+    });
   };
 
   const handleRemovePromo = () => {
@@ -96,12 +100,12 @@ export function CartSummary({ items }: Params) {
       const order: CreateOrderReq = {
         shipping_address_id: 1,
         items: orderItems,
+        coupon_code: appliedPromo?.code || "",
       };
       const result = await createOrder(order);
       if (result.success) {
-        toast.message(
-          `Order Created Successfully!, ORDER ID #${result.orderID}`
-        );
+        toast.success(result.message);
+        router.push("/thank-you");
       } else {
         toast.error(result.message);
       }
@@ -181,7 +185,7 @@ export function CartSummary({ items }: Params) {
                         type="text"
                         value={promoCode}
                         onChange={(e) => {
-                          setPromoCode(e.target.value.toUpperCase());
+                          setPromoCode(e.target?.value?.toUpperCase());
                           setPromoError("");
                         }}
                         onKeyDown={(e) =>
@@ -194,7 +198,7 @@ export function CartSummary({ items }: Params) {
                     <motion.button
                       whileTap={{ scale: 0.95 }}
                       onClick={handleApplyPromo}
-                      disabled={isApplyingPromo || !promoCode.trim()}
+                      disabled={isApplyingPromo || !promoCode?.trim()}
                       className="px-5 py-3 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary-hover font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap flex items-center gap-2"
                     >
                       {isApplyingPromo ? (
@@ -217,7 +221,7 @@ export function CartSummary({ items }: Params) {
                     </motion.button>
                   </div>
                   <AnimatePresence>
-                    {promoError && (
+                    {promoError !== "" && (
                       <motion.p
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}

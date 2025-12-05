@@ -1,5 +1,4 @@
-import Login from "@/app/_components/auth/Login";
-import Header from "@/app/_components/header/Header";
+import Login from "@/app/_components/auth/Login"
 
 interface Props {
   // props here

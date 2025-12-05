@@ -1,4 +1,9 @@
-import { Coupon, CreateCouponReq, CreateOrderReq, OrderStatus } from "../types/order_types";
+import {
+  Coupon,
+  CreateCouponReq,
+  CreateOrderReq,
+  OrderStatus,
+} from "../types/order_types";
 import { authenticatedRequest } from "./authService";
 
 export async function createOrderReq(req: CreateOrderReq) {
@@ -18,13 +23,12 @@ export async function createOrderReq(req: CreateOrderReq) {
 export async function getOrder(id: number) {
   try {
     const response = await authenticatedRequest({
-      method : "GET",
-      url: `/api/orders/${id}`
-    })
-    return response 
-  }
-  catch(e: any) {
-    throw new Error(e.message || "Failed to get Order")
+      method: "GET",
+      url: `/api/orders/${id}`,
+    });
+    return response;
+  } catch (e: any) {
+    throw new Error(e.message || "Failed to get Order");
   }
 }
 
@@ -33,25 +37,23 @@ export async function updateOrderStatusReq(id: number, status: OrderStatus) {
     const response = await authenticatedRequest({
       method: "PATCH",
       url: `/api/admin/orders/${id}`,
-      data: {status}
-    })
-    return response
-  }
-  catch(e: any) {
-    throw new Error(e.message || "Failed to update order status")
+      data: { status },
+    });
+    return response;
+  } catch (e: any) {
+    throw new Error(e.message || "Failed to update order status");
   }
 }
 
 export async function cancelOrderReq(id: number) {
   try {
     const response = await authenticatedRequest({
-      method : "PATCH",
-      url: `/api/orders/${id}`
-    })
-    return response
-  }
-  catch(e: any) {
-    throw new Error(e.message || "Failed to Cancel Order") 
+      method: "PATCH",
+      url: `/api/orders/${id}`,
+    });
+    return response;
+  } catch (e: any) {
+    throw new Error(e.message || "Failed to Cancel Order");
   }
 }
 
@@ -65,6 +67,14 @@ export async function getCoupons(): Promise<Coupon[]> {
   } catch (e: any) {
     throw new Error(e.message || "Failed To Fetch Coupons");
   }
+}
+
+export async function getCouponReq(code: string): Promise<Coupon> {
+  const respone = await authenticatedRequest({
+    method: "GET",
+    url: `/api/coupons/${code}`,
+  });
+  return respone;
 }
 
 export async function createCouponReq(req: CreateCouponReq) {
