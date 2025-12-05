@@ -1,4 +1,4 @@
-import { Coupon, CreateCouponReq, CreateOrderReq } from "../types/order_types";
+import { Coupon, CreateCouponReq, CreateOrderReq, OrderStatus } from "../types/order_types";
 import { authenticatedRequest } from "./authService";
 
 export async function createOrderReq(req: CreateOrderReq) {
@@ -25,6 +25,20 @@ export async function getOrder(id: number) {
   }
   catch(e: any) {
     throw new Error(e.message || "Failed to get Order")
+  }
+}
+
+export async function updateOrderStatusReq(id: number, status: OrderStatus) {
+  try {
+    const response = await authenticatedRequest({
+      method: "PATCH",
+      url: `/api/admin/orders/${id}`,
+      data: {status}
+    })
+    return response
+  }
+  catch(e: any) {
+    throw new Error(e.message || "Failed to update order status")
   }
 }
 

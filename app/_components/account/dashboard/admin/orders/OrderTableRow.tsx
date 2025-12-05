@@ -3,6 +3,7 @@ import { formatDate } from "@/app/_lib/utils/utils";
 import { Badge } from "@/components/ui/badge";
 import { TableCell, TableRow } from "@/components/ui/table";
 import OrderActionBtns from "./OrderActionBtns";
+import { StatusBadge } from "./order-details/StatusBadge";
 
 interface Props {
   order: Order;
@@ -82,12 +83,13 @@ export default function OrderTableRow({
       </TableCell>
       {/* Order Status */}
       <TableCell>
-        <Badge
+        {/* <Badge
           variant={statusConfig.variant}
           className={`capitalize ${statusConfig.className}`}
         >
           {order.status}
-        </Badge>
+        </Badge> */}
+        <StatusBadge status={order.status} />
       </TableCell>
 
       {/* Actions */}
