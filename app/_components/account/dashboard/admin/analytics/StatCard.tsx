@@ -75,7 +75,7 @@ const StatCard: React.FC<Props> = ({ stat }) => {
                 ) : (
                   <HiArrowDown className="h-3 w-3" />
                 )}
-                {Math.abs(change)}%
+                {Math.abs(change).toFixed(1)}%
               </span>
               <span className="text-xs text-muted-foreground">
                 vs last month
