@@ -10,13 +10,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import OrderActionBtns from "./orders/OrderActionBtns";
+import { StatusBadge } from "./orders/order-details/StatusBadge";
 
 interface Props {
   // props here
 }
 
 const RecentOrders: React.FC<Props> = async ({}) => {
-  const ordersData = await getOrders({ limit: 10, page: 1 });
+  const ordersData = await getOrders({ limit: 10, page: 1, status : "pending" });
   const orders = ordersData?.orders || [];
 
   if (orders.length === 0) {
@@ -29,7 +30,7 @@ const RecentOrders: React.FC<Props> = async ({}) => {
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-xl font-semibold leading-none tracking-tight">
-              Recent Orders
+              Recent Pending Orders
             </h3>
             <p className="text-sm text-muted-foreground mt-1.5">
               Latest orders from your customers
@@ -62,14 +63,14 @@ const RecentOrders: React.FC<Props> = async ({}) => {
                   {order?.customer?.first_name}-{order?.customer?.last_name}
                 </TableCell>
                 <TableCell>{order.customer.phone}</TableCell>
-                <TableCell>{order.status}</TableCell>
-                <TableCell className="">${order.total_price}</TableCell>
+                <TableCell><StatusBadge status={order.status} /></TableCell>
+                <TableCell>${order.total_price}</TableCell>
                 <TableCell>
                   {formatDate(order.created_at)} -{" "}
                   {new Date(order.created_at).toLocaleTimeString()}
                 </TableCell>
                 <TableCell>
-                  <OrderActionBtns orderId={order.id} />
+                  <OrderActionBtns currentStatus={order.status} orderId={order.id} />
                 </TableCell>
               </TableRow>
             ))}

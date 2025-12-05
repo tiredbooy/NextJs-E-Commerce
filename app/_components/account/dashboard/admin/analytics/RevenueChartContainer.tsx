@@ -28,7 +28,7 @@ export default async function RevenueChartContainer({duration}: Props) {
             Your sales performance over {!isNaN(duration) ? duration : 12} months
           </p>
         </div>
-        <ToggleGroupComponent values={filterData} />
+        <ToggleGroupComponent paramName="duration" options={filterData} defaultValue={12} />
       </div>
       <div className="p-6 pt-0">
         <RevenueChart data={incomeReport} />

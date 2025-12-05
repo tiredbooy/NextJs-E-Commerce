@@ -7,7 +7,7 @@ interface Props {
 export default function loading({}: Props) {
   return (
     <div className="w-full min-h-screen flex items-center justify-center">
-      <Loading variant="spinner" text="Loading Orders..." />
+      <Loading variant="bars" text="Loading Order..." />
     </div>
   );
 }
