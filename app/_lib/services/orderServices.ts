@@ -42,6 +42,19 @@ export async function updateOrderStatusReq(id: number, status: OrderStatus) {
   }
 }
 
+export async function cancelOrderReq(id: number) {
+  try {
+    const response = await authenticatedRequest({
+      method : "PATCH",
+      url: `/api/orders/${id}`
+    })
+    return response
+  }
+  catch(e: any) {
+    throw new Error(e.message || "Failed to Cancel Order") 
+  }
+}
+
 export async function getCoupons(): Promise<Coupon[]> {
   try {
     const response = await authenticatedRequest({

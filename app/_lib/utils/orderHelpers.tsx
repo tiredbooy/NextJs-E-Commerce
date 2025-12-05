@@ -52,3 +52,58 @@ export const orderHelpers = {
     return `${address.address}, ${address.city}, ${address.state} ${address.postal_code}, ${address.country}`;
   },
 };
+
+export const orderStatusUtils = {
+  /**
+   * Get the next status in the order lifecycle
+   */
+  getNextStatus(currentStatus: OrderStatus): OrderStatus | null {
+    const statusFlow: Record<OrderStatus, OrderStatus | null> = {
+      pending: "processing",
+      processing: "shipped",
+      shipped: "completed",
+      completed: null,
+      cancelled: null,
+    };
+
+    return statusFlow[currentStatus];
+  },
+
+  /**
+   * Check if an order status can be changed
+   */
+  canChangeStatus(status: OrderStatus): boolean {
+    return status !== "completed" && status !== "cancelled";
+  },
+
+  /**
+   * Get all possible status transitions for a given status
+   */
+  getPossibleTransitions(currentStatus: OrderStatus): OrderStatus[] {
+    const transitions: Record<OrderStatus, OrderStatus[]> = {
+      pending: ["processing", "cancelled"],
+      processing: ["shipped", "cancelled"],
+      shipped: ["completed"],
+      completed: [],
+      cancelled: [],
+    };
+
+    return transitions[currentStatus] || [];
+  },
+
+  /**
+   * Get status display information
+   */
+  getStatusInfo(status: OrderStatus) {
+    const statusInfo: Record<OrderStatus, { label: string; variant: string }> =
+      {
+        pending: { label: "Pending", variant: "warning" },
+        processing: { label: "Processing", variant: "info" },
+        shipped: { label: "Shipped", variant: "default" },
+        completed: { label: "Completed", variant: "success" },
+        cancelled: { label: "Cancelled", variant: "destructive" },
+      };
+
+    return statusInfo[status];
+  },
+};

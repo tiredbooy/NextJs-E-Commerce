@@ -1,4 +1,5 @@
 "use client";
+import { cancelOrder } from "@/app/_lib/actions/orderAction";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,45 +9,62 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Spinner } from "@/components/ui/spinner";
 import { useRouter } from "next/navigation";
-import { FiEdit } from "react-icons/fi";
-import {
-  IoDownload,
-  IoEllipsisVertical,
-  IoEye,
-  IoTrash,
-} from "react-icons/io5";
+import { useTransition } from "react";
+import { IoEllipsisVertical, IoEye, IoTrash, IoPencil } from "react-icons/io5";
+import { toast } from "sonner";
+import { OrderStatus } from "@/app/_lib/types/order_types";
+import { orderStatusUtils } from "@/app/_lib/utils/orderHelpers";
+import { useOrderStatusUpdate } from "@/app/_lib/hooks/useIrderStatusUpdate";
 
 interface Props {
   orderId: number;
+  currentStatus: OrderStatus;
 }
 
-export default function OrderActionBtns({ orderId: id }: Props) {
+export default function OrderActionBtns({ orderId: id, currentStatus }: Props) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const { updateStatus, isPending: isUpdating } = useOrderStatusUpdate();
 
-  function onView(orderId: number) {
-    router.push(`/admin/orders/${orderId}`)
+  const disableCancelOrder = currentStatus !== "pending"
+  const canChangeStatus = orderStatusUtils.canChangeStatus(currentStatus);
+  const nextStatus = orderStatusUtils.getNextStatus(currentStatus);
+
+  function onView() {
+    router.push(`/admin/orders/${id}`);
   }
 
-  function onDelete(orderId) {
-    console.log("value");
+  function onDelete() {
+    if (disableCancelOrder) {
+      toast.error("You Can't Cancel Order Now!")
+      return
+    }
+
+    startTransition(async () => {
+      const result = await cancelOrder(id);
+      if (result.success) {
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    });
   }
 
-  function onEdit(orderId) {
-    console.log("value");
-  }
-
-  function onDownloadInvoice(orderId) {
-    console.log("value");
+  function onUpdateStatus() {
+    if (nextStatus) {
+      updateStatus(id, nextStatus);
+    }
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1">
       {/* Quick Actions */}
       <Button
         variant="ghost"
         size="icon"
-        onClick={() => onView?.(id)}
+        onClick={onView}
         className="h-8 w-8 text-primary hover:text-primary-hover hover:bg-primary/10"
       >
         <IoEye className="w-4 h-4" />
@@ -55,10 +73,11 @@ export default function OrderActionBtns({ orderId: id }: Props) {
       <Button
         variant="ghost"
         size="icon"
-        onClick={() => onDelete?.(id)}
-        className="h-8 w-8 text-destructive hover:text-destructive-hover hover:bg-destructive/10"
+        onClick={onDelete}
+        disabled={isPending}
+        className={`h-8 w-8 text-destructive hover:text-destructive-hover hover:bg-destructive/10 ${disableCancelOrder ? "text-destructive/50" : ""} `}
       >
-        <IoTrash className="w-4 h-4" />
+        {isPending ? <Spinner /> : <IoTrash className="w-4 h-4" />}
       </Button>
 
       {/* More Actions Dropdown */}
@@ -75,24 +94,34 @@ export default function OrderActionBtns({ orderId: id }: Props) {
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => onView?.(id)}>
-            <IoEye className="w-4 h-4 mr-2" />
+          <DropdownMenuItem
+            className="cursor-pointer hover:bg-muted"
+            onClick={onView}
+          >
+            <IoEye className="w-4 h-4 mr-1" />
             View Details
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => onEdit?.(id)}>
-            <FiEdit className="w-4 h-4 mr-2" />
-            Edit Order
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => onDownloadInvoice?.(id)}>
-            <IoDownload className="w-4 h-4 mr-2" />
-            Download Invoice
-          </DropdownMenuItem>
+          {canChangeStatus && nextStatus && (
+            <DropdownMenuItem
+              className="text-warning cursor-pointer hover:bg-warning/5"
+              onClick={onUpdateStatus}
+              disabled={isUpdating}
+            >
+              {isUpdating ? (
+                <Spinner className="w-4 h-4 mr-1" />
+              ) : (
+                <IoPencil className="w-4 h-4 mr-1 text-warning" />
+              )}
+              Update Status
+            </DropdownMenuItem>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={() => onDelete?.(id)}
-            className="text-destructive focus:text-destructive focus:bg-destructive/10"
+            onClick={onDelete}
+            disabled={isPending}
+            className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer hover:bg-destructive/5"
           >
-            <IoTrash className="w-4 h-4 mr-2" />
+            <IoTrash className="w-4 h-4 mr-1 text-destructive" />
             Delete Order
           </DropdownMenuItem>
         </DropdownMenuContent>

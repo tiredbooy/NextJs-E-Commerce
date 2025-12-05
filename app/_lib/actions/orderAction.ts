@@ -1,16 +1,16 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import {
-  createCouponReq,
-  createOrderReq,
-  updateOrderStatusReq,
+    cancelOrderReq,
+    createCouponReq,
+    createOrderReq,
+    updateOrderStatusReq,
 } from "../services/orderServices";
 import {
-  CreateCouponReq,
-  CreateOrderReq,
-  OrderStatus,
+    CreateCouponReq,
+    CreateOrderReq,
+    OrderStatus,
 } from "../types/order_types";
-import { redirect } from "next/navigation";
 
 export async function createOrder(req: CreateOrderReq) {
   try {
@@ -34,6 +34,18 @@ export async function updateOrderStatus(id: number, status: OrderStatus) {
       message: e.message || "Failed to update order status",
     };
   }
+}
+
+export async function cancelOrder(id: number ) {
+    try {
+        const result = await cancelOrderReq(id)
+        revalidatePath("/admin/orders")
+        revalidatePath("/account/orders")
+        return {success: true, message: "Order Cancelled"}
+    }
+    catch(e: any) {
+        return {success: false, message: e.message || "Failed to cancel Order"}
+    }
 }
 
 export async function createCoupon(req: CreateCouponReq) {

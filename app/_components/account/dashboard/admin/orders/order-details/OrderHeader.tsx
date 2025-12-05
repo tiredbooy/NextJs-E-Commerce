@@ -1,13 +1,11 @@
 "use client";
-import { FiCalendar, FiClock } from "react-icons/fi";
-import { orderHelpers } from "@/app/_lib/utils/orderHelpers";
-import { StatusBadge } from "./StatusBadge";
+import { Order } from "@/app/_lib/types/order_types";
+import { orderHelpers, orderStatusUtils } from "@/app/_lib/utils/orderHelpers";
 import { Button } from "@/components/ui/button";
-import { Order, OrderStatus } from "@/app/_lib/types/order_types";
-import { useTransition } from "react";
-import { updateOrderStatus } from "@/app/_lib/actions/orderAction";
-import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
+import { FiCalendar, FiClock } from "react-icons/fi";
+import { StatusBadge } from "./StatusBadge";
+import { useOrderStatusUpdate } from "@/app/_lib/hooks/useIrderStatusUpdate";
 
 interface OrderHeaderProps {
   order: Order;
@@ -15,34 +13,15 @@ interface OrderHeaderProps {
 }
 
 export function OrderHeader({ order, viewMode }: OrderHeaderProps) {
-  const [isPending, startTransition] = useTransition();
+  const { updateStatus, isPending } = useOrderStatusUpdate();
   const isAdmin = viewMode === "admin";
-  const canChangeStatus =
-    order.status !== "completed" && order.status !== "cancelled";
-  let newStatus: OrderStatus;
-
-  switch (order.status) {
-    case "pending":
-      newStatus = "processing";
-      break;
-    case "processing":
-      newStatus = "shipped";
-      break;
-    case "shipped":
-      newStatus = "completed";
-      break;
-  }
+  const canChangeStatus = orderStatusUtils.canChangeStatus(order.status);
+  const nextStatus = orderStatusUtils.getNextStatus(order.status);
 
   function handleStatus() {
-    startTransition(async () => {
-      try {
-        console.log("newStatus:", newStatus);
-        const result = await updateOrderStatus(order.id, newStatus);
-        if (result.success) toast.success(result.message);
-      } catch (e: any) {
-        toast.error(e.message);
-      }
-    });
+    if (nextStatus) {
+      updateStatus(order.id, nextStatus);
+    }
   }
 
   return (
@@ -64,8 +43,13 @@ export function OrderHeader({ order, viewMode }: OrderHeaderProps) {
 
         <div className="flex items-center gap-3">
           <StatusBadge status={order.status} />
-          {isAdmin && canChangeStatus && (
-            <Button disabled={isPending || canChangeStatus} variant="outline" onClick={handleStatus} size="sm">
+          {isAdmin && canChangeStatus && nextStatus && (
+            <Button
+              disabled={isPending}
+              variant="outline"
+              onClick={handleStatus}
+              size="sm"
+            >
               {isPending ? <Spinner /> : "Update Status"}
             </Button>
           )}
