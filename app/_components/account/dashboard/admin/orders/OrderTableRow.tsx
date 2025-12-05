@@ -55,7 +55,7 @@ export default function OrderTableRow({
       <TableCell>
         <div className="flex flex-col">
           <span className="font-medium text-foreground">
-            {order.customer?.first_name} - {order.customer?.first_name}
+            {order.customer?.first_name} - {order.customer?.last_name}
           </span>
           <span className="text-xs text-muted-foreground">
             {order.customer?.email}

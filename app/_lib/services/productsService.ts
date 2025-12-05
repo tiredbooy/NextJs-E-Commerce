@@ -125,21 +125,10 @@ export async function editProductReq(req: CreateProductRequest, id: number) {
   }
 }
 
-export async function getProductSingleImage(productId: number) {
+export async function getProductSingleImage(productId: number): Promise<Image> {
   try {
-    // const response = await serverApi.get(`/api/products/${productId}/image`);
-    const response = await fetch(
-      `${BASE_URL}/api/products/${productId}/image`,
-      {
-        next: { tags: [`products/${productId}/image`] },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch image: ${response.status}`);
-    }
-
-    return response.json;
+    const response = await serverApi.get(`/api/products/${productId}/image`);
+    return response.data
   } catch (e: any) {
     throw new Error("Something went worng!", e.message);
   }

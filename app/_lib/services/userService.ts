@@ -1,5 +1,19 @@
 import { CartItemReq } from "../types";
+import { Address, User } from "../types/user_types";
 import { authenticatedRequest } from "./authService";
+
+export async function getUserById(id: number): Promise<User> {
+  try {
+    const result = await authenticatedRequest({
+      method : "GET",
+      url: `/api/admin/users/${id}`
+    })
+    return result
+  }
+  catch(e: any) {
+    throw new Error(e.message || "Failed to get user")
+  }
+}
 
 export async function getUserCart() {
   try {
@@ -66,5 +80,18 @@ export async function updateQuantityReq(id: number, quantity: number) {
     return result.message;
   } catch (e: any) {
     throw new Error("Could not remove item");
+  }
+}
+
+export async function getAddress(id: number): Promise<Address> {
+  try {
+    const result = await authenticatedRequest({
+      method : "GET",
+      url : `/api/addresses/${id}`
+    })
+    return result
+  }
+  catch(e: any) {
+    throw new Error("Could not Get Address at this time")
   }
 }

@@ -1,42 +1,45 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 import { FiEdit } from "react-icons/fi";
 import {
-    IoDownload,
-    IoEllipsisVertical,
-    IoEye,
-    IoTrash,
+  IoDownload,
+  IoEllipsisVertical,
+  IoEye,
+  IoTrash,
 } from "react-icons/io5";
 
 interface Props {
   orderId: number;
 }
 
-function onView(order) {
-  console.log("value");
-}
+export default function OrderActionBtns({ orderId: id }: Props) {
+  const router = useRouter();
 
-function onDelete(order) {
-  console.log("value");
-}
+  function onView(orderId: number) {
+    router.push(`/admin/orders/${orderId}`)
+  }
 
-function onEdit(order) {
-  console.log("value");
-}
+  function onDelete(orderId) {
+    console.log("value");
+  }
 
-function onDownloadInvoice(order) {
-  console.log("value");
-}
+  function onEdit(orderId) {
+    console.log("value");
+  }
 
-export default function OrderActionBtns({orderId: id}: Props) {
+  function onDownloadInvoice(orderId) {
+    console.log("value");
+  }
+
   return (
     <div className="flex items-center gap-2">
       {/* Quick Actions */}

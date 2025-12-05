@@ -15,6 +15,19 @@ export async function createOrderReq(req: CreateOrderReq) {
   }
 }
 
+export async function getOrder(id: number) {
+  try {
+    const response = await authenticatedRequest({
+      method : "GET",
+      url: `/api/orders/${id}`
+    })
+    return response 
+  }
+  catch(e: any) {
+    throw new Error(e.message || "Failed to get Order")
+  }
+}
+
 export async function getCoupons(): Promise<Coupon[]> {
   try {
     const response = await authenticatedRequest({
