@@ -14,16 +14,25 @@ interface Props {
 }
 
 export default function TicketTableRow({ ticket }: Props) {
-  const { id, client, subject, status, priority, created_at } = ticket;
+  const {
+    id,
+    client_first_name: first_name,
+    client_last_name: last_name,
+    subject,
+    status,
+    priority,
+    created_at,
+  } = ticket;
   const { theme } = useTheme();
   const pathname = usePathname();
   const route = useRouter();
+  const client = `${first_name} - ${last_name}`;
 
   let statusColor: string;
   let priorityColor: string;
 
   function navigateToTicketDetail(): void {
-    route.push(`${pathname}/${id}`)
+    route.push(`${pathname}/${id}`);
   }
 
   const {
@@ -60,7 +69,7 @@ export default function TicketTableRow({ ticket }: Props) {
     case "open":
       statusColor = "bg-badge-success";
       break;
-    case "close":
+    case "closed":
       statusColor = "bg-badge-error";
       break;
     case "pending":
@@ -91,12 +100,16 @@ export default function TicketTableRow({ ticket }: Props) {
         <TableCell>{client}</TableCell>
         <TableCell>{subject}</TableCell>
         <TableCell>
-          <Badge className={`${statusColor} font-semibold text-background`}>
+          <Badge
+            className={`${statusColor} font-semibold text-background first-letter:uppercase block`}
+          >
             {status}
           </Badge>
         </TableCell>
         <TableCell>
-          <Badge className={`${priorityColor} text-background font-semibold`}>
+          <Badge
+            className={`${priorityColor} text-background font-semibold first-letter:uppercase block`}
+          >
             {priority}
           </Badge>
         </TableCell>

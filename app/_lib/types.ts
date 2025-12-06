@@ -63,19 +63,24 @@ export interface Message {
   id: number;
   content: string;
   sender: "user" | "admin";
-  senderName: string;
-  timestamp: Date | string;
+  sender_role: "admin" | "user"
+  sender_first_name: string;
+  sender_last_name?: string;
+  created_at: string;
 }
 
 export interface Ticket {
   id: number;
   subject: string;
   client: number;
-  created_at: string;
+  client_first_name?: string
+  client_last_name?: string
   messages: Message[];
   order_id?: number;
   priority: "low" | "medium" | "high";
   status: "open" | "closed" | "pending";
+  created_at: string;
+  updated_at: string;
 }
 
 export interface QueryParams {
@@ -155,4 +160,9 @@ export interface SettingsData {
 
 export interface UpdateSetting {
   [key: string]: string | boolean;
+}
+
+export interface CreateTicketMessage {
+  content: string
+  is_internal? : boolean
 }

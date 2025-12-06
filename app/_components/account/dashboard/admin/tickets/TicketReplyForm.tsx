@@ -1,15 +1,14 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { MdSend } from "react-icons/md";
 
 interface TicketReplyFormProps {
-  onSendMessage: (content: string) => void;
   disabled?: boolean;
 }
 
 export function TicketReplyForm({
-  onSendMessage,
   disabled,
 }: TicketReplyFormProps) {
   const [message, setMessage] = useState("");
@@ -22,10 +21,8 @@ export function TicketReplyForm({
 
     setIsSending(true);
 
-    // Simulate API call delay
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    onSendMessage(message.trim());
     setMessage("");
     setIsSending(false);
   };
@@ -41,7 +38,7 @@ export function TicketReplyForm({
     <div className="border rounded-lg p-4">
       <h3 className="text-lg font-semibold mb-3">Reply to Ticket</h3>
       {disabled ? (
-        <div className="bg-gray-100 rounded-lg p-4 text-center text-gray-600">
+        <div className="bg-muted rounded-lg p-4 text-center text-muted-foreground font-medium cursor-not-allowed">
           This ticket is closed. Reopen it to send messages.
         </div>
       ) : (
@@ -58,7 +55,7 @@ export function TicketReplyForm({
             <Button
               type="submit"
               disabled={!message.trim() || isSending}
-              className="gap-2"
+              className="gap-2 text-background font-medium"
             >
               <MdSend />
               {isSending ? "Sending..." : "Send Reply"}

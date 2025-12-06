@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MdMessage } from "react-icons/md";
 import TicketsTable from "./TicketsTable";
 
-export default function Tickets({}: Props) {
+export default function Tickets({}) {
   return (
     <Card className="px-10 py-8 border-border bg-card">
       <CardHeader className="flex flex-row gap-1 items-center text-xl font-semibold md:text-3xl">
