@@ -6,13 +6,12 @@ import { TicketInfo } from "./TicketInfo";
 import { TicketMessages } from "./TicketMessages";
 import { TicketReplyForm } from "./TicketReplyForm";
 
-
 interface Props {
   ticketId: number;
 }
 
 export default async function TicketDetails({ ticketId }: Props) {
-  const ticket: Ticket = await getTicketDetail(ticketId)
+  const ticket: Ticket = await getTicketDetail(ticketId);
 
   return (
     <Card>
@@ -26,6 +25,7 @@ export default async function TicketDetails({ ticketId }: Props) {
         <TicketInfo ticket={ticket} />
         <TicketMessages messages={ticket.messages} />
         <TicketReplyForm
+          ticketId={ticketId}
           disabled={ticket.status === "closed"}
         />
       </CardContent>
