@@ -69,6 +69,8 @@ export interface Message {
   created_at: string;
 }
 
+export type TicketStatus = "open" | "closed" | "pending"
+
 export interface Ticket {
   id: number;
   subject: string;
@@ -78,9 +80,14 @@ export interface Ticket {
   messages: Message[];
   order_id?: number;
   priority: "low" | "medium" | "high";
-  status: "open" | "closed" | "pending";
+  status: TicketStatus;
   created_at: string;
   updated_at: string;
+}
+
+export interface CreateTicketMessage {
+  content: string
+  is_internal? : boolean
 }
 
 export interface QueryParams {
@@ -162,7 +169,5 @@ export interface UpdateSetting {
   [key: string]: string | boolean;
 }
 
-export interface CreateTicketMessage {
-  content: string
-  is_internal? : boolean
-}
+
+

@@ -9,7 +9,6 @@ export function useOrderStatusUpdate() {
   const updateStatus = (orderId: number, newStatus: OrderStatus) => {
     startTransition(async () => {
       try {
-        console.log("newStatus:", newStatus);
         const result = await updateOrderStatus(orderId, newStatus);
         if (result.success) {
           toast.success(result.message);

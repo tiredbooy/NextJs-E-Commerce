@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { FiCalendar, FiClock } from "react-icons/fi";
 import { StatusBadge } from "./StatusBadge";
-import { useOrderStatusUpdate } from "@/app/_lib/hooks/useIrderStatusUpdate";
+import { useOrderStatusUpdate } from "@/app/_lib/hooks/useOrderStatusUpdate";
 
 interface OrderHeaderProps {
   order: Order;

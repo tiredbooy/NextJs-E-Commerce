@@ -1,15 +1,18 @@
 "use client";
-import { Ticket } from "@/app/_lib/types";
+import { updateTicketStatus } from "@/app/_lib/actions/ticketAction";
+import { Ticket, TicketStatus } from "@/app/_lib/types";
 import { Badge } from "@/components/ui/badge";
+import { Spinner } from "@/components/ui/spinner";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useTheme } from "next-themes";
 import { usePathname, useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { HiDotsVertical, HiEye, HiPencil, HiTrash } from "react-icons/hi";
 
 import { ContextMenu, useContextMenu } from "react-smart-contextmenu";
+import { toast } from "sonner";
 
 interface Props {
-  // props here
   ticket: Ticket;
 }
 
@@ -23,9 +26,19 @@ export default function TicketTableRow({ ticket }: Props) {
     priority,
     created_at,
   } = ticket;
+  const [isPending, startTransition] = useTransition();
   const { theme } = useTheme();
   const pathname = usePathname();
   const route = useRouter();
+  const {
+    isOpen,
+    position,
+    handleContextMenu,
+    closeMenu,
+    focusedIndex,
+    setFocusedIndex,
+  } = useContextMenu();
+
   const client = `${first_name} - ${last_name}`;
 
   let statusColor: string;
@@ -35,14 +48,33 @@ export default function TicketTableRow({ ticket }: Props) {
     route.push(`${pathname}/${id}`);
   }
 
-  const {
-    isOpen,
-    position,
-    handleContextMenu,
-    closeMenu,
-    focusedIndex,
-    setFocusedIndex,
-  } = useContextMenu();
+  const updateStatus = (ticketId: number, status: TicketStatus) => {
+    startTransition(async () => {
+      try {
+        const result = await updateTicketStatus(ticketId, status);
+        if (result.success) {
+          toast.success(result.message);
+        } else {
+          toast.error(result.message);
+        }
+      } catch (e: any) {
+        toast.error(e.message || "An error Occurred");
+      }
+    });
+  };
+
+  function onUpdateStatus() {
+    if (status === "closed") {
+      toast.error("You Can't Change Close Status");
+      return;
+    } else if (status === "open") {
+      updateStatus(id, "pending");
+    } else if (status === "pending") {
+      updateStatus(id, "closed");
+    } else {
+      toast.error("Could not update status");
+    }
+  }
 
   const menuOptions = [
     { type: "header" as const, label: subject },
@@ -53,8 +85,8 @@ export default function TicketTableRow({ ticket }: Props) {
     },
     {
       label: "Change Status",
-      onClick: () => console.log("Clicked"),
-      icon: <HiPencil />,
+      onClick: () => onUpdateStatus(),
+      icon: isPending ? <Spinner /> : <HiPencil />,
     },
     { type: "separator" as const },
     {

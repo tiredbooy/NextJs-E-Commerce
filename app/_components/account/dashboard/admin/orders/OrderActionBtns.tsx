@@ -16,7 +16,7 @@ import { IoEllipsisVertical, IoEye, IoTrash, IoPencil } from "react-icons/io5";
 import { toast } from "sonner";
 import { OrderStatus } from "@/app/_lib/types/order_types";
 import { orderStatusUtils } from "@/app/_lib/utils/orderHelpers";
-import { useOrderStatusUpdate } from "@/app/_lib/hooks/useIrderStatusUpdate";
+import { useOrderStatusUpdate } from "@/app/_lib/hooks/useOrderStatusUpdate";
 
 interface Props {
   orderId: number;
@@ -28,7 +28,7 @@ export default function OrderActionBtns({ orderId: id, currentStatus }: Props) {
   const [isPending, startTransition] = useTransition();
   const { updateStatus, isPending: isUpdating } = useOrderStatusUpdate();
 
-  const disableCancelOrder = currentStatus !== "pending"
+  const disableCancelOrder = currentStatus !== "pending";
   const canChangeStatus = orderStatusUtils.canChangeStatus(currentStatus);
   const nextStatus = orderStatusUtils.getNextStatus(currentStatus);
 
@@ -38,8 +38,8 @@ export default function OrderActionBtns({ orderId: id, currentStatus }: Props) {
 
   function onDelete() {
     if (disableCancelOrder) {
-      toast.error("You Can't Cancel Order Now!")
-      return
+      toast.error("You Can't Cancel Order Now!");
+      return;
     }
 
     startTransition(async () => {
@@ -75,7 +75,9 @@ export default function OrderActionBtns({ orderId: id, currentStatus }: Props) {
         size="icon"
         onClick={onDelete}
         disabled={isPending}
-        className={`h-8 w-8 text-destructive hover:text-destructive-hover hover:bg-destructive/10 ${disableCancelOrder ? "text-destructive/50" : ""} `}
+        className={`h-8 w-8 text-destructive hover:text-destructive-hover hover:bg-destructive/10 ${
+          disableCancelOrder ? "text-destructive/50" : ""
+        } `}
       >
         {isPending ? <Spinner /> : <IoTrash className="w-4 h-4" />}
       </Button>
