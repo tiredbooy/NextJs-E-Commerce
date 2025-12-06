@@ -1,13 +1,29 @@
-import { CreateTicketMessage, Ticket, TicketStatus } from "../types";
+import {
+  CreateTicketMessage,
+  QueryParams,
+  Ticket,
+  TicketStatus,
+} from "../types";
+import { buildQuery } from "../utils/utils";
 import { authenticatedRequest } from "./authService";
 
-export async function getAllTickets(): Promise<Ticket[]> {
-  const response = await authenticatedRequest({
-    method: "GET",
-    url: "/api/admin/tickets/",
-  });
+type TicketQueryParam = Pick<
+  QueryParams,
+  "limit" | "page" | "status" | "from" | "to"
+>;
 
-  return response;
+export async function getAllTickets(params: TicketQueryParam = {}) {
+  try {
+    const query = buildQuery(params)
+    const response = await authenticatedRequest({
+      method: "GET",
+      url: `/api/admin/tickets${query}`,
+    });
+
+    return response;
+  } catch (e: any) {
+    throw new Error(e.message || "Could not fetch Tickets");
+  }
 }
 
 export async function getTicketDetail(id: number): Promise<Ticket> {
@@ -33,7 +49,7 @@ export async function updateTicketStatusReq(id: number, status: TicketStatus) {
   const response = await authenticatedRequest({
     method: "PATCH",
     url: `/api/tickets/${id}`,
-    data: { status : status },
+    data: { status: status },
   });
   return response;
 }

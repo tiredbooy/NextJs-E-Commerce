@@ -7,10 +7,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import TicketTableRow from "./TicketTableRow";
+import { Ticket } from "@/app/_lib/types";
 
-export default async function TicketsTable({}) {
-  const tickets = await getAllTickets()
+interface Props {
+  status: string;
+}
 
+export default async function TicketsTable({ status }: Props) {
+  const fixedStatus = status === "all" ? "" : status;
+
+  const ticketsData = await getAllTickets({ status: fixedStatus });
+  const tickets = ticketsData?.tickets;
   return (
     <Table>
       <TableHeader>
@@ -25,7 +32,7 @@ export default async function TicketsTable({}) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {tickets?.map((ticket) => (
+        {tickets?.map((ticket: Ticket) => (
           <TicketTableRow ticket={ticket} key={ticket.id} />
         ))}
       </TableBody>

@@ -2,19 +2,14 @@ import {
   SkeletonGrid,
   StatsSkeletonCard,
 } from "@/app/_components/reusable/SkeletonCard";
+import ToggleGroupFilter, {
+  ToggleOption,
+} from "@/app/_components/reusable/ToggleGroup";
 import { OrderQueryParam } from "@/app/_lib/services/services";
 import { Card } from "@/components/ui/card";
 import { Suspense } from "react";
 import { FaBoxes } from "react-icons/fa";
 import OrdersContent from "./OrdersContent";
-import ToggleGroupFilter, {
-  ToggleOption,
-} from "@/app/_components/reusable/ToggleGroup";
-import {
-  IoCheckmarkCircle,
-  IoCloseCircle,
-  IoTimeOutline,
-} from "react-icons/io5";
 
 interface Props {
   queries?: Omit<OrderQueryParam, "limit">;

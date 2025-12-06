@@ -90,8 +90,8 @@ export default function TicketTableRow({ ticket }: Props) {
     },
     { type: "separator" as const },
     {
-      label: "Delete Ticket",
-      onClick: () => console.log("Clicked"),
+      label: "Close Ticket",
+      onClick: () => updateStatus(id, "closed"),
       danger: true,
       icon: <HiTrash />,
     },
@@ -129,7 +129,7 @@ export default function TicketTableRow({ ticket }: Props) {
         className="cursor-pointer"
       >
         <TableCell>#{id}</TableCell>
-        <TableCell>{client}</TableCell>
+        <TableCell className="first-letter:uppercase">{client}</TableCell>
         <TableCell>{subject}</TableCell>
         <TableCell>
           <Badge
