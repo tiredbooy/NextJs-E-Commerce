@@ -134,11 +134,11 @@ export async function getUserAddress(): Promise<Address> {
   }
 }
 
-export async function updateAddress(data: Partial<Address>): Promise<Address> {
+export async function updateAddressReq(id: number, data: Partial<Address>): Promise<Address> {
   try {
     const result = await authenticatedRequest({
       method: "PATCH",
-      url: `/api/addresses/${data.id}`,
+      url: `/api/addresses/${id}`,
       data,
     });
     return result;

@@ -1,15 +1,15 @@
 "use client";
+import { updateAddress, updateUserProfile } from "@/app/_lib/actions/userActions";
 import { Address, UpdateUserReq, User } from "@/app/_lib/types/user_types";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { FiSave, FiX } from "react-icons/fi";
-import PersonalInfoSection from "./PersonalInfo";
-import ContactInfoSection from "./ContactInfoSection";
-import AddressSection from "./AddressSection";
 import { toast } from "sonner";
-import { updateUserProfile } from "@/app/_lib/actions/userActions";
+import AddressSection from "./AddressSection";
+import ContactInfoSection from "./ContactInfoSection";
+import PersonalInfoSection from "./PersonalInfo";
 
 interface Props {
   profileData: User;
@@ -84,9 +84,9 @@ function UserProfileForm({ profileData, addressData }: Props) {
           promises.push(updateUserProfile(changedProfileData));
         }
 
-        // if (hasAddressChanges) {
-        //   promises.push(updateAddress(changedAddressData));
-        // }
+        if (hasAddressChanges) {
+          promises.push(updateAddress(addressData.id, changedAddressData));
+        }
 
         // Execute in parallel
         if (promises.length > 0) {

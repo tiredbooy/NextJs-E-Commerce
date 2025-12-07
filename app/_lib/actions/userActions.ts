@@ -4,11 +4,12 @@ import {
   addCartItemReq,
   addProductToFavoriteReq,
   removeCartItemReq,
+  updateAddressReq,
   updateQuantityReq,
   updateUserReq,
 } from "../services/userService";
 import { CartItemReq } from "../types";
-import { UpdateUserReq } from "../types/user_types";
+import { Address, UpdateUserReq } from "../types/user_types";
 
 export async function updateUserProfile( data: UpdateUserReq) {
   try {
@@ -16,6 +17,18 @@ export async function updateUserProfile( data: UpdateUserReq) {
 
     revalidatePath("/account/profile")
     return {success: true, message: "Profile Updated Successfully!", username: result?.first_name}
+  }
+  catch(e: any) {
+    return {success: false, message: "Failed to update Profile"}
+  }
+}
+
+export async function updateAddress(id: number, data: Partial<Address>) {
+  try {
+    const result = await updateAddressReq(id, data)
+
+    revalidatePath("/account/profile")
+    return {success: true, message: "Profile Updated Successfully!"}
   }
   catch(e: any) {
     return {success: false, message: "Failed to update Profile"}
