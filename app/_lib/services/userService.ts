@@ -120,6 +120,20 @@ export async function getAddress(id: number): Promise<Address> {
   }
 }
 
+export async function getUserAddress(): Promise<Address> {
+  try {
+    const result = await authenticatedRequest({
+      method : "GET",
+      url: "/api/addresses"
+    })
+
+    return result[0]
+  }
+  catch(e:any) {
+    throw new Error(e.message || "Failed to Get Address")
+  }
+}
+
 export async function updateAddress(data: Partial<Address>): Promise<Address> {
   try {
     const result = await authenticatedRequest({

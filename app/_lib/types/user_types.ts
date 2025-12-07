@@ -55,7 +55,7 @@ export interface Address {
   country: string;
   city: string;
   address: string;
-  postal_code: number | string;
+  postal_code: string;
   state?: string;
   is_default: boolean;
   created_at: string;

@@ -1,5 +1,5 @@
 "use client";
-import { UpdateUserReq, User } from "@/app/_lib/types/user_types";
+import { Address, UpdateUserReq, User } from "@/app/_lib/types/user_types";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useState, useTransition } from "react";
@@ -13,6 +13,7 @@ import { updateUserProfile } from "@/app/_lib/actions/userActions";
 
 interface Props {
   profileData: User;
+  addressData: Address
 }
 
 
@@ -23,7 +24,7 @@ export interface AddressFormData {
   postal_code: string;
 }
 
-function UserProfileForm({ profileData }: Props) {
+function UserProfileForm({ profileData, addressData }: Props) {
   const [isPending, startTransition] = useTransition()
 
   // Profile form
@@ -33,7 +34,7 @@ function UserProfileForm({ profileData }: Props) {
       last_name: profileData.last_name,
       email: profileData.email,
       phone: profileData.phone,
-      birth_date: profileData.birth_date || "1995-05-15",
+      birth_date: profileData.birth_date || "15-05-1995",
       gender: profileData.gender || "male",
     },
   });
@@ -41,10 +42,10 @@ function UserProfileForm({ profileData }: Props) {
   // Address form
   const addressForm = useForm<AddressFormData>({
     defaultValues: {
-      country: "Iran",
-      city: "Tehran",
-      address: "123 Main Street, District 1",
-      postal_code: "1234567890",
+      country: addressData.country || "Iran",
+      city: addressData.city || "Tehran",
+      address: addressData.address || "123 Main Street, District 1",
+      postal_code: addressData.postal_code || "1234567890",
     },
   });
 

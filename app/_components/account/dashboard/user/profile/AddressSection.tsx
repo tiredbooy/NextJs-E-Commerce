@@ -37,11 +37,12 @@ export default function AddressSection({ form }: Props) {
                   <SelectValue placeholder="Select country" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Iran">Iran</SelectItem>
+                  <SelectItem value="IRAN">Iran</SelectItem>
                   <SelectItem value="USA">United States</SelectItem>
                   <SelectItem value="UK">United Kingdom</SelectItem>
-                  <SelectItem value="Canada">Canada</SelectItem>
-                  <SelectItem value="Australia">Australia</SelectItem>
+                  <SelectItem value="CANADA">Canada</SelectItem>
+                  <SelectItem value="AUSTRALIA">Australia</SelectItem>
+                  <SelectItem value="JAPAN">Japan</SelectItem>
                 </SelectContent>
               </Select>
             </FormField>
