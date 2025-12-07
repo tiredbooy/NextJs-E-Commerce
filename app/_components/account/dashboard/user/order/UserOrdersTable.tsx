@@ -1,5 +1,3 @@
-// UserOrdersTable.tsx (Server Component)
-import { Order } from "@/app/_lib/types";
 import {
   Table,
   TableBody,
@@ -7,86 +5,36 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import OrderTableRow from "./UserOrderTable";
+import OrderTableRow from "./UserOrderTableRow";
+import { getUserOrders, OrderQueryParam } from "@/app/_lib/services/services";
+import { Order } from "@/app/_lib/types/order_types";
 
-export const orders: Order[] = [
-  {
-    id: 1,
-    order_id: 1223,
-    items: [
-      {
-        id: 1,
-        name: "black T-shirt",
-        price: 100,
-        quantity: 3,
-        subtotal: 300,
-      },
-    ],
-    total_price: 475,
-    user_id: 1,
-    payment_method: "card",
-    status: "completed",
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: 2,
-    order_id: 1224,
-    items: [
-      {
-        id: 1,
-        name: "black suit",
-        price: 865,
-        quantity: 3,
-        subtotal: 2540,
-      },
-    ],
-    total_price: 2540,
-    user_id: 1,
-    payment_method: "card",
-    status: "paid",
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: 3,
-    order_id: 1225,
-    items: [
-      {
-        id: 1,
-        name: "Jean Paul Gaultier Le Beau",
-        price: 2314,
-        quantity: 1,
-        subtotal: 2314,
-      },
-    ],
-    total_price: 2314,
-    user_id: 1,
-    payment_method: "card",
-    status: "pending",
-    created_at: new Date().toISOString(),
-  },
-];
+interface Props {
+  queries?: Omit<OrderQueryParam, "limit">;
+}
 
+export default async function UserOrdersTable({ queries }: Props) {
+  const ordersData = await getUserOrders(queries);
+  
+  const orders = ordersData.orders || [];
 
-
-function UserOrdersTable({}) {
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Order Id</TableHead>
-          <TableHead>Payment Method</TableHead>
-          <TableHead>Total Price</TableHead>
-          <TableHead>Created At</TableHead>
+          <TableHead>Order Id</TableHead>
+          <TableHead>Total Items</TableHead>
+          <TableHead>Total Amount</TableHead>
+          <TableHead>Date</TableHead>
           <TableHead>Status</TableHead>
+          <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {orders.map((order) => (
+        {orders.map((order: Order) => (
           <OrderTableRow key={order.id} order={order} />
         ))}
       </TableBody>
     </Table>
   );
 }
-
-export default UserOrdersTable;

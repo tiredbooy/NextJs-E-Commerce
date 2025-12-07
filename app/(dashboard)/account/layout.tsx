@@ -13,6 +13,7 @@ const DashboardLayout: React.FC<Props> = async ({ children }) => {
   if (!user) {
     redirect("/auth/login");
   }
+
   const fullName = `${user.first_name} ${user.last_name}`;
   return (
     <>

@@ -21,9 +21,14 @@ import { useOrderStatusUpdate } from "@/app/_lib/hooks/useOrderStatusUpdate";
 interface Props {
   orderId: number;
   currentStatus: OrderStatus;
+  role?: "admin" | "user";
 }
 
-export default function OrderActionBtns({ orderId: id, currentStatus }: Props) {
+export default function OrderActionBtns({
+  orderId: id,
+  currentStatus,
+  role = "admin",
+}: Props) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const { updateStatus, isPending: isUpdating } = useOrderStatusUpdate();
@@ -32,11 +37,16 @@ export default function OrderActionBtns({ orderId: id, currentStatus }: Props) {
   const canChangeStatus = orderStatusUtils.canChangeStatus(currentStatus);
   const nextStatus = orderStatusUtils.getNextStatus(currentStatus);
 
-  function onView() {
-    router.push(`/admin/orders/${id}`);
+  function onView(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    const route = role === "admin" ? "/admin/" : "/account/"
+    router.push(`${route}orders/${id}`);
   }
 
-  function onDelete() {
+  function onDelete(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
     if (disableCancelOrder) {
       toast.error("You Can't Cancel Order Now!");
       return;
@@ -52,7 +62,9 @@ export default function OrderActionBtns({ orderId: id, currentStatus }: Props) {
     });
   }
 
-  function onUpdateStatus() {
+  function onUpdateStatus(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
     if (nextStatus) {
       updateStatus(id, nextStatus);
     }
@@ -103,7 +115,7 @@ export default function OrderActionBtns({ orderId: id, currentStatus }: Props) {
             <IoEye className="w-4 h-4 mr-1" />
             View Details
           </DropdownMenuItem>
-          {canChangeStatus && nextStatus && (
+          {canChangeStatus && nextStatus && role === "admin" && (
             <DropdownMenuItem
               className="text-warning cursor-pointer hover:bg-warning/5"
               onClick={onUpdateStatus}
@@ -120,11 +132,11 @@ export default function OrderActionBtns({ orderId: id, currentStatus }: Props) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={onDelete}
-            disabled={isPending}
+            disabled={isPending || currentStatus !== "pending"}
             className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer hover:bg-destructive/5"
           >
             <IoTrash className="w-4 h-4 mr-1 text-destructive" />
-            Delete Order
+            Cancel Order
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

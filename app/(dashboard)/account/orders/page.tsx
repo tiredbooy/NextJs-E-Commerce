@@ -1,12 +1,28 @@
-import UserOrdersTable from "@/app/_components/account/dashboard/user/order/UserOrdersTable";
+import UserOrderManagment from "@/app/_components/account/dashboard/user/order/UserOrderManagment";
 
-function page ({  }) {
-  return (
-    <div className="flex flex-col gap-5 px-6 py-4">
-      <h1 className="font-semibold text-3xl">Orders</h1>
-      <UserOrdersTable />
-    </div>
-  );
-};
+interface Props {
+  searchParams: {
+    page: string;
+    status: string;
+    total: string;
+    from: string;
+    to: string;
+  };
+}
+
+async function page({ searchParams }: Props) {
+  const { page, status, total, from, to } = await searchParams;
+  const fixedStatus = status === "all" ? "" : status;
+
+  const queries = {
+    page: Number(page),
+    status: fixedStatus,
+    total: Number(total),
+    from,
+    to,
+  };
+
+  return <UserOrderManagment queries={queries} />;
+}
 
 export default page;
