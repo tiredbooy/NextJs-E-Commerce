@@ -32,6 +32,7 @@ function HeaderNav() {
       {navItems.map((item, i) => (
         <li key={i} className="relative group">
           <Link
+            prefetch={true}
             href={item.href}
             className="flex items-center gap-1 text-accent-foreground dark:text-gray-100 transition-colors hover:text-foreground"
           >

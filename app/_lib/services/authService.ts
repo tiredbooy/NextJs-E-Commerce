@@ -230,5 +230,4 @@ export async function logoutUser() {
   );
 
   await session.destroy();
-  redirect("/auth/login");
 }

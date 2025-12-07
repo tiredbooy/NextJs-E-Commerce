@@ -19,6 +19,7 @@ export default async function OrderManagment({ queries }: Props) {
   const statusOptions: ToggleOption[] = [
     { id: "all", title: "All", value: "all" },
     { id: "pending", title: "Pending", value: "pending" },
+    { id: "processing", title: "Processing", value: "processing" },
     {
       id: "completed",
       title: "Completed",

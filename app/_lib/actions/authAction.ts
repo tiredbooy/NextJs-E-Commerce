@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
-import { loginUser, signupUser } from "../services/authService";
+import { loginUser, logoutUser, signupUser } from "../services/authService";
 import { getStringFromForm } from "../utils/utils";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -83,4 +83,11 @@ export async function login(
   redirect("/");
 }
 
-
+export async function logout() {
+  try {
+    await logoutUser()
+    return {success: true, message: "Logout Successfully."}
+  }catch(e: any) {
+    return {success: false, message: "Failed to Logout"}
+  }
+}

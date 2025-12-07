@@ -7,6 +7,7 @@ import {
 import ThemeSwitcher from "./ThemeSwitcher";
 import ToggleSidebar from "./ToggleSidebar";
 import { getInitials } from "@/app/_lib/utils/utils";
+import Logout from "./Logout";
 
 interface Props {
   userName?: string;
@@ -47,16 +48,7 @@ const HeaderNavigation: React.FC<Props> = ({ userName = "", userAvatar }) => {
           {/* Theme Switcher Dropdown */}
             <ThemeSwitcher />
           {/* Logout Button */}
-          <Link href="/auth">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-9 w-9 text-destructive hover:text-destructive hover:bg-destructive/10 cursor-pointer"
-              aria-label="Logout"
-            >
-              <HiOutlineLogout className="h-5 w-5" />
-            </Button>
-          </Link>
+          <Logout />
         </div>
       </div>
     </header>
