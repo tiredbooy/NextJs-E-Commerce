@@ -1,11 +1,30 @@
+import OrderDetails from "@/app/_components/account/dashboard/admin/orders/order-details/OrderDetail";
+import OrderLayout from "@/app/_components/account/dashboard/admin/orders/order-details/OrderLayout";
+import { Breadcrumb } from "@/app/_components/reusable/BreadCrump";
+import { getOrder } from "@/app/_lib/services/orderServices";
+import { getAddress, getUserById } from "@/app/_lib/services/userService";
+import { Order } from "@/app/_lib/types/order_types";
 
+interface Props {
+  params: { orderId: string };
+}
 
-const page: React.FC<Props> = ({  }) => {
+export default async function page({ params }: Props) {
+  const { orderId } = await params;
+  const order: Order = await getOrder(Number(orderId));
+
+  // const address = order.shipping_address_id ? await getAddress(order.shipping_address_id) : null
+
   return (
-    <div className="">
-      heu there
-    </div>
+    <>
+      <Breadcrumb />
+      <OrderLayout title={`Order #${order.id}`}>
+        <OrderDetails
+          order={order}
+          address={undefined}
+          viewMode="user"
+        />
+      </OrderLayout>
+    </>
   );
-};
-
-export default page;
+}

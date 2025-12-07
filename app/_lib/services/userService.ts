@@ -1,17 +1,29 @@
 import { CartItemReq } from "../types";
-import { Address, User } from "../types/user_types";
+import { Address, CreateAddressReq, UpdateUserReq, User } from "../types/user_types";
 import { authenticatedRequest } from "./authService";
 
 export async function getUserById(id: number): Promise<User> {
   try {
     const result = await authenticatedRequest({
-      method : "GET",
-      url: `/api/admin/users/${id}`
-    })
-    return result
+      method: "GET",
+      url: `/api/admin/users/${id}`,
+    });
+    return result;
+  } catch (e: any) {
+    throw new Error(e.message || "Failed to get user");
   }
-  catch(e: any) {
-    throw new Error(e.message || "Failed to get user")
+}
+
+export async function updateUserReq(data: UpdateUserReq): Promise<User> {
+  try {
+    const response = await authenticatedRequest({
+      method: "PATCH",
+      url: `/api/auth/profile`,
+      data,
+    });
+    return response;
+  } catch (e: any) {
+    throw new Error(e.message || "Failed to update user profile");
   }
 }
 
@@ -87,7 +99,7 @@ export async function updateQuantityReq(id: number, quantity: number) {
     const result = await authenticatedRequest({
       method: "PATCH",
       url: `/api/cart/items/${id}`,
-      data: {quantity}
+      data: { quantity },
     });
 
     return result.message;
@@ -99,12 +111,37 @@ export async function updateQuantityReq(id: number, quantity: number) {
 export async function getAddress(id: number): Promise<Address> {
   try {
     const result = await authenticatedRequest({
-      method : "GET",
-      url : `/api/addresses/${id}`
-    })
-    return result
+      method: "GET",
+      url: `/api/addresses/${id}`,
+    });
+    return result;
+  } catch (e: any) {
+    throw new Error("Could not Get Address at this time");
   }
-  catch(e: any) {
-    throw new Error("Could not Get Address at this time")
+}
+
+export async function updateAddress(data: Partial<Address>): Promise<Address> {
+  try {
+    const result = await authenticatedRequest({
+      method: "PATCH",
+      url: `/api/addresses/${data.id}`,
+      data,
+    });
+    return result;
+  } catch (e: any) {
+    throw new Error("Could not update Address at this time");
+  }
+}
+
+export async function createAddress(data: Partial<CreateAddressReq>): Promise<Address> {
+  try {
+    const result = await authenticatedRequest({
+      method: "POST",
+      url: `/api/addresses/`,
+      data,
+    });
+    return result;
+  } catch (e: any) {
+    throw new Error("Could not create Address at this time");
   }
 }

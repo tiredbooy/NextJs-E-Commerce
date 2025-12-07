@@ -18,12 +18,24 @@ export interface User {
   first_name: string;
   last_name?: string;
   phone?: string;
-  image?: string | StaticImageData;
+  gender?: string;
+  birth_date?: string;
+  image?: string;
   email: string;
   role: string;
   total_orders: number;
   total_spent: number;
   created_at: string;
+}
+
+export interface UpdateUserReq {
+  first_name?: string;
+  last_name?: string;
+  phone?: string;
+  email?: string;
+  gender?: string;
+  birth_date?: string;
+  image?: string;
 }
 
 export interface PaginatedUserResponse {
@@ -47,6 +59,16 @@ export interface Address {
   state?: string;
   is_default: boolean;
   created_at: string;
+}
+
+export interface CreateAddressReq {
+  name: string;
+  country: string;
+  city: string;
+  address: string;
+  postal_code: number | string;
+  state?: string;
+  is_default?: boolean;
 }
 
 export interface Favorits {

@@ -5,8 +5,22 @@ import {
   addProductToFavoriteReq,
   removeCartItemReq,
   updateQuantityReq,
+  updateUserReq,
 } from "../services/userService";
 import { CartItemReq } from "../types";
+import { UpdateUserReq } from "../types/user_types";
+
+export async function updateUserProfile( data: UpdateUserReq) {
+  try {
+    const result = await updateUserReq(data)
+
+    revalidatePath("/account/profile")
+    return {success: true, message: "Profile Updated Successfully!", username: result?.first_name}
+  }
+  catch(e: any) {
+    return {success: false, message: "Failed to update Profile"}
+  }
+}
 
 export async function addCartItem(req: CartItemReq) {
   try {

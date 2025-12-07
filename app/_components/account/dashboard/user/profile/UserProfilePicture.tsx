@@ -1,15 +1,26 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FiCamera, FiUser } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import { IoCalendar, IoLocationSharp, IoMail } from "react-icons/io5";
 import Image from "next/image";
 import Link from "next/link";
+import { User } from "@/app/_lib/types/user_types";
 
-function UserProfilePicture({}) {
+interface Props {
+  profileData: User
+}
+
+function UserProfilePicture({ profileData }: Props) {
   const [isHovered, setIsHovered] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState("");
+
+  useEffect(() => {
+    if (profileData.image && profileData.image !== "") {
+      setProfileImage(profileData?.image);
+    }
+  }, [profileData]);
 
   const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
@@ -34,7 +45,7 @@ function UserProfilePicture({}) {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          {/* Profile Picture or Placeholder */}
+         
           {profileImage ? (
             <Image
               fill
@@ -48,7 +59,7 @@ function UserProfilePicture({}) {
             </div>
           )}
 
-          {/* Hover Overlay */}
+          {/* Image Hover Overlay */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: isHovered ? 1 : 0 }}
@@ -90,11 +101,13 @@ function UserProfilePicture({}) {
       >
         {/* <div className="space-y-2"> */}
         <h2 className="font-semibold text-xl md:text2xl lg:text-3xl">
-          Mahdi Kazemi
+          {profileData.first_name} {profileData.last_name}
         </h2>
         <div className="flex flex-row gap-1 items-center text-muted-foreground text-xs md:text-sm lg:text-base">
           <IoCalendar />
-          <span className="text-muted-foreground">Joined May 2024</span>
+          <span className="text-muted-foreground">
+            {new Date(profileData.created_at).toLocaleDateString()}
+          </span>
         </div>
         <div className="flex flex-row gap-1 items-center text-muted-foreground text-xs md:text-sm lg:text-base">
           <IoLocationSharp />
@@ -102,25 +115,15 @@ function UserProfilePicture({}) {
         </div>
         <div className="flex-row gap-1 items-center text-muted-foreground hidden lg:flex text-base">
           <IoMail />
-          <span>mahdykazemyo1i2@gmail.com</span>
+          <span>{profileData.email}</span>
         </div>
-        {/* </div> */}
-        {/* <div className="flex flex-row gap-4 items-center">
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-fit mt-2 cursor-pointer text-xs md:text-base"
-          >
-            <Link href="/account/profile?edit=true">Edit Profile</Link>
-          </Button> */}
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-fit mt-2 cursor-pointer text-xs md:text-base"
-          >
-            <Link href="account/orders">View Orders</Link>
-          </Button>
-        {/* </div> */}
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-fit mt-2 cursor-pointer text-xs md:text-base"
+        >
+          <Link href="/account/orders">View Orders</Link>
+        </Button>
       </motion.div>
     </div>
   );

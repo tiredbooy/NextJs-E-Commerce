@@ -1,7 +1,6 @@
 "use client";
 
 import { Order } from "@/app/_lib/types/order_types";
-import { Badge } from "@/components/ui/badge";
 import { TableCell, TableRow } from "@/components/ui/table";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

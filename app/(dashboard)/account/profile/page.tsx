@@ -2,7 +2,9 @@ import UserProfile from "@/app/_components/account/dashboard/user/profile/UserPr
 
 
 
-function page  ({  }){
+async function page  ({  }){
+  
+
   return (
     <UserProfile />
   );
