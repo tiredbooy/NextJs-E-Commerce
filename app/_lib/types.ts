@@ -127,10 +127,7 @@ export interface CustomerDataForAdminOrder {
   phone: string | undefined;
 }
 
-export interface FavoriteProduct {
-  product_id: number;
-  user_id: number;
-}
+
 
 export interface Cart {
   id: number;

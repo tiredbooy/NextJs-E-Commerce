@@ -34,9 +34,10 @@ export interface ProductItem {
   description: string;
   stock: number;
   slug: string;
+  image?: string;
   brand: number;
   sales: number;
-  is_featured : boolean;
+  is_featured: boolean;
   include_tax: boolean;
   is_active: boolean;
   created_at: string;

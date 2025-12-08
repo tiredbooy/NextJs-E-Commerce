@@ -1,5 +1,11 @@
 import { CartItemReq } from "../types";
-import { Address, CreateAddressReq, UpdateUserReq, User } from "../types/user_types";
+import {
+  Address,
+  CreateAddressReq,
+  Favorites,
+  UpdateUserReq,
+  User,
+} from "../types/user_types";
 import { authenticatedRequest } from "./authService";
 
 export async function getUserById(id: number): Promise<User> {
@@ -68,6 +74,19 @@ export async function addProductToFavoriteReq(productId: number) {
   }
 }
 
+export async function getUserFavorites(): Promise<Favorites[]> {
+  try {
+    const result = await authenticatedRequest({
+      method: "GET",
+      url: "/api/favorites",
+    });
+
+    return await result;
+  } catch (e: any) {
+    throw new Error(e.message || "Something went worng!");
+  }
+}
+
 export async function removeCartItemReq(id: number) {
   try {
     const result = await authenticatedRequest({
@@ -123,18 +142,20 @@ export async function getAddress(id: number): Promise<Address> {
 export async function getUserAddress(): Promise<Address> {
   try {
     const result = await authenticatedRequest({
-      method : "GET",
-      url: "/api/addresses"
-    })
+      method: "GET",
+      url: "/api/addresses",
+    });
 
-    return result[0]
-  }
-  catch(e:any) {
-    throw new Error(e.message || "Failed to Get Address")
+    return result[0];
+  } catch (e: any) {
+    throw new Error(e.message || "Failed to Get Address");
   }
 }
 
-export async function updateAddressReq(id: number, data: Partial<Address>): Promise<Address> {
+export async function updateAddressReq(
+  id: number,
+  data: Partial<Address>
+): Promise<Address> {
   try {
     const result = await authenticatedRequest({
       method: "PATCH",
@@ -147,7 +168,9 @@ export async function updateAddressReq(id: number, data: Partial<Address>): Prom
   }
 }
 
-export async function createAddress(data: Partial<CreateAddressReq>): Promise<Address> {
+export async function createAddress(
+  data: Partial<CreateAddressReq>
+): Promise<Address> {
   try {
     const result = await authenticatedRequest({
       method: "POST",

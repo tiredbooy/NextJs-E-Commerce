@@ -1,4 +1,4 @@
-import { StaticImageData } from "next/image";
+import { Product } from "./product_types";
 
 export interface Signup {
   first_name: string;
@@ -71,9 +71,15 @@ export interface CreateAddressReq {
   is_default?: boolean;
 }
 
-export interface Favorits {
+export interface CreateFavoritsReq {
   id: number;
   user_id: number;
   product_id: number;
+  created_at: string;
+}
+
+export interface Favorites {
+  id: number;
+  product: Product;
   created_at: string;
 }
