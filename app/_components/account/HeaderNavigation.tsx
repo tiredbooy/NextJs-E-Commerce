@@ -1,13 +1,8 @@
+import { getInitials } from "@/app/_lib/utils/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import {
-  HiOutlineLogout
-} from "react-icons/hi";
+import Logout from "./Logout";
 import ThemeSwitcher from "./ThemeSwitcher";
 import ToggleSidebar from "./ToggleSidebar";
-import { getInitials } from "@/app/_lib/utils/utils";
-import Logout from "./Logout";
 
 interface Props {
   userName?: string;

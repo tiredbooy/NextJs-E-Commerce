@@ -1,4 +1,5 @@
 import { FilterState } from "@/app/_components/products/filter/FilterBar";
+import {jwtDecode} from "jwt-decode"
 
 export function getStringFromForm(
   formData: FormData,
@@ -23,38 +24,6 @@ export function getNumberFromForm(
   return Number.isFinite(n) ? n : defaultValue;
 }
 
-/**
- * Decode a JWT token without verification
- * This is safe for reading claims but should never be used for security decisions
- */
-export function decodeJWT(
-  token?: string
-): { exp?: number; iat?: number; [key: string]: any } | null {
-  if (!token) return null;
-
-  try {
-    const parts = token.split(".");
-    if (parts.length !== 3) return null;
-
-    const payload = parts[1];
-    if (!payload) return null;
-
-    // Decode base64url to base64
-    const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
-    );
-
-    return JSON.parse(jsonPayload);
-  } catch (error) {
-    console.error("Failed to decode JWT:", error);
-    return null;
-  }
-}
-
 export function buildQuery<T extends Record<string, any>>(params: T): string {
   const searchParams = new URLSearchParams();
 
@@ -68,30 +37,39 @@ export function buildQuery<T extends Record<string, any>>(params: T): string {
   return query ? `?${query}` : "";
 }
 
-/**
- * @param token - The JWT token to check
- * @param bufferSeconds - Number of seconds before expiry to consider token expired (default: 60)
- */
-export function isTokenExpired(
-  token?: string,
-  bufferSeconds: number = 60
-): boolean {
+// utils/jwt.ts
+
+interface JwtPayload {
+  exp?: number;
+  email?: string;
+  userId?: number;
+  role?: string;
+  username?: string;
+  [key: string]: any;
+}
+
+export function decodeJWT(token?: string): JwtPayload | null {
+  if (!token) return null;
+  try {
+    return jwtDecode<JwtPayload>(token);
+  } catch (error) {
+    console.error("JWT decode failed:", error);
+    return null;
+  }
+}
+
+export function isTokenExpired(token?: string, bufferSeconds = 60): boolean {
   if (!token) return true;
 
   const payload = decodeJWT(token);
-
-  // If no expiry claim, treat as expired for safety
   if (!payload?.exp) return true;
 
-  // Convert exp (seconds) to milliseconds and add buffer
-  const expiryTime = payload.exp * 1000;
-  const bufferTime = bufferSeconds * 1000;
   const now = Date.now();
+  const expiry = payload.exp * 1000;
+  const buffer = bufferSeconds * 1000;
 
-  // Token is expired if current time + buffer >= expiry time
-  return now >= expiryTime - bufferTime;
+  return now >= expiry - buffer;
 }
-
 /**
  * Get time remaining until token expires (in seconds)
  */
@@ -128,7 +106,6 @@ export const getInitials = (name: string) => {
     .toUpperCase()
     .slice(0, 2);
 };
-
 
 /**
  * Converts filter state to URL query string
@@ -231,22 +208,14 @@ export const filtersToApiParams = (filters: FilterState) => {
     params.maxPrice = filters.priceRange.max;
   }
 
-  // if (filters.inStock) {
-  //   params.inStock = true;
-  // }
-  // if (filters.onSale) {
-  //   params.onSale = true;
-  // }
-
   return params;
 };
 
-
 export const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+};

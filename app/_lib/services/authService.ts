@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 import { getSession } from "../auth";
 import { serverApi } from "../server_api";
 import { Login, Signup } from "../types/user_types";
-import { isTokenExpired } from "../utils/utils";
+import { decodeJWT, isTokenExpired } from "../utils/utils";
 
 // Track ongoing refresh to prevent race conditions
 let refreshPromise: Promise<string> | null = null;
@@ -36,7 +36,7 @@ export async function loginUser(userObj: Login) {
       const access = accessMatch[1];
       const refresh = refreshMatch[1];
       const userData = JSON.parse(decodeURIComponent(userMatch[1]));
-      console.log('userMatch:', userMatch);
+      console.log("userMatch:", userMatch);
 
       const cookieStore = await cookies();
       const session = await getIronSession<SessionData>(
@@ -69,35 +69,38 @@ async function performTokenRefresh(): Promise<string> {
 
   refreshPromise = (async () => {
     try {
+      // Get the current cookies to pass along
       const cookieStore = await cookies();
-      const session = await getIronSession<SessionData>(
-        cookieStore,
-        sessionOptions
-      );
+      const allCookies = cookieStore.getAll();
+      const cookieHeader = allCookies
+        .map((cookie) => `${cookie.name}=${cookie.value}`)
+        .join("; ");
 
-      if (!session?.refresh) {
-        throw new Error("No refresh token available");
+      // Make internal API call with cookies
+      const baseUrl =
+        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+      const response = await fetch(`${baseUrl}/api/auth/refresh-token`, {
+        method: "POST",
+        headers: {
+          Cookie: cookieHeader,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Token refresh failed");
       }
 
-      const response = await serverApi.post(
-        "/api/auth/refresh",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${session.refresh}`,
-          },
-        }
-      );
+      const data = await response.json();
 
-      const newAccessToken = response.data.access || response.data.accessToken;
-      if (!newAccessToken) {
+      if (!data.access) {
         throw new Error("No access token returned from refresh");
       }
 
-      session.access = newAccessToken;
-      await session.save();
-
-      return newAccessToken;
+      return data.access;
+    } catch (error) {
+      throw error;
     } finally {
       refreshPromise = null;
     }
@@ -112,17 +115,46 @@ export async function getValidAccessToken(): Promise<string> {
     cookieStore,
     sessionOptions
   );
-
   if (!session.access) {
     throw new Error("Not authenticated");
   }
 
-  if (!isTokenExpired(session.access)) {
+  // Check token without buffer first
+  const isExpiredNoBuffer = isTokenExpired(session.access, 0);
+  // Decode to see actual expiration
+  const payload = decodeJWT(session.access);
+
+  if (!isExpiredNoBuffer) {
     return session.access;
   }
 
   try {
-    return await performTokenRefresh();
+    const newToken = await performTokenRefresh();
+
+    // After refresh, read the session again to get updated token
+    const updatedCookieStore = await cookies();
+    const updatedSession = await getIronSession<SessionData>(
+      updatedCookieStore,
+      sessionOptions
+    );
+
+
+    const finalToken =  newToken;
+    
+    const newPayload = decodeJWT(finalToken);
+    const newExpiryTime = newPayload?.exp
+      ? new Date(newPayload.exp * 1000)
+      : null;
+
+    const isNewTokenExpired = isTokenExpired(finalToken, 0);
+
+    if (isNewTokenExpired) {
+      throw new Error(
+        "expired token. Please Login Again"
+      );
+    }
+
+    return finalToken;
   } catch (error) {
     throw new Error("Session expired. Please login again.");
   }
@@ -177,16 +209,17 @@ export async function authenticatedRequest<T = any>(
 
     return response.data as T;
   } catch (error) {
+
     if (axios.isAxiosError(error) && error.response?.status === 401) {
       if (retryCount < MAX_RETRIES) {
         try {
           await performTokenRefresh();
           return authenticatedRequest<T>(config, retryCount + 1);
         } catch (refreshError) {
+          console.error("Token refresh failed:", refreshError);
           throw new Error("Session expired. Please login again.");
         }
       }
-
       throw new Error("Session expired. Please login again.");
     }
 
