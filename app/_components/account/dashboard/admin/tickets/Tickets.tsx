@@ -4,12 +4,14 @@ import TicketsTable from "./TicketsTable";
 import ToggleGroupFilter, {
   ToggleOption,
 } from "@/app/_components/reusable/ToggleGroup";
+import { UserRole } from "@/app/_lib/types";
 
 interface Props {
   status: string
+  role: UserRole
 }
 
-export default function Tickets({status}: Props) {
+export default function Tickets({status, role}: Props) {
   const statusOptions: ToggleOption[] = [
     { id: "all", title: "All", value: "all" },
     { id: "pending", title: "Pending", value: "pending" },
@@ -39,7 +41,7 @@ export default function Tickets({status}: Props) {
         />
       </CardHeader>
       <CardContent>
-        <TicketsTable status={status} />
+        <TicketsTable status={status} role={role} />
       </CardContent>
     </Card>
   );

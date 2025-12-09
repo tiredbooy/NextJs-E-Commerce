@@ -25,7 +25,7 @@ export type SideBar<T extends string = string> = {
   [K in T]: SideBarItem[];
 };
 
-export type dashboardRole = "admin" | "user";
+export type UserRole = "admin" | "user";
 
 export interface Stat {
   title: string;

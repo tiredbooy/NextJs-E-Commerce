@@ -7,5 +7,5 @@ interface Props {
 
 export default async function page ({ searchParams }: Props) {
   const  {status} = await searchParams
-  return <Tickets status={status} />
+  return <Tickets status={status} role="admin" />
 };

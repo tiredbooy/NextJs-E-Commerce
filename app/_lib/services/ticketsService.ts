@@ -26,6 +26,20 @@ export async function getAllTickets(params: TicketQueryParam = {}) {
   }
 }
 
+export async function getUserTickets(params: TicketQueryParam = {}) {
+  try {
+    const query = buildQuery(params)
+    const response = await authenticatedRequest({
+      method: "GET",
+      url: `/api/tickets${query}`,
+    });
+
+    return response;
+  } catch (e: any) {
+    throw new Error(e.message || "Could not fetch Tickets");
+  }
+}
+
 export async function getTicketDetail(id: number): Promise<Ticket> {
   const response = await authenticatedRequest({
     method: "GET",
