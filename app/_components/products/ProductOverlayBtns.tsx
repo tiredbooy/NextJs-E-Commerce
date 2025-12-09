@@ -7,6 +7,7 @@ import {
 import { CartItemReq } from "@/app/_lib/types";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { useCart } from "@/hooks/useCart";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { FiEye, FiHeart, FiShoppingCart } from "react-icons/fi";
@@ -17,8 +18,10 @@ interface Props {
 }
 
 export default function ProductOverlayBtns({ productId }: Props) {
-  const [isPending, startTransition] = useTransition();
+  const [isAddingToCart, startAddingToCart] = useTransition();
+  const [isAddingToFavorite, startAddingToFavorite] = useTransition();
   const router = useRouter();
+  const {incrementCart} = useCart()
 
   const cartItem: CartItemReq = {
     product_id: productId,
@@ -31,11 +34,12 @@ export default function ProductOverlayBtns({ productId }: Props) {
     e.preventDefault();
     e.stopPropagation();
 
-    startTransition(async () => {
+    startAddingToCart(async () => {
       try {
         const res = await addCartItem(cartItem);
         if (res.success) {
           toast.success(res.message);
+          incrementCart()
         }
       } catch (e: any) {
         console.log("e.message:", e.message);
@@ -46,10 +50,10 @@ export default function ProductOverlayBtns({ productId }: Props) {
   const handleAddToFavorites = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    startTransition(async () => {
+    startAddingToFavorite(async () => {
       try {
         const res = await addProductToFavorites(productId);
-        console.log('res:', res);
+        console.log("res:", res);
         if (res.success) {
           toast.success(res.message);
         }
@@ -67,30 +71,29 @@ export default function ProductOverlayBtns({ productId }: Props) {
   return (
     <>
       <Button
-        disabled={isPending}
         onClick={handleQuickView}
         className="bg-background/70 backdrop-blur-2xl text-primary p-3 rounded-full hover:bg-progress-background transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
         aria-label="Quick view"
       >
-        {isPending ? <Spinner /> : <FiEye size={20} />}
+        <FiEye size={20} />
       </Button>
 
       <Button
-        disabled={isPending}
+        disabled={isAddingToCart}
         onClick={handleAddToCart}
         className="bg-background/70 backdrop-blur-2xl text-success p-3 rounded-full hover:bg-progress-background transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100"
         aria-label="Add to cart"
       >
-        {isPending ? <Spinner /> : <FiShoppingCart size={20} />}
+        {isAddingToCart ? <Spinner /> : <FiShoppingCart size={20} />}
       </Button>
 
       <Button
-        disabled={isPending}
+        disabled={isAddingToFavorite}
         onClick={handleAddToFavorites}
         className="bg-background/70 backdrop-blur-2xl text-destructive p-3 rounded-full hover:bg-progress-background transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-150"
         aria-label="Add to favorites"
       >
-        {isPending ? <Spinner /> : <FiHeart size={20} />}
+        {isAddingToFavorite ? <Spinner /> : <FiHeart size={20} />}
       </Button>
     </>
   );

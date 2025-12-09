@@ -1,6 +1,8 @@
 import { Announcment } from "@/app/_lib/types";
 import HeaderItem from "./HeaderItem";
 import HeaderUserMenu from "./HeaderUserMenu";
+import { Suspense } from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 const announcment: Announcment = {
   announcmentTxt: "Sign up and get 20% off your first order.",
@@ -9,11 +11,12 @@ const announcment: Announcment = {
 };
 
 async function Header() {
-  
   return (
     <>
       <HeaderItem announcment={announcment}>
-        <HeaderUserMenu />
+        <Suspense fallback={<Spinner />}>
+          <HeaderUserMenu />
+        </Suspense>
       </HeaderItem>
     </>
   );

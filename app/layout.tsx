@@ -1,10 +1,10 @@
+import { Toaster } from "@/components/ui/sonner";
+import { CartProvider } from "@/hooks/useCart";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Poppins } from "next/font/google";
-import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
 import Providers from "./_lib/providers/providers";
-import { TokenRefreshHandler } from "./_lib/ClientTokenRefresh";
+import "./globals.css";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -35,8 +35,7 @@ export default function MainLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <TokenRefreshHandler />
-            {children}
+            <CartProvider initialCount={0}>{children}</CartProvider>
           </ThemeProvider>
           <Toaster />
         </Providers>

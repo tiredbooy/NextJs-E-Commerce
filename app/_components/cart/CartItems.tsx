@@ -1,13 +1,20 @@
-// components/cart/CartItems.tsx
+"use client"
 import { CartItem as CartItemType } from "@/app/_lib/types";
 import { CartItem } from "./CartItem";
+import { useCart } from "@/hooks/useCart";
+import { useEffect } from "react";
 
 interface Props {
   items: CartItemType[];
 }
 
 // Server Component - fetches data on the server
-export async function CartItems({ items }: Props) {
+export function CartItems({ items }: Props) {
+  const {syncCart} = useCart()
+
+  useEffect(() => {
+    syncCart(items.length)
+  }, [items.length, syncCart]);
 
   return (
     <div className="space-y-4">
