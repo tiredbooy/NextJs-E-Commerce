@@ -70,6 +70,7 @@ export interface Message {
 }
 
 export type TicketStatus = "open" | "closed" | "pending"
+export type TicketPriority = "low" | "medium" | "high"
 
 export interface Ticket {
   id: number;
@@ -79,10 +80,17 @@ export interface Ticket {
   client_last_name?: string
   messages: Message[];
   order_id?: number;
-  priority: "low" | "medium" | "high";
+  priority: TicketPriority;
   status: TicketStatus;
   created_at: string;
   updated_at: string;
+}
+
+export interface CreateTicketReq {
+  subject: string
+  priority: TicketPriority
+  order_id?: number
+  message: string
 }
 
 export interface CreateTicketMessage {

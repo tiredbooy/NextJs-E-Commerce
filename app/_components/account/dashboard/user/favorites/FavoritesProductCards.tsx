@@ -23,7 +23,7 @@ export default function FavoritesProductCards({ favorites }: Props) {
               : "flex flex-col gap-4"
           }
         >
-          {favorites.map((f) => (
+          {favorites?.map((f) => (
             <FavoriteProductCard
               key={f.product.id}
               favoriteId={f.id}

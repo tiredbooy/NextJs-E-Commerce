@@ -19,12 +19,6 @@ interface ProductImage {
   name: string;
 }
 
-// interface ProductFormData {
-//   id: number;
-//   title: string;
-//   images: ProductImage[] | ImageType[];
-// }
-
 interface Props {
   data: ProductFormData;
   onChange: (updates: Partial<ProductFormData>) => void;
@@ -260,7 +254,7 @@ export function ProductImages({ data, onChange }: Props) {
                       placeholder="Alt text"
                       value={image.name}
                       onChange={(e) =>
-                        handleAltChange(image.id, e.target.value)
+                        handleAltChange(Number(image.id), e.target.value)
                       }
                       className="text-xs h-7"
                     />

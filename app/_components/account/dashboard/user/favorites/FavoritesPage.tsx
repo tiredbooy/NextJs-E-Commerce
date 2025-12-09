@@ -4,8 +4,8 @@ import { getUserFavorites } from "@/app/_lib/services/userService";
 import FavoritesProductCards from "./FavoritesProductCards";
 
 async function FavoritesPage() {
-  const favorites = await getUserFavorites()
-  console.log('favorites:', favorites);
+  const favorites = await getUserFavorites() || []
+  
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       {/* Header */}
@@ -19,12 +19,12 @@ async function FavoritesPage() {
           </h1>
         </div>
         <p className="text-muted-foreground">
-          You have {favorites.length} favorite{" "}
-          {favorites.length !== 1 ? "items" : "item"}
+          You have {favorites?.length} favorite{" "}
+          {favorites?.length !== 1 ? "items" : "item"}
         </p>
       </div>
 
-      {favorites.length === 0 ? (
+      {favorites?.length === 0 ? (
         <EmptyFavorites />
       ) : (
         <FavoritesProductCards favorites={favorites} />

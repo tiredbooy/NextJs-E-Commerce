@@ -1,5 +1,6 @@
 import {
   CreateTicketMessage,
+  CreateTicketReq,
   QueryParams,
   Ticket,
   TicketStatus,
@@ -47,6 +48,15 @@ export async function getTicketDetail(id: number): Promise<Ticket> {
   });
 
   return response;
+}
+
+export async function createTicketReq(data: CreateTicketReq) {
+  const response = await authenticatedRequest({
+    method: "POST",
+    url: "/api/tickets/",
+    data
+  })
+  return response
 }
 
 export async function addMessageReq(id: number, data: CreateTicketMessage) {

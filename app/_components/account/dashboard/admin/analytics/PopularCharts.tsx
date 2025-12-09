@@ -28,7 +28,13 @@ export default async function PopularChartsSection({}: Props) {
               </p>
             </div>
           </div>
-          <PopularChart data={popularProducts} />
+          {popularProducts && popularProducts.length > 1 ? (
+            <PopularChart data={popularProducts} />
+          ) : (
+            <div className="bg-destructive font-semibold px-4 py-2 rounded-md text-background text-center">
+              There Is No Data At this time
+            </div>
+          )}
         </div>
       </div>
       <div className="rounded-md border bg-card">
@@ -43,7 +49,13 @@ export default async function PopularChartsSection({}: Props) {
               </p>
             </div>
           </div>
-          <PopularChart data={popularCategories} />
+          {popularCategories && popularCategories.length > 1 ? (
+            <PopularChart data={popularCategories} />
+          ) : (
+            <div className="bg-destructive font-semibold px-4 py-2 rounded-md text-background text-center">
+              There Is No Data At this time
+            </div>
+          )}
         </div>
       </div>
     </>
