@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { CiRouter } from "react-icons/ci";
 import { RiCoupon2Line } from "react-icons/ri";
 import {
@@ -30,6 +30,9 @@ import {
   HiOutlineUsers,
 } from "react-icons/hi";
 import HeaderLogo from "../header/Logo";
+import { useTransition } from "react";
+import { logout } from "@/app/_lib/actions/authAction";
+import { toast } from "sonner";
 
 export const sideBarItems: SideBar<UserRole> = {
   admin: [
@@ -65,20 +68,26 @@ const SideNavigation: React.FC<Props> = ({ role = "user", onLogout }) => {
   const items = sideBarItems[role];
   const pathname = usePathname();
 
+  const [isPending, startTransition] = useTransition();
+
+  const handleLogout = () => {
+    startTransition(async () => {
+      const result = await logout();
+      if (result.success) {
+        toast.success(result.message);
+        redirect("/auth/login");
+      } else {
+        toast.error(result.message);
+      }
+    });
+  };
+
   // Check if current path matches the item href
   const isActive = (href: string) => {
     if (href === "/admin" || href === "/account") {
       return pathname === href;
     }
     return pathname?.startsWith(href);
-  };
-
-  const handleLogout = () => {
-    if (onLogout) {
-      onLogout();
-    } else {
-      window.location.href = "/logout";
-    }
   };
 
   return (

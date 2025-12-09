@@ -24,7 +24,7 @@ const HeaderNavigation: React.FC<Props> = ({ userName = "", userAvatar }) => {
           {/* User Profile */}
           <div className="flex items-center gap-3">
             <Avatar className="h-9 w-9">
-              <AvatarImage src={userAvatar} alt={userName} />
+              <AvatarImage src={userAvatar} alt={userName} className="object-cover" />
               <AvatarFallback className="text-xs font-medium">
                 {getInitials(userName)}
               </AvatarFallback>

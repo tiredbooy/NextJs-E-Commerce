@@ -9,6 +9,7 @@ import { useState, useTransition } from "react";
 import { MdAdd, MdDelete, MdImage } from "react-icons/md";
 import { toast } from "sonner";
 import { ProductFormData } from "./ProductForm";
+import { uploadMultipileImage } from "@/app/_lib/actions/imageAction";
 
 const API_URL = process.env.API_URL || "http://localhost:8080/api";
 
@@ -55,28 +56,25 @@ export function ProductImages({ data, onChange }: Props) {
 
       const startTime = Date.now();
 
-      const res = await fetch(`${API_URL}/uploads`, {
-        method: "POST",
-        body: formData,
+      startTransition(async () => {
+        const response = await uploadMultipileImage(formData);
+        if (response.success) {
+          toast.success(response.message);
+          const newImages: ProductImage[] = response.results.urls.map(
+            (result: any, index: number) => ({
+              url: result.url,
+              name: result.original_name || "",
+            })
+          );
+
+          onChange({ images: [...data.images, ...newImages] });
+        } else {
+          toast.error(response.message);
+        }
       });
 
       const uploadTime = ((Date.now() - startTime) / 1000).toFixed(1);
 
-      if (!res.ok) {
-        const errorText = await res.text();
-        throw new Error(`Upload failed (${res.status}): ${errorText}`);
-      }
-
-      const results = await res.json();
-
-      const newImages: ProductImage[] = results.urls.map(
-        (result: any, index: number) => ({
-          url: result.url,
-          name: result.original_name || "",
-        })
-      );
-
-      onChange({ images: [...data.images, ...newImages] });
       setUploadProgress(
         `Successfully uploaded ${files.length} image${
           files.length > 1 ? "s" : ""
@@ -105,7 +103,7 @@ export function ProductImages({ data, onChange }: Props) {
         try {
           const res = await deleteProductImage(
             Number(filteredOldImages.id),
-            productId
+            Number(productId)
           );
           console.log("res:", res);
           toast.success("image deleted successfully!");

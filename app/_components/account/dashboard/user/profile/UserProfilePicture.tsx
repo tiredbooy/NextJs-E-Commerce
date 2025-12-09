@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { motion } from "framer-motion";
 import { FiCamera, FiUser } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
@@ -7,12 +7,16 @@ import { IoCalendar, IoLocationSharp, IoMail } from "react-icons/io5";
 import Image from "next/image";
 import Link from "next/link";
 import { User } from "@/app/_lib/types/user_types";
+import { uploadProfileImage } from "@/app/_lib/actions/imageAction";
+import { updateUserProfile } from "@/app/_lib/actions/userActions";
+import { toast } from "sonner";
 
 interface Props {
-  profileData: User
+  profileData: User;
 }
 
 function UserProfilePicture({ profileData }: Props) {
+  const [isUploading, startUploadImage] = useTransition();
   const [isHovered, setIsHovered] = useState(false);
   const [profileImage, setProfileImage] = useState("");
 
@@ -24,13 +28,24 @@ function UserProfilePicture({ profileData }: Props) {
 
   const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+    const formData = new FormData();
+    formData.append("image", file);
+
+    startUploadImage(async () => {
+      const result = await uploadProfileImage(formData);
+      setProfileImage(result.imageUrl);
+
+      if (result.success) {
+        const updateProfileResult = await updateUserProfile({
+          image: result.imageUrl,
+        });
+        if (updateProfileResult.success) {
+          toast.success("Profile Updated");
+        } else {
+          toast.error("Failed to Update Profile");
+        }
+      }
+    });
   };
 
   return (
@@ -45,11 +60,11 @@ function UserProfilePicture({ profileData }: Props) {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-         
           {profileImage ? (
             <Image
               fill
               src={profileImage}
+              unoptimized={profileImage.startsWith("http://localhost")}
               alt="Profile"
               className="w-full h-full object-cover"
             />
