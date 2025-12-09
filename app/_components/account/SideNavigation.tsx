@@ -1,6 +1,6 @@
 "use client";
 
-import { dashboardRole, SideBar } from "@/app/_lib/types";
+import { UserRole, SideBar } from "@/app/_lib/types";
 import {
   Sidebar,
   SidebarContent,
@@ -31,7 +31,7 @@ import {
 } from "react-icons/hi";
 import HeaderLogo from "../header/Logo";
 
-export const sideBarItems: SideBar<dashboardRole> = {
+export const sideBarItems: SideBar<UserRole> = {
   admin: [
     { title: "Dashboard", href: "/admin", icon: HiOutlineHome },
     { title: "Orders", href: "/admin/orders", icon: HiOutlineShoppingBag },
@@ -53,12 +53,11 @@ export const sideBarItems: SideBar<dashboardRole> = {
       icon: HiOutlineHeart,
     },
     { title: "Support", href: "/account/tickets", icon: HiOutlineChatAlt2 },
-    { title: "Settings", href: "/account/settings", icon: HiOutlineCog },
   ],
 };
 
 interface Props {
-  role: dashboardRole;
+  role: UserRole;
   onLogout?: () => void;
 }
 

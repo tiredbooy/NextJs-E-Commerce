@@ -173,10 +173,10 @@ export function TableRowSkeleton() {
   return (
     <TableRow className="animate-pulse">
       <TableCell>
-        <Skeleton className="h-4 w-12" />
+        <Skeleton className="h-4 w-8" />
       </TableCell>
       <TableCell>
-        <Skeleton className="h-8 w-8 rounded-full" />
+        <Skeleton className="h-4 w-12" />
       </TableCell>
       <TableCell>
         <Skeleton className="h-4 w-32" />
@@ -189,6 +189,9 @@ export function TableRowSkeleton() {
       </TableCell>
       <TableCell>
         <Skeleton className="h-4 w-12" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="h-4 w-20" />
       </TableCell>
       <TableCell>
         <Skeleton className="h-4 w-20" />

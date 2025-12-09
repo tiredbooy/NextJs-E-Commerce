@@ -1,17 +1,21 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MdMessage } from "react-icons/md";
-import TicketsTable from "./TicketsTable";
+import {
+  TableRowSkeleton
+} from "@/app/_components/reusable/SkeletonCard";
 import ToggleGroupFilter, {
   ToggleOption,
 } from "@/app/_components/reusable/ToggleGroup";
 import { UserRole } from "@/app/_lib/types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Suspense } from "react";
+import { MdMessage } from "react-icons/md";
+import TicketsTable from "./TicketsTable";
 
 interface Props {
-  status: string
-  role: UserRole
+  status: string;
+  role: UserRole;
 }
 
-export default function Tickets({status, role}: Props) {
+export default function Tickets({ status, role }: Props) {
   const statusOptions: ToggleOption[] = [
     { id: "all", title: "All", value: "all" },
     { id: "pending", title: "Pending", value: "pending" },
@@ -41,7 +45,13 @@ export default function Tickets({status, role}: Props) {
         />
       </CardHeader>
       <CardContent>
-        <TicketsTable status={status} role={role} />
+        <Suspense
+          fallback={Array.from({ length: 3 }).map((_, i) => (
+            <TableRowSkeleton key={i + 1} />
+          ))}
+        >
+          <TicketsTable status={status} role={role} />
+        </Suspense>
       </CardContent>
     </Card>
   );
