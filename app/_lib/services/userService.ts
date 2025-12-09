@@ -87,6 +87,19 @@ export async function getUserFavorites(): Promise<Favorites[]> {
   }
 }
 
+export async function removeFromFavoritesReq(id: number) {
+   try {
+    const result = await authenticatedRequest({
+      method: "DELETE",
+      url: `/api/favorites/${id}`,
+    });
+
+    return await result;
+  } catch (e: any) {
+    throw new Error(e.message || "Something went worng!");
+  }
+}
+
 export async function removeCartItemReq(id: number) {
   try {
     const result = await authenticatedRequest({

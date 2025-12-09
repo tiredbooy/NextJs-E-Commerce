@@ -4,6 +4,7 @@ import {
   addCartItemReq,
   addProductToFavoriteReq,
   removeCartItemReq,
+  removeFromFavoritesReq,
   updateAddressReq,
   updateQuantityReq,
   updateUserReq,
@@ -85,6 +86,13 @@ export async function updateQuantity(id: number, quantity: number) {
   }
 }
 
-// export async function getUserFavorites() {
-  
-// }
+export async function removeFavoriteProduct(id: number) {
+  try {
+    const result = await removeFromFavoritesReq(id)
+    revalidatePath("/account/favorites")
+    return {success:  true, message: "Product Removed From Favorites"}
+  }
+  catch(e: any) {
+    return {success : false, message: e.message || "Failed To Remove Product From Favorites"}
+  }
+}

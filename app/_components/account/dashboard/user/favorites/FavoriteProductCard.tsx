@@ -1,3 +1,8 @@
+import {
+  addCartItem,
+  removeFavoriteProduct,
+} from "@/app/_lib/actions/userActions";
+import { CartItemReq } from "@/app/_lib/types";
 import { Product } from "@/app/_lib/types/product_types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,14 +13,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { FiHeart, FiShoppingCart, FiTrash2 } from "react-icons/fi";
+import { toast } from "sonner";
 
 interface Props {
   product: Product;
   favoritedAt: string;
+  favoriteId: number;
   viewMode: "grid" | "list";
 }
 
@@ -23,13 +31,44 @@ export default function FavoriteProductCard({
   product,
   favoritedAt,
   viewMode,
+  favoriteId,
 }: Props) {
-  const [isRemoving, setIsRemoving] = useState(false);
+  // const [isRemoving, setIsRemoving] = useState(false);
+  const [isRemoving, startRemovingTransition] = useTransition();
+  const [isPending, startAddingToCartTransition] = useTransition();
   const [isHovered, setIsHovered] = useState(false);
   const outOfStock = product.stock === 0;
 
   const handleRemove = () => {
-    setIsRemoving(true);
+    startRemovingTransition(async () => {
+      const result = await removeFavoriteProduct(favoriteId);
+      result.success
+        ? toast.success(result.message)
+        : toast.error(result.message);
+    });
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const cartItem: CartItemReq = {
+      product_id: product.id,
+      quantity: 1,
+      size_id: 1,
+      color_id: 1,
+    };
+
+    startAddingToCartTransition(async () => {
+      try {
+        const res = await addCartItem(cartItem);
+        if (res.success) {
+          toast.success(res.message);
+        }
+      } catch (e: any) {
+        console.log("e.message:", e.message);
+      }
+    });
   };
 
   const discountPercentage = product?.discount_price
@@ -44,7 +83,7 @@ export default function FavoriteProductCard({
     <motion.div
       layout
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: isRemoving ? 0 : 1, y: isRemoving ? -20 : 0 }}
+      animate={{ opacity: isRemoving ? 0 : 1, y: isRemoving ? -40 : 0 }}
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       className="h-full cursor-pointer"
@@ -52,13 +91,13 @@ export default function FavoriteProductCard({
       onHoverEnd={() => setIsHovered(false)}
     >
       <Card
-        className={`group relative overflow-hidden border bg-card/50 backdrop-blur-sm hover:bg-gradient-to-br hover:from-background hover:to-card hover:border-primary/20 transition-all duration-500 h-full ${
+        className={`group relative py-4 px-2 overflow-hidden border bg-card/50 backdrop-blur-sm hover:bg-gradient-to-br hover:from-background hover:to-card hover:border-primary/20 transition-all duration-500 h-full ${
           isGridView ? "flex flex-col" : "flex flex-col sm:flex-row"
         }`}
       >
         {/* Discount Badge */}
         {discountPercentage > 0 && (
-          <Badge className="absolute top-2 left-2 sm:top-3 sm:left-3 z-20 bg-gradient-to-r from-red-500 to-pink-500 text-background border-0 shadow-lg text-xs font-bold px-2.5 py-1 rotate-0">
+          <Badge className="absolute top-2 left-2 sm:top-3 sm:left-3 z-20 bg-gradient-to-r bg-sale-badge text-background border-0 shadow-lg text-xs font-bold px-2.5 py-1 rotate-0">
             -{discountPercentage}%
           </Badge>
         )}
@@ -76,9 +115,9 @@ export default function FavoriteProductCard({
 
         {/* Product Image */}
         <div
-          className={`relative bg-gradient-to-br from-muted to-muted/50 overflow-hidden ${
+          className={`relative bg-gradient-to-br from-muted to-muted/50 rounded-md overflow-hidden ${
             isGridView
-              ? "aspect-square w-full"
+              ? "aspect-square w-full h-52"
               : "w-full sm:w-56 sm:h-56 aspect-square sm:aspect-auto"
           }`}
         >
@@ -161,11 +200,18 @@ export default function FavoriteProductCard({
           <CardFooter className="gap-2.5 p-0 mt-auto">
             <Button
               disabled={outOfStock}
+              onClick={handleAddToCart}
               className="flex-1 gap-2 bg-gradient-to-br from-primary via-primary-dark to-primary-dark/80 shadow-md hover:shadow-lg transition-all duration-300 font-medium"
               size="sm"
             >
-              <FiShoppingCart className="w-4 h-4" />
-              Add to Cart
+              {isPending ? (
+                <Spinner />
+              ) : (
+                <>
+                  <FiShoppingCart className="w-4 h-4" />
+                  <span>Add to Cart</span>
+                </>
+              )}
             </Button>
             <Button
               variant="outline"
