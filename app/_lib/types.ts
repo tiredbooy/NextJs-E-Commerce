@@ -106,6 +106,8 @@ export interface QueryParams {
   user?: number;
   from?: string;
   to?: string;
+  sale?: string
+  isFeatured?: string
   search?: string;
   sortBy?: string;
   orderBy?: string;

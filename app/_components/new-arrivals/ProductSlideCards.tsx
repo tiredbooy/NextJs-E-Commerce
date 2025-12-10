@@ -1,5 +1,5 @@
 "use client";
-import { Product } from "@/app/_lib/types";
+import { Product } from "@/app/_lib/types/product_types";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,6 +10,8 @@ interface Props {
 }
 
 const ProductSlideCards: React.FC<Props> = ({ product, usage }) => {
+
+  const image = product?.images[0]
   return (
     <Link href={`/products/${product.id}`}>
       <article
@@ -34,13 +36,14 @@ const ProductSlideCards: React.FC<Props> = ({ product, usage }) => {
         <div className="aspect-square h-48 relative rounded-xl">
           <Image
             fill
-            src={product?.images![0].url}
+            src={image?.url || ""}
             alt={product.title as string}
+            unoptimized={image?.url?.startsWith("http://localhost")}
             className="object-cover rounded-md"
           />
         </div>
         <h2 className="font-semibold text-foreground">{product.title}</h2>
-        <p className="text-muted-foreground">{product.description}</p>
+        <p className="text-muted-foreground line-clamp-2 leading-tight">{product.description}</p>
         {product.discount_price && product.discount_price > 0 ? (
           <div className="flex flex-row gap-5 items-center">
             <p className="text-price font-semibold text-md">

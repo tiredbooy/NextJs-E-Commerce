@@ -34,7 +34,7 @@ export default function Signup() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-1/3"
+
       >
         <Card>
           <CardHeader className="space-y-2 text-center">
@@ -151,7 +151,7 @@ export default function Signup() {
                 </div>
               </div>
 
-              <div className="flex items-start space-x-2">
+              <div className="flex items-start space-x-2 text-xs md:text-sm">
                 <input
                   type="checkbox"
                   id="terms"
@@ -162,7 +162,7 @@ export default function Signup() {
                 />
                 <Label
                   htmlFor="terms"
-                  className="text-sm font-normal cursor-pointer leading-tight"
+                  className="text-xs font-normal cursor-pointer leading-tight"
                 >
                   I agree to the{" "}
                   <button

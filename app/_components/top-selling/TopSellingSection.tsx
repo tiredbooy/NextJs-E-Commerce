@@ -1,11 +1,14 @@
 "use client";
-import ProductSlideCards from "../new-arrivals/ProductSlideCards";
-import SectionHeader from "../new-arrivals/SectionHeader";
 import { FaFire } from "react-icons/fa";
-import { products } from "../new-arrivals/NewArrivals";
 import SwiperProducts from "../new-arrivals/NewArrivalProducts";
+import SectionHeader from "../new-arrivals/SectionHeader";
+import { Product } from "@/app/_lib/types/product_types";
 
-function TopSellingSection() {
+interface Props {
+  products: Product[];
+}
+
+function TopSellingSection({ products }: Props) {
   return (
     <section className="w-full max-w-[100vw] h-screen bg-muted flex flex-col py-8 md:py-20 px-4 md:px-8 items-center">
       <SectionHeader

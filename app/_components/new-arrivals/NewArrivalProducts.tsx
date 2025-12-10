@@ -1,22 +1,15 @@
 "use client";
-import { Product } from "@/app/_lib/types";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import ProductSlideCards from "./ProductSlideCards";
+import { Product } from "@/app/_lib/types/product_types";
 
 interface Props {
   products: Product[];
-  usage? : string
+  usage? : "New" | "Sale" | "Featured"  
 }
 
 const SwiperProducts: React.FC<Props> = ({ products, usage }) => {
-  // Duplicate products multiple times to ensure smooth infinite loop
-  const duplicatedProducts = [
-    ...products,
-    ...products,
-    ...products,
-    ...products,
-  ];
 
   return (
     <Swiper
@@ -72,9 +65,9 @@ const SwiperProducts: React.FC<Props> = ({ products, usage }) => {
         },
       }}
     >
-      {duplicatedProducts.map((p, index) => (
+      {products?.map((p, i) => (
         <SwiperSlide
-          key={`${p.id || index}-${index}`}
+          key={`${p.id || i}-${i}`}
           className="flex justify-center items-center"
         >
           <ProductSlideCards product={p} usage={usage} />

@@ -6,11 +6,13 @@ import { authenticatedRequest } from "./authService";
 
 const BASE_URL = "http://localhost:8080";
 
-type ProductQueryParam = Pick<
+export type ProductQueryParam = Pick<
   QueryParams,
   | "limit"
   | "page"
   | "category"
+  | "isFeatured"
+  | "sale"
   | "brand"
   | "search"
   | "minPrice"

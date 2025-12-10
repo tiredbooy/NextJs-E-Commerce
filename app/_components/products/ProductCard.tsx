@@ -61,7 +61,6 @@ const ProductCard: React.FC<Props> = ({ product, usage }) => {
             src={image?.url ?? ""}
             alt={image?.name || title}
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            quality={85}
             unoptimized={image?.url?.startsWith("http://localhost")}
             className="object-cover rounded-md group-hover:scale-105 transition-transform duration-300"
           />

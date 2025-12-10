@@ -12,7 +12,9 @@ import {
   deleteProductImageReq,
   deleteProductReq,
   editProductReq,
+  getProducts,
   getProductSingleImage,
+  ProductQueryParam,
 } from "../services/productsService";
 import { Image } from "../types/product_types";
 
@@ -98,6 +100,11 @@ export async function createProductImages(images: Image[]) {
   } catch (e) {
     return { success: false, message: "Failed to save images" };
   }
+}
+
+export async function getProductsAction(params: ProductQueryParam = {}) {
+  const products = await getProducts(params);
+  return products;
 }
 
 export async function createBrand(title: string) {
@@ -204,10 +211,10 @@ export async function deleteProductImage(id: number, productId: number) {
 export async function getProductImage(id: number): Promise<Image> {
   try {
     const result = await getProductSingleImage(id);
-    if(!result) throw new Error("Failed to Get the product Image")
+    if (!result) throw new Error("Failed to Get the product Image");
 
-    return result
-  }catch(e: any ) {
-    throw new Error(e.message || "Something went wrong!")
+    return result;
+  } catch (e: any) {
+    throw new Error(e.message || "Something went wrong!");
   }
 }

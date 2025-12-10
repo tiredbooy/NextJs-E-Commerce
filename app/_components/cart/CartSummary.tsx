@@ -63,8 +63,6 @@ export function CartSummary({ items }: Params) {
     startTransition(async () => {
       const result = await getCoupon(promoCode.trim());
       const couponResult = result?.result
-      console.log('couponResult:', couponResult);
-
 
       if(Number(couponResult?.min_purchase) > subtotal) {
         setPromoError(`Coupon Minimum Purchase amount is $${couponResult?.min_purchase}`)
