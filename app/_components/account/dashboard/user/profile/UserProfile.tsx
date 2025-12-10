@@ -1,9 +1,8 @@
 import { getCurrentUser } from "@/app/_lib/services/authService";
+import { getUserAddress } from "@/app/_lib/services/userService";
 import { Separator } from "@/components/ui/separator";
 import UserProfileForm from "./UserProfileForm";
 import UserProfilePicture from "./UserProfilePicture";
-import { User } from "@/app/_lib/types/user_types";
-import { getUserAddress } from "@/app/_lib/services/userService";
 
 async function UserProfile({}) {
   const [profileData, address] = await Promise.all([

@@ -74,7 +74,7 @@ export async function getCouponReq(code: string): Promise<Coupon> {
     method: "GET",
     url: `/api/coupons/${code}`,
   });
-  return respone;
+  return respone.coupon;
 }
 
 export async function createCouponReq(req: CreateCouponReq) {

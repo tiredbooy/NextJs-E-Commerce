@@ -62,17 +62,34 @@ export function CartSummary({ items }: Params) {
 
     startTransition(async () => {
       const result = await getCoupon(promoCode.trim());
+      const couponResult = result?.result
+      console.log('couponResult:', couponResult);
 
-      if (!result.success) {
-        setPromoError(result?.message);
-        setIsApplyingPromo(false);
-        return; // Exit early on error
+
+      if(Number(couponResult?.min_purchase) > subtotal) {
+        setPromoError(`Coupon Minimum Purchase amount is $${couponResult?.min_purchase}`)
+        return
+      }
+
+      if(Number(couponResult?.max_purchase) < subtotal) {
+        setPromoError(`Coupon Maximum Purchase amount is $${couponResult?.max_purchase}`)
+        return
+      }
+
+      if(couponResult?.current_uses === couponResult?.max_uses) {
+        setPromoError(`Coupon Limit has been reached you can no longer use this coupon`)
+        return
+      }
+
+      if(!couponResult?.is_active) {
+        setPromoError(`Coupon Is Not Active`)
+        return
       }
 
       setAppliedPromo({
-        code: result.result?.code || promoCode.toUpperCase(),
-        discount: result.result?.discount_percentage
-          ? subtotal * (result.result.discount_percentage / 100)
+        code: couponResult?.code || promoCode.toUpperCase(),
+        discount: couponResult?.discount_percentage
+          ? subtotal * (couponResult.discount_percentage / 100)
           : 0,
       });
 

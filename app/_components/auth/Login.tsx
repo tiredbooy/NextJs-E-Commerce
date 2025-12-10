@@ -39,7 +39,7 @@ export default function Login() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-1/3"
+        className=""
       >
         <Card>
           <CardHeader className="space-y-2 text-center">
