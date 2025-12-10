@@ -11,23 +11,6 @@ import {
   YAxis,
 } from "recharts";
 
-/*  SAMLE DATA
-export const revenueOverviewData: RevenueData[] = [
-  { month: "Jan", sales: 23, revenue: 18000 },
-  { month: "Feb", sales: 28, revenue: 22000 },
-  { month: "Mar", sales: 31, revenue: 25000 },
-  { month: "Apr", sales: 27, revenue: 21000 },
-  { month: "May", sales: 35, revenue: 29000 },
-  { month: "Jun", sales: 38, revenue: 32000 },
-  { month: "Jul", sales: 41, revenue: 35000 },
-  { month: "Aug", sales: 39, revenue: 33000 },
-  { month: "Sep", sales: 44, revenue: 37000 },
-  { month: "Oct", sales: 46, revenue: 40000 },
-  { month: "Nov", sales: 48, revenue: 42000 },
-  { month: "Dec", sales: 50, revenue: 45000 },
-];
-*/
-
 interface Props {
   // future props here if needed
   data: RevenueData[];

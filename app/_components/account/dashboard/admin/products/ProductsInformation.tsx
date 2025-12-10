@@ -39,7 +39,7 @@ export default function ProductsInformation({
   ];
 
   return (
-    <div className="flex flex-wrap md:flex-row gap-3 items-center ">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-center">
       {information.map((d, i) => (
         <motion.div
           key={i}
@@ -47,17 +47,18 @@ export default function ProductsInformation({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.08, duration: 0.4 }}
           whileHover={{ y: -3, scale: 1.01 }}
+          className="w-full"
         >
           <Card
             className={`
-              relative overflow-hidden w-fit px-4 py-3 rounded-lg bg-card border-border shadow-md hover:shadow-md transition-all duration-300
+              relative overflow-hidden w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-card border-border shadow-md hover:shadow-md transition-all duration-300
             `}
           >
-            <div className="relative z-10 flex flex-col gap-2">
+            <div className="relative z-10 flex flex-col gap-1.5 sm:gap-2">
               <div className="flex flex-row gap-2 items-center">
                 <div
                   className={`
-                    ${d.colorClass} text-base
+                    ${d.colorClass} text-sm sm:text-base
                     p-1.5 rounded-md
                     ${d.bgClass}
                     border border-current/20
@@ -65,11 +66,11 @@ export default function ProductsInformation({
                 >
                   <d.icon />
                 </div>
-                <h4 className="text-xs font-medium text-foreground/60">
+                <h4 className="text-xs sm:text-sm font-medium text-foreground/60">
                   {d.title}
                 </h4>
               </div>
-              <span className="text-2xl font-bold text-foreground pl-1">
+              <span className="text-xl sm:text-2xl font-bold text-foreground pl-0.5 sm:pl-1">
                 {d.value}
               </span>
             </div>

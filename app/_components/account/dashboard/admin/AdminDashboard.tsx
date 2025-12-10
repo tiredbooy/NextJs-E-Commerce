@@ -59,7 +59,7 @@ const AdminDashboard: React.FC<Props> = ({duration}) => {
         </Suspense>
       </div>
       {/* Chart Section - Full Width */}
-      <div className="grid gap-4">
+      <div className="gap-4">
         <Suspense
           fallback={<SkeletonGrid columns={1} count={1} variant="stats" />}
         >

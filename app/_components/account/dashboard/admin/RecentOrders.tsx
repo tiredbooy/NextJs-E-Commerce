@@ -64,7 +64,7 @@ const RecentOrders: React.FC<Props> = async ({}) => {
                 </TableCell>
                 <TableCell>{order.customer.phone}</TableCell>
                 <TableCell><StatusBadge status={order.status} /></TableCell>
-                <TableCell>${order.total_price}</TableCell>
+                <TableCell>${Number(order.total_price).toLocaleString()}</TableCell>
                 <TableCell>
                   {formatDate(order.created_at)} -{" "}
                   {new Date(order.created_at).toLocaleTimeString()}
