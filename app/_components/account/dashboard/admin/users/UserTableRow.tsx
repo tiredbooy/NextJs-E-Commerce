@@ -13,6 +13,7 @@ import {
   HiTrash,
   HiUser,
 } from "react-icons/hi";
+import { toast } from "sonner";
 
 interface Props {
   // props here
@@ -56,21 +57,10 @@ export default function UserTableRow({ user }: Props) {
       onClick: () => console.log("Clicked"),
       icon: <HiEye />,
     },
-    {
-      label: "Edit",
-      onClick: () => console.log("Clicked"),
-      icon: <HiPencil />,
-    },
     { type: "separator" as const },
     {
-      label: "Suspend",
-      onClick: () => console.log("Clicked"),
-      danger: true,
-      icon: <HiBan />,
-    },
-    {
       label: "Delete Product",
-      onClick: () => console.log("Clicked"),
+      onClick: () => toast.info("You are Not Allow To Delete User"),
       danger: true,
       icon: <HiTrash />,
     },
@@ -85,6 +75,7 @@ export default function UserTableRow({ user }: Props) {
             <Image
               src={userImage}
               alt={fullname}
+              unoptimized={image?.startsWith("http://localhost")}
               fill
               className="object-cover rounded-full"
             />

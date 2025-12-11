@@ -1,22 +1,13 @@
-import { SearchParams } from "next/dist/server/request/search-params";
-import FilterBar from "@/app/_components/products/filter/FilterBar";
+import SortBy from "@/app/_components/products/filter/SortBy";
+import ProductFilters from "@/app/_components/products/ProductFilters";
 import ProductsCards from "@/app/_components/products/ProductsCards";
 import ProductsHeader from "@/app/_components/products/ProductsHeader";
-import SortBy from "@/app/_components/products/filter/SortBy";
-import {
-  getBrands,
-  getCategories,
-  getColors,
-  getProducts,
-  getSizes,
-} from "@/app/_lib/services/productsService";
-import { filtersToQueryString } from "@/app/_lib/utils/utils";
-import { Suspense } from "react";
 import {
   FilterBarSkeletonMinimal,
   SkeletonGrid,
 } from "@/app/_components/reusable/SkeletonCard";
-import ProductFilters from "@/app/_components/products/ProductFilters";
+import { SearchParams } from "next/dist/server/request/search-params";
+import { Suspense } from "react";
 
 interface Props {
   searchParams: SearchParams;
@@ -25,7 +16,8 @@ interface Props {
 const page: React.FC<Props> = async ({ searchParams }) => {
   const params = await searchParams;
   const currentPage =
-    typeof params.search === "string" ? Number(params.page) : 1;
+    typeof params.page === "string" ? Number(params.page) : 1;
+
   const search = typeof params.search === "string" ? params.search : "";
 
   const categoryParam =
@@ -79,7 +71,7 @@ const page: React.FC<Props> = async ({ searchParams }) => {
 
   const queryObj = {
     limit: 10,
-    page: Number(currentPage) || 0,
+    page: Number(currentPage) || 1,
     category: categoryParam,
     brand: brandParam,
     search,

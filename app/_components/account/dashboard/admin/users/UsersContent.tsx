@@ -3,15 +3,19 @@ import UsersTable from "./UsersTable";
 import Pagination from "@/app/_components/reusable/Pagination";
 
 interface Props {
-  // props here
-  page?: number;
+  queries: {
+    page: number,
+    sortBy: string,
+    orderBy: string
+    search: string
+    joined: string
+  }
 }
 
-export default async function UsersContent({ page }: Props) {
-  const currentPage = page ? page : 1;
-  const usersData = await getUsers({ limit: 10, page: currentPage });
+export default async function UsersContent({ queries }: Props) {
+  const usersData = await getUsers(queries);
+  const currentPage = queries?.page || 1
   const totalPages = usersData?.total_pages;
-
   return (
     <>
       <UsersTable users={usersData.users || []} />

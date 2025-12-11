@@ -1,33 +1,31 @@
 "use client";
-import { useState, useRef, useEffect, useCallback } from "react";
-import { Check, ChevronDown, ArrowUpDown } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useClickOutside, useInitialSort } from "@/app/_lib/hooks/useSort";
+import { updateURLParams } from "@/app/_lib/utils/sortHelpers";
+import { ArrowUpDown, Check, ChevronDown } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useCallback, useRef, useState } from "react";
+import { DropdownMenu } from "../../reusable/SortDropdownMenu";
 
-// Types
-export type SortOption =
-  | "price-asc"
-  | "price-desc"
-  | "name-asc"
-  | "name-desc"
-  | "newest"
-  | "rating"
-  | "popular";
-
-interface SortConfig {
-  value: SortOption;
+export interface SortOption<T extends string = string> {
+  value: T;
   label: string;
   icon?: string;
 }
 
-interface Props {
-  defaultSort?: SortOption;
-  onSortChange?: (sortValue: SortOption) => void;
+export interface SortByProps<T extends string = string> {
+  options?: SortOption<T>[];
+  defaultSort?: T;
+  onSortChange?: (sortValue: T) => void;
   className?: string;
   compact?: boolean;
+  syncWithURL?: boolean;
+  urlParamName?: string;
+  showLabel?: boolean;
+  labelText?: string;
 }
 
-// Sort options configuration
-const SORT_OPTIONS: SortConfig[] = [
+// Default sort for products
+export const DEFAULT_PRODUCT_SORT_OPTIONS: SortOption[] = [
   { value: "newest", label: "Newest First" },
   { value: "popular", label: "Most Popular" },
   { value: "price-asc", label: "Price: Low to High" },
@@ -37,94 +35,57 @@ const SORT_OPTIONS: SortConfig[] = [
   { value: "rating", label: "Highest Rated" },
 ];
 
-// Get sort from URL
-const getSortFromURL = (): SortOption | null => {
-  const params = useSearchParams();
-  const sortParam = params.get("sortBy")
-
-  if (sortParam && SORT_OPTIONS.some((opt) => opt.value === sortParam)) {
-    return sortParam as SortOption;
-  }
-
-  return null;
-};
-
-const SortBy: React.FC<Props> = ({
-  defaultSort = "newest",
+function SortBy<T extends string = string>({
+  options = DEFAULT_PRODUCT_SORT_OPTIONS as SortOption<T>[],
+  defaultSort = "newest" as T,
   onSortChange,
   className = "",
   compact = false,
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedSort, setSelectedSort] = useState<SortOption>(
-    getSortFromURL() || defaultSort
-  );
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  syncWithURL = true,
+  urlParamName = "sortBy",
+  showLabel = true,
+  labelText = "Sort by:",
+}: SortByProps<T>) {
+
   const router = useRouter();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const updateURLWithSort = (sortValue: SortOption) => {
-    const params = new URLSearchParams(window?.location?.search);
-    const sort = sortValue.split("-");
-    const sortBy = sort[0];
-    const orderBy = sort[1];
+  // Get initial sort from URL or default
+  const initialSort = useInitialSort(
+    options,
+    defaultSort,
+    urlParamName,
+    syncWithURL
+  );
+  const [selectedSort, setSelectedSort] = useState<T>(initialSort);
 
-    if (sortValue === "newest") {
-      params.delete("sortBy");
-    } else {
-      params.set("sortBy", sortBy);
-      sort.length > 1
-        ? params.set("orderBy", orderBy)
-        : params.delete("orderBy");
-    }
-
-    const newURL = `${location.pathname}${
-      params.toString() ? "?" + params.toString() : ""
-    }`;
-    // history.pushState({}, "", newURL);
-    router.push(newURL, {scroll : false})
-  };
-
-  // Get current sort label
   const currentSortLabel =
-    SORT_OPTIONS.find((opt) => opt.value === selectedSort)?.label || "Sort By";
+    options.find((opt) => opt.value === selectedSort)?.label || "Sort By";
 
-  // Handle sort selection
   const handleSortChange = useCallback(
-    (sortValue: SortOption) => {
+    (sortValue: T) => {
       setSelectedSort(sortValue);
       setIsOpen(false);
-      updateURLWithSort(sortValue);
+
+      // Update URL if sync is enabled
+      if (syncWithURL) {
+        updateURLParams(sortValue, defaultSort, urlParamName, router);
+      }
+
+      // Call external handler
       onSortChange?.(sortValue);
     },
-    [onSortChange]
+    [syncWithURL, defaultSort, urlParamName, router, onSortChange]
   );
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen]);
-
-  // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") {
       setIsOpen(false);
     }
   };
+
+  useClickOutside(dropdownRef, () => setIsOpen(false), isOpen);
 
   if (compact) {
     return (
@@ -146,24 +107,11 @@ const SortBy: React.FC<Props> = ({
         </button>
 
         {isOpen && (
-          <div className="absolute left-0 top-full mt-2 w-56 bg-popover border border-border rounded-md shadow-lg z-50 py-1">
-            {SORT_OPTIONS.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => handleSortChange(option.value)}
-                className={`w-full flex items-center justify-between px-4 py-2.5 text-sm text-left transition-colors ${
-                  selectedSort === option.value
-                    ? "bg-accent text-accent-foreground"
-                    : "text-popover-foreground hover:bg-muted"
-                }`}
-              >
-                <span>{option.label}</span>
-                {selectedSort === option.value && (
-                  <Check className="w-4 h-4 text-primary" />
-                )}
-              </button>
-            ))}
-          </div>
+          <DropdownMenu
+            options={options}
+            selectedSort={selectedSort}
+            onSelect={handleSortChange}
+          />
         )}
       </div>
     );
@@ -172,12 +120,14 @@ const SortBy: React.FC<Props> = ({
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
       <div className="flex items-center gap-2">
-        <label
-          htmlFor="sort-select"
-          className="text-sm font-medium text-foreground whitespace-nowrap"
-        >
-          Sort by:
-        </label>
+        {showLabel && (
+          <label
+            htmlFor="sort-select"
+            className="text-sm font-medium text-foreground whitespace-nowrap"
+          >
+            {labelText}
+          </label>
+        )}
 
         <button
           id="sort-select"
@@ -197,27 +147,16 @@ const SortBy: React.FC<Props> = ({
       </div>
 
       {isOpen && (
-        <div className="absolute left-0 sm:left-auto sm:right-0 top-full mt-2 w-full sm:w-56 bg-popover border border-border rounded-md shadow-lg z-50 py-1">
-          {SORT_OPTIONS.map((option) => (
-            <button
-              key={option.value}
-              onClick={() => handleSortChange(option.value)}
-              className={`w-full flex items-center justify-between px-4 py-2.5 text-sm text-left transition-colors ${
-                selectedSort === option.value
-                  ? "bg-accent text-accent-foreground font-medium"
-                  : "text-popover-foreground hover:bg-muted"
-              }`}
-            >
-              <span>{option.label}</span>
-              {selectedSort === option.value && (
-                <Check className="w-4 h-4 text-primary" />
-              )}
-            </button>
-          ))}
-        </div>
+        <DropdownMenu
+          options={options}
+          selectedSort={selectedSort}
+          onSelect={handleSortChange}
+        />
       )}
     </div>
   );
-};
+}
+
+
 
 export default SortBy;
