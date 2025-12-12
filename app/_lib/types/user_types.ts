@@ -13,6 +13,12 @@ export interface Login {
   password: string;
 }
 
+export interface LoginWithOAuth {
+  email: string
+  oauth_id: string
+  oauth_provider: string
+}
+
 export interface User {
   id: number;
   first_name: string;

@@ -2,7 +2,12 @@
 
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
-import { loginUser, logoutUser, signupUser } from "../services/authService";
+import {
+  loginUser,
+  loginUserWithOAuth,
+  logoutUser,
+  signupUser,
+} from "../services/authService";
 import { getStringFromForm } from "../utils/utils";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -16,6 +21,9 @@ export async function signup(
   const email = getStringFromForm(formData, "email");
   const password = getStringFromForm(formData, "password");
   const confirmPassword = getStringFromForm(formData, "confirmPassword");
+  const oauth_provider = getStringFromForm(formData, "oauth_provider");
+  const image = getStringFromForm(formData, "image");
+  const oauth_id = getStringFromForm(formData, "oauth_id");
   const terms = formData.get("terms") === "accepted";
   const isEmailValid = email && emailRegex.test(email);
 
@@ -39,7 +47,15 @@ export async function signup(
     return { success: false, message: "Invalid email address." };
   }
 
-  const userObj = { first_name, last_name, email, password, image: "" };
+  const userObj = {
+    first_name,
+    last_name,
+    email,
+    password,
+    image: image ? image : "",
+    oauth_provider: oauth_provider ? oauth_provider : "",
+    oauth_id: oauth_id ? oauth_id : "",
+  };
   let signupSuccess = false;
 
   try {
@@ -83,11 +99,32 @@ export async function login(
   redirect("/");
 }
 
+export async function oauthLogin(
+  prevState: { message: string } | undefined,
+  formData: FormData
+): Promise<{ message: string }> {
+  const email = getStringFromForm(formData, "email");
+  const oauth_provider = getStringFromForm(formData, "oauth_provider");
+  const oauth_id = getStringFromForm(formData, "oauth_id");
+
+  if (!email || !oauth_provider || !oauth_id) {
+    return { message: "Failed to Validate Credentials" };
+  }
+
+  try {
+    await loginUserWithOAuth({ email, oauth_provider, oauth_id });
+  } catch (err: any) {
+    return { message: err.message || "Invalid Credentials" };
+  }
+
+  redirect("/");
+}
+
 export async function logout() {
   try {
-    await logoutUser()
-    return {success: true, message: "Logout Successfully."}
-  }catch(e: any) {
-    return {success: false, message: "Failed to Logout"}
+    await logoutUser();
+    return { success: true, message: "Logout Successfully." };
+  } catch (e: any) {
+    return { success: false, message: "Failed to Logout" };
   }
 }

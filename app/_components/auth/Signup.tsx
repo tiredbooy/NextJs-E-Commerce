@@ -13,11 +13,22 @@ import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
-import { FaGithub } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 
-export default function Signup() {
+interface Props {
+  children: React.ReactNode;
+  defaultValues: {
+    email: string;
+    name: string;
+    image: string;
+    oauth_provider: string;
+    oauth_id: string;
+  };
+}
+
+export default function Signup({ defaultValues, children }: Props) {
+  const { email, name, image, oauth_provider, oauth_id } = defaultValues;
+  const [first_name, last_name] = name?.split(" ") || []
   const [state, formAction, isPending] = useActionState(signup, null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -34,7 +45,6 @@ export default function Signup() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-
       >
         <Card>
           <CardHeader className="space-y-2 text-center">
@@ -61,6 +71,7 @@ export default function Signup() {
                   <Input
                     id="firstName"
                     name="first_name"
+                    defaultValue={first_name || ""}
                     type="text"
                     placeholder="John"
                     className="pl-10"
@@ -69,6 +80,14 @@ export default function Signup() {
                 </div>
               </div>
 
+              <input type="hidden" name="provider" value={oauth_provider} />
+              <input
+                type="hidden"
+                name="provider_id"
+                value={oauth_id}
+              />
+              <input type="hidden" name="iamge" value={image} />
+
               <div className="space-y-2">
                 <Label htmlFor="lastName">Last Name</Label>
                 <div className="relative">
@@ -76,6 +95,7 @@ export default function Signup() {
                   <Input
                     id="lastName"
                     name="last_name"
+                    defaultValue={last_name || ""}
                     type="text"
                     placeholder="Doe"
                     className="pl-10"
@@ -92,6 +112,7 @@ export default function Signup() {
                     id="email"
                     name="email"
                     type="email"
+                    defaultValue={email || ""}
                     placeholder="you@example.com"
                     className="pl-10"
                     disabled={isPending}
@@ -197,26 +218,7 @@ export default function Signup() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <Button
-                disabled={isPending}
-                variant="outline"
-                className="w-full"
-                type="button"
-              >
-                <FcGoogle className="w-5 h-5 mr-2" />
-                Google
-              </Button>
-              <Button
-                disabled={isPending}
-                variant="outline"
-                className="w-full"
-                type="button"
-              >
-                <FaGithub className="w-5 h-5 mr-2" />
-                GitHub
-              </Button>
-            </div>
+            {children}
 
             <div className="text-center text-sm text-muted-foreground">
               Already have an account?{" "}

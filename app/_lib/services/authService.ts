@@ -1,11 +1,10 @@
-import { redirect } from "next/navigation";
 import { SessionData, sessionOptions } from "@/app/_lib/session";
-import axios, { AxiosRequestConfig, AxiosError } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { getSession } from "../auth";
 import { serverApi } from "../server_api";
-import { Login, Signup } from "../types/user_types";
+import { Login, LoginWithOAuth, Signup } from "../types/user_types";
 import { decodeJWT, isTokenExpired } from "../utils/utils";
 
 // Track ongoing refresh to prevent race conditions
@@ -36,7 +35,6 @@ export async function loginUser(userObj: Login) {
       const access = accessMatch[1];
       const refresh = refreshMatch[1];
       const userData = JSON.parse(decodeURIComponent(userMatch[1]));
-      console.log("userMatch:", userMatch);
 
       const cookieStore = await cookies();
       const session = await getIronSession<SessionData>(
@@ -60,6 +58,51 @@ export async function loginUser(userObj: Login) {
   }
 
   return response.data;
+}
+
+export async function loginUserWithOAuth(userObj: LoginWithOAuth) {
+  const response = await serverApi.post("/api/auth/oauth/login", userObj, {
+    withCredentials: true,
+  });
+
+  const setCookieHeader = response.headers["set-cookie"];
+
+  if (setCookieHeader) {
+    const cookieString = Array.isArray(setCookieHeader)
+      ? setCookieHeader.join("; ")
+      : setCookieHeader;
+
+    const accessMatch = cookieString.match(/access=([^;]+)/);
+    const refreshMatch = cookieString.match(/refresh=([^;]+)/);
+    const userMatch = cookieString.match(/user=([^;]+)/);
+
+    if (accessMatch && refreshMatch && userMatch) {
+      const access = accessMatch[1];
+      const refresh = refreshMatch[1];
+      const userData = JSON.parse(decodeURIComponent(userMatch[1]));
+
+      const cookieStore = await cookies();
+      const session = await getIronSession<SessionData>(
+        cookieStore,
+        sessionOptions
+      );
+
+      session.access = access;
+      session.refresh = refresh;
+      session.user = {
+        id: userData.id,
+        email: userData.email,
+        name: userData.name,
+        image: userData.image || "",
+        role: userData.role || "user",
+      };
+      session.isLoggedIn = true;
+
+      await session.save();
+    }
+  }
+
+  return response.data
 }
 
 async function performTokenRefresh(): Promise<string> {
@@ -138,9 +181,8 @@ export async function getValidAccessToken(): Promise<string> {
       sessionOptions
     );
 
+    const finalToken = newToken;
 
-    const finalToken =  newToken;
-    
     const newPayload = decodeJWT(finalToken);
     const newExpiryTime = newPayload?.exp
       ? new Date(newPayload.exp * 1000)
@@ -149,9 +191,7 @@ export async function getValidAccessToken(): Promise<string> {
     const isNewTokenExpired = isTokenExpired(finalToken, 0);
 
     if (isNewTokenExpired) {
-      throw new Error(
-        "expired token. Please Login Again"
-      );
+      throw new Error("expired token. Please Login Again");
     }
 
     return finalToken;
@@ -209,7 +249,6 @@ export async function authenticatedRequest<T = any>(
 
     return response.data as T;
   } catch (error) {
-
     if (axios.isAxiosError(error) && error.response?.status === 401) {
       if (retryCount < MAX_RETRIES) {
         try {

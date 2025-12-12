@@ -38,13 +38,13 @@ export function OrderItemsSection({
       }
     >
       <div className="space-y-3">
-        {items.map((item) => (
-          <Suspense
-            fallback={<SkeletonGrid columns={1} count={3} variant="list" />}
-          >
+        <Suspense
+          fallback={<SkeletonGrid columns={1} count={3} variant="list" />}
+        >
+          {items.map((item) => (
             <OrderItemCard key={item.id} item={item} />
-          </Suspense>
-        ))}
+          ))}
+        </Suspense>
       </div>
     </InfoCard>
   );

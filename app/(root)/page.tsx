@@ -9,7 +9,7 @@ import {
 } from "../_components/reusable/SkeletonCard";
 import TopSellings from "../_components/top-selling/TopSellings";
 
-export default function Home() {
+export default async function Home() {
   return (
     <>
       <HeroSection />
