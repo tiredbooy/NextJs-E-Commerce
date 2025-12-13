@@ -1,3 +1,5 @@
+"use server"
+import { oauthLogin } from "@/app/_lib/actions/authAction";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
@@ -18,12 +20,12 @@ export default async function CallbackPage({ searchParams }: Props) {
   const provider = session?.oauth_provider || "";
   const providerId = session?.oauth_id || "";
 
+  const params = new URLSearchParams();
   // 3. Check intent
-  const {intent} = await searchParams; // "signup" or "login"
+  const { intent } = await searchParams; // "signup" or "login"
 
   // 4. If signup: redirect to signup form with data
   if (intent === "signup") {
-    const params = new URLSearchParams();
     if (email) params.set("email", email);
     if (name) params.set("name", name);
     if (image) params.set("image", image);
@@ -34,9 +36,20 @@ export default async function CallbackPage({ searchParams }: Props) {
   }
 
   // 5. If login: try to login
-  //   if (intent === "login") {
-  //     // Call your oauthLogin action
-  //     // If success: redirect to /
-  //     // If fail: redirect to /auth/login?error=notfound
-  //   }
+  if (intent === "login") {
+    console.log("Error IS Happenning");
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("oauth_provider", provider);
+    formData.append("oauth_id", providerId);
+    
+    const result = await oauthLogin(undefined, formData);
+    console.log('result:', result);
+    // if (result.success) {
+      redirect("/");
+    // }
+    // Call your oauthLogin action
+    // If success: redirect to /
+    // If fail: redirect to /auth/login?error=notfound
+  }
 }

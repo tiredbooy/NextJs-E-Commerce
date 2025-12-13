@@ -15,9 +15,8 @@ import { motion } from "framer-motion";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
-import { FaGithub } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
+import OAuthBtns from "./OAuthBtns";
 
 export default function Login() {
   const searchParams = useSearchParams();
@@ -26,6 +25,8 @@ export default function Login() {
 
   const signupSuccess = searchParams.get("signup") === "success";
   const email = searchParams.get("email");
+
+  const error = searchParams.get("error") || "";
 
   useEffect(() => {
     if (state?.message && state.message !== "NEXT_REDIRECT") {
@@ -53,13 +54,28 @@ export default function Login() {
             </motion.div>
             <CardTitle className="text-2xl">Sign in</CardTitle>
             <CardDescription>
-              {!signupSuccess ? (
-                "Welcome back! Please sign in to continue"
-              ) : (
-                <div className="bg-success px-4 py-2 rounded-md text-background font-medium">
-                  Account created Succesfully, Please log in.
-                </div>
-              )}
+              {(() => {
+                // case success
+                if (signupSuccess) {
+                  return (
+                    <div className="bg-success px-4 py-2 rounded-md text-background font-medium">
+                      Account created successfully! Please log in.
+                    </div>
+                  );
+                }
+
+                // case failed validation
+                if (error === "notfound") {
+                  return (
+                    <div className="bg-destructive px-4 py-2 rounded-md text-background font-medium">
+                      Failed to validate credentials. Please check your login
+                      details.
+                    </div>
+                  );
+                }
+                // default case
+                return "Welcome back! Please sign in to continue";
+              })()}
             </CardDescription>
           </CardHeader>
 
@@ -143,16 +159,7 @@ export default function Login() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <Button variant="outline" className="w-full" disabled={isPending}>
-                <FcGoogle className="w-5 h-5 mr-2" />
-                Google
-              </Button>
-              <Button variant="outline" className="w-full" disabled={isPending}>
-                <FaGithub className="w-5 h-5 mr-2" />
-                GitHub
-              </Button>
-            </div>
+            <OAuthBtns mode="signin" />
 
             <div className="text-center text-sm text-muted-foreground">
               Don't have an account?{" "}

@@ -28,7 +28,7 @@ interface Props {
 
 export default function Signup({ defaultValues, children }: Props) {
   const { email, name, image, oauth_provider, oauth_id } = defaultValues;
-  const [first_name, last_name] = name?.split(" ") || []
+  const [first_name, last_name] = name?.split(" ") || [];
   const [state, formAction, isPending] = useActionState(signup, null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -80,13 +80,13 @@ export default function Signup({ defaultValues, children }: Props) {
                 </div>
               </div>
 
-              <input type="hidden" name="provider" value={oauth_provider} />
               <input
                 type="hidden"
-                name="provider_id"
-                value={oauth_id}
+                name="oauth_provider"
+                value={oauth_provider}
               />
-              <input type="hidden" name="iamge" value={image} />
+              <input type="hidden" name="oauth_id" value={oauth_id} />
+              <input type="hidden" name="image" value={image} />
 
               <div className="space-y-2">
                 <Label htmlFor="lastName">Last Name</Label>

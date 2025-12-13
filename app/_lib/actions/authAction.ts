@@ -22,8 +22,8 @@ export async function signup(
   const password = getStringFromForm(formData, "password");
   const confirmPassword = getStringFromForm(formData, "confirmPassword");
   const oauth_provider = getStringFromForm(formData, "oauth_provider");
-  const image = getStringFromForm(formData, "image");
   const oauth_id = getStringFromForm(formData, "oauth_id");
+  const image = getStringFromForm(formData, "image");
   const terms = formData.get("terms") === "accepted";
   const isEmailValid = email && emailRegex.test(email);
 
@@ -47,14 +47,19 @@ export async function signup(
     return { success: false, message: "Invalid email address." };
   }
 
+  console.log("=== FRONTEND DEBUG ===");
+  console.log("oauth_provider:", oauth_provider);
+  console.log("oauth_id:", oauth_id);
+  console.log("Type:", typeof oauth_provider);
+
   const userObj = {
     first_name,
     last_name,
     email,
     password,
     image: image ? image : "",
-    oauth_provider: oauth_provider ? oauth_provider : "",
-    oauth_id: oauth_id ? oauth_id : "",
+    oauth_provider: oauth_provider || null, // Changed
+    oauth_id: oauth_id || null, // Changed
   };
   let signupSuccess = false;
 
@@ -102,10 +107,14 @@ export async function login(
 export async function oauthLogin(
   prevState: { message: string } | undefined,
   formData: FormData
-): Promise<{ message: string }> {
+): Promise<{ success?: boolean, message: string }> {
   const email = getStringFromForm(formData, "email");
   const oauth_provider = getStringFromForm(formData, "oauth_provider");
   const oauth_id = getStringFromForm(formData, "oauth_id");
+
+  console.log("action----- oauth_provider:", oauth_provider);
+
+  console.log("action----- oauth_id:", oauth_id);
 
   if (!email || !oauth_provider || !oauth_id) {
     return { message: "Failed to Validate Credentials" };
@@ -113,11 +122,10 @@ export async function oauthLogin(
 
   try {
     await loginUserWithOAuth({ email, oauth_provider, oauth_id });
+    return {success: true, message: "Logged In Successfully!"}
   } catch (err: any) {
-    return { message: err.message || "Invalid Credentials" };
+    return { success: false, message: err.message || "Invalid Credentials" };
   }
-
-  redirect("/");
 }
 
 export async function logout() {
