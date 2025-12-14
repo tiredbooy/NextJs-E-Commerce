@@ -52,8 +52,6 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.redirect(new URL("/", request.url));
     } catch (error: any) {
-      console.error("OAuth signup error:", error);
-
       // Check if error is "user already exists"
       if (
         error.message?.includes("already exists") ||
@@ -92,9 +90,33 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.redirect(new URL("/", request.url));
     } catch (error: any) {
-      console.error("OAuth login error:", error);
+      // Check if error is "user already exists"
+      if (
+        error.message?.includes("already exists") ||
+        error.response?.status === 409 ||
+        error.response?.status === 500
+      ) {
+        // Connect oAuth To User Then Login
+        try {
+          await linkOAuthToAccount(userObj);
+
+          await loginUserWithOAuth(userObj);
+
+          // Login successful - user had OAuth linked
+          return NextResponse.redirect(new URL("/", request.url));
+        } catch (loginError) {
+          return NextResponse.redirect(
+            new URL(
+              "/auth/login?error=account_exists&email=" +
+                encodeURIComponent(email),
+              request.url
+            )
+          );
+        }
+      }
+
       return NextResponse.redirect(
-        new URL("/auth/login?error=account_not_found", request.url)
+        new URL("/auth/signup?error=oauth_failed", request.url)
       );
     }
   }

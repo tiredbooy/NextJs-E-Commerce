@@ -212,7 +212,7 @@ export function EndpointPerformanceChart({ endpoints: data }: Props) {
               🚀 Fastest Endpoint
             </p>
             <p className="text-sm font-bold text-success mt-1">
-              { fastestEndpoint.avg_response_time >  1000 ? `${(fastestEndpoint.avg_response_time).toFixed(2)}s` : `${(fastestEndpoint.avg_response_time).toFixed(1)}ms`}
+              { fastestEndpoint.avg_response_time / 1000 >  1000 ? `${(fastestEndpoint.avg_response_time / 1000).toFixed(2)}s` : `${(fastestEndpoint.avg_response_time / 1000).toFixed(1)}ms`}
             </p>
             <p className="text-xs text-success/70 mt-1 truncate">
               {fastestEndpoint.endpoint.split("/").pop()}

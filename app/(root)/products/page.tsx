@@ -63,7 +63,7 @@ const page: React.FC<Props> = async ({ searchParams }) => {
   // // Boolean filters
   // removed onSale and inStock for now api api dosen't support
   // const inStock = params.inStock === "true";
-  // const onSale = params.onSale === "true";
+  const onSale = params.onSale === "true";
 
   const sortBy =
     typeof params.sortBy === "string" ? params.sortBy : "createdAt";
@@ -75,6 +75,7 @@ const page: React.FC<Props> = async ({ searchParams }) => {
     category: categoryParam,
     brand: brandParam,
     search,
+    sale: onSale,
     minPrice: minPrice.toString(),
     maxPrice: maxPrice.toString(),
     sortBy,

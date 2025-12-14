@@ -102,7 +102,7 @@ export function RealTimeEndpointAnalytics({ webSocketUrl }: Props) {
   // Calculate some stats from the data
   const totalRequests = data?.total_today || 0;
   const avgResponseTime =
-    data?.top_endpoints?.reduce((acc, ep) => (acc + ep?.avg_response_time ) / 1000, 0) /
+    data?.top_endpoints?.reduce((acc, ep) => (acc + ep?.avg_response_time /1000), 0) /
       (data?.top_endpoints?.length || 1) || 0;
   const totalEndpoints = data?.top_endpoints?.length || 0;
 

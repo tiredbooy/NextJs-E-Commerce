@@ -9,6 +9,7 @@ interface Props {
     page: number,
     category: string
     brand: string
+    sale: string
     search: string
     minPrice: string
     maxPrice: string
