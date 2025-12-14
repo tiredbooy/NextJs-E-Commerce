@@ -1,6 +1,18 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
 import { FiMapPin } from "react-icons/fi";
 import FormField from "./FormField";
@@ -9,9 +21,10 @@ import { AddressFormData } from "./UserProfileForm";
 
 interface Props {
   form: UseFormReturn<AddressFormData>;
+  isNewAddress?: boolean;
 }
 
-export default function AddressSection({ form }: Props) {
+export default function AddressSection({ form, isNewAddress = false }: Props) {
   const {
     register,
     formState: { errors },
@@ -23,15 +36,25 @@ export default function AddressSection({ form }: Props) {
     <Card className="border-border bg-card">
       <CardHeader>
         <CardTitle className="text-xl">Address</CardTitle>
-        <CardDescription>Update your location and address</CardDescription>
+        <CardDescription>
+          {isNewAddress
+            ? "Add your location and address information"
+            : "Update your location and address"}
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <FormSection icon={FiMapPin} title="Location Details">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField label="Country" error={errors.country?.message}>
+            <FormField
+              label="Country"
+              error={errors.country?.message}
+              required={isNewAddress}
+            >
               <Select
                 defaultValue={watch("country")}
-                onValueChange={(value) => setValue("country", value)}
+                onValueChange={(value) =>
+                  setValue("country", value, { shouldDirty: true })
+                }
               >
                 <SelectTrigger className="bg-background border-input focus:border-primary">
                   <SelectValue placeholder="Select country" />
@@ -47,26 +70,43 @@ export default function AddressSection({ form }: Props) {
               </Select>
             </FormField>
 
-            <FormField label="City" error={errors.city?.message}>
+            <FormField
+              label="City"
+              error={errors.city?.message}
+              required={isNewAddress}
+            >
               <Input
-                {...register("city")}
+                {...register("city", {
+                  required: isNewAddress ? "City is required" : false,
+                })}
                 placeholder="Enter your city"
                 className="bg-background border-input focus:border-primary"
               />
             </FormField>
           </div>
 
-          <FormField label="Address" error={errors.address?.message}>
+          <FormField
+            label="Address"
+            error={errors.address?.message}
+            required={isNewAddress}
+          >
             <Input
-              {...register("address")}
+              {...register("address", {
+                required: isNewAddress ? "Address is required" : false,
+              })}
               placeholder="Street address, apartment, suite, etc."
               className="bg-background border-input focus:border-primary"
             />
           </FormField>
 
-          <FormField label="Postal Code" error={errors.postal_code?.message}>
+          <FormField
+            label="Postal Code"
+            error={errors.postal_code?.message}
+            required={isNewAddress}
+          >
             <Input
               {...register("postal_code", {
+                required: isNewAddress ? "Postal code is required" : false,
                 pattern: {
                   value: /^[0-9]{5,10}$/,
                   message: "Invalid postal code",

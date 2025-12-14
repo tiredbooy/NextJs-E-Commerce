@@ -118,7 +118,7 @@ const Footer = () => {
                 className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 <MdEmail className="w-4 h-4" />
-                <span>support@yourbrand.com</span>
+                <span>velissemail@gmail.com</span>
               </a>
               <a
                 href="#"
@@ -135,7 +135,7 @@ const Footer = () => {
         <div className="border-t py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} YourBrand. All rights reserved.
+              © {new Date().getFullYear()} Velisse. All rights reserved.
             </p>
             <div className="flex gap-6">
               <a

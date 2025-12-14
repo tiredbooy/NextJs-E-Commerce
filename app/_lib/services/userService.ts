@@ -181,7 +181,7 @@ export async function updateAddressReq(
   }
 }
 
-export async function createAddress(
+export async function createAddressReq(
   data: Partial<CreateAddressReq>
 ): Promise<Address> {
   try {

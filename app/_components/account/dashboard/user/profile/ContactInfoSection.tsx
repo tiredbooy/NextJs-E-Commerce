@@ -4,10 +4,9 @@ import { UseFormReturn } from "react-hook-form";
 import { FiMail, FiPhone } from "react-icons/fi";
 import FormField from "./FormField";
 import FormSection from "./FormSection";
-import { ProfileFormData } from "./UserProfileForm";
 
 interface Props {
-  form: UseFormReturn<ProfileFormData>;
+  form: UseFormReturn;
 }
 
 export default function ContactInfoSection({ form }: Props) {

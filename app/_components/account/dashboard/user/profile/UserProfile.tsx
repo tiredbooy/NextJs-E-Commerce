@@ -7,8 +7,9 @@ import UserProfilePicture from "./UserProfilePicture";
 async function UserProfile({}) {
   const [profileData, address] = await Promise.all([
     getCurrentUser(),
-    getUserAddress()
+    getUserAddress() // This can now return null if no address exists
   ])
+  
   return (
     <div className="px-10 py-12 rounded-md bg-card border max-w-4xl mx-auto w-full flex flex-col gap-5">
       <UserProfilePicture profileData={profileData} />

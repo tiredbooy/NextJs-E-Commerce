@@ -17,6 +17,7 @@ import { useSearchParams } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import OAuthBtns from "./OAuthBtns";
+import Link from "next/link";
 
 export default function Login() {
   const searchParams = useSearchParams();
@@ -163,9 +164,11 @@ export default function Login() {
 
             <div className="text-center text-sm text-muted-foreground">
               Don't have an account?{" "}
-              <button className="text-primary hover:underline font-medium">
-                Sign up
-              </button>
+              <Link href="/auth/signup">
+                <button className="text-primary hover:underline font-medium  cursor-pointer">
+                  Sign up
+                </button>
+              </Link>
             </div>
           </CardContent>
         </Card>

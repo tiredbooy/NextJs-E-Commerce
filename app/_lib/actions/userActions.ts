@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import {
   addCartItemReq,
   addProductToFavoriteReq,
+  createAddressReq,
   removeCartItemReq,
   removeFromFavoritesReq,
   updateAddressReq,
@@ -10,7 +11,7 @@ import {
   updateUserReq,
 } from "../services/userService";
 import { CartItemReq } from "../types";
-import { Address, UpdateUserReq } from "../types/user_types";
+import { Address, CreateAddressReq, UpdateUserReq } from "../types/user_types";
 
 export async function updateUserProfile( data: UpdateUserReq) {
   try {
@@ -33,6 +34,17 @@ export async function updateAddress(id: number, data: Partial<Address>) {
   }
   catch(e: any) {
     return {success: false, message: "Failed to update Profile"}
+  }
+}
+
+export async function createAddress(data: CreateAddressReq) {
+  try {
+    const result = await createAddressReq(data)
+    
+    revalidatePath("/account/profile")
+    return {success: true, message: "Address Created Successfully!"}
+  }catch(e: any) {
+    return {success: false, message: "Failed to create Address"}
   }
 }
 

@@ -1,6 +1,6 @@
 "use client";
-import { updateAddress, updateUserProfile } from "@/app/_lib/actions/userActions";
-import { Address, UpdateUserReq, User } from "@/app/_lib/types/user_types";
+import { createAddress, updateAddress, updateUserProfile } from "@/app/_lib/actions/userActions";
+import { Address, CreateAddressReq, UpdateUserReq, User } from "@/app/_lib/types/user_types";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useTransition } from "react";
@@ -13,9 +13,8 @@ import PersonalInfoSection from "./PersonalInfo";
 
 interface Props {
   profileData: User;
-  addressData: Address
+  addressData: Address | null; // Changed to allow null
 }
-
 
 export interface AddressFormData {
   country: string;
@@ -25,7 +24,7 @@ export interface AddressFormData {
 }
 
 function UserProfileForm({ profileData, addressData }: Props) {
-  const [isPending, startTransition] = useTransition()
+  const [isPending, startTransition] = useTransition();
 
   // Profile form
   const profileForm = useForm<UpdateUserReq>({
@@ -39,13 +38,13 @@ function UserProfileForm({ profileData, addressData }: Props) {
     },
   });
 
-  // Address form
+  // Address form - with default empty values if no address exists
   const addressForm = useForm<AddressFormData>({
     defaultValues: {
-      country: addressData.country || "Iran",
-      city: addressData.city || "Tehran",
-      address: addressData.address || "123 Main Street, District 1",
-      postal_code: addressData.postal_code || "1234567890",
+      country: addressData?.country || "",
+      city: addressData?.city || "",
+      address: addressData?.address || "",
+      postal_code: addressData?.postal_code || "",
     },
   });
 
@@ -85,7 +84,18 @@ function UserProfileForm({ profileData, addressData }: Props) {
         }
 
         if (hasAddressChanges) {
-          promises.push(updateAddress(addressData.id, changedAddressData));
+          // Check if address exists - if not, create new one
+          if (!addressData || !addressData.id) {
+            const newAddressObj: CreateAddressReq = {
+              ...addressForm.getValues(),
+              is_default: true,
+              name: `${profileData.first_name} ${profileData.last_name || ""}`.trim(),
+            }
+            promises.push(createAddress(newAddressObj));
+          } else {
+            // Update existing address with only changed values
+            promises.push(updateAddress(addressData.id, changedAddressData));
+          }
         }
 
         // Execute in parallel
@@ -100,7 +110,11 @@ function UserProfileForm({ profileData, addressData }: Props) {
             profileForm.reset(profileForm.getValues());
             addressForm.reset(addressForm.getValues());
 
-            toast.success("Changes saved successfully!");
+            toast.success(
+              !addressData 
+                ? "Profile created and changes saved successfully!" 
+                : "Changes saved successfully!"
+            );
           } else {
             toast.error("Some changes failed to save");
           }
@@ -124,7 +138,7 @@ function UserProfileForm({ profileData, addressData }: Props) {
     <div className="space-y-8">
       <PersonalInfoSection form={profileForm} />
       <ContactInfoSection form={profileForm} />
-      <AddressSection form={addressForm} />
+      <AddressSection form={addressForm} isNewAddress={!addressData} />
 
       {/* Action Buttons */}
       <motion.div
@@ -150,7 +164,7 @@ function UserProfileForm({ profileData, addressData }: Props) {
           className="w-full sm:w-auto gap-2 bg-primary hover:bg-primary-hover text-primary-foreground"
         >
           <FiSave className="w-4 h-4" />
-          {isPending ? "Saving..." : "Save Changes"}
+          {isPending ? "Saving..." : addressData ? "Save Changes" : "Create Profile"}
         </Button>
       </motion.div>
     </div>
