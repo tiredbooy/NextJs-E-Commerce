@@ -15,8 +15,7 @@ interface Props {
 
 const page: React.FC<Props> = async ({ searchParams }) => {
   const params = await searchParams;
-  const currentPage =
-    typeof params.page === "string" ? Number(params.page) : 1;
+  const currentPage = typeof params.page === "string" ? Number(params.page) : 1;
 
   const search = typeof params.search === "string" ? params.search : "";
 
@@ -61,9 +60,8 @@ const page: React.FC<Props> = async ({ searchParams }) => {
     typeof params.maxPrice === "string" ? parseInt(params.maxPrice) : 20000;
 
   // // Boolean filters
-  // removed onSale and inStock for now api api dosen't support
   // const inStock = params.inStock === "true";
-  const onSale = params.onSale === "true";
+  const sale = params.onSale === "true" ? "true" : "";
 
   const sortBy =
     typeof params.sortBy === "string" ? params.sortBy : "createdAt";
@@ -75,7 +73,7 @@ const page: React.FC<Props> = async ({ searchParams }) => {
     category: categoryParam,
     brand: brandParam,
     search,
-    sale: onSale,
+    sale,
     minPrice: minPrice.toString(),
     maxPrice: maxPrice.toString(),
     sortBy,
