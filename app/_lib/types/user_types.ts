@@ -5,6 +5,8 @@ export interface Signup {
   last_name: string;
   email: string;
   password: string;
+  oauth_id?: string | null
+  oauth_provider?: string | null
   image?: string;
 }
 

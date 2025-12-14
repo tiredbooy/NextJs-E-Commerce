@@ -159,7 +159,7 @@ export async function getUserAddress(): Promise<Address> {
       url: "/api/addresses",
     });
 
-    return result[0];
+    return result?.[0] || [];
   } catch (e: any) {
     throw new Error(e.message || "Failed to Get Address");
   }

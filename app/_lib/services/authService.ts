@@ -105,6 +105,17 @@ export async function loginUserWithOAuth(userObj: LoginWithOAuth) {
   return response.data
 }
 
+export async function linkOAuthToAccount(userObj: LoginWithOAuth) {
+  try {
+    const response = await serverApi.post("/api/auth/link-oauth", userObj)
+    return response
+  }
+  catch(e: any) {
+    throw new Error(e.message || "Failed to Link oAuth")
+  }
+  
+}
+
 async function performTokenRefresh(): Promise<string> {
   if (refreshPromise) {
     return refreshPromise;

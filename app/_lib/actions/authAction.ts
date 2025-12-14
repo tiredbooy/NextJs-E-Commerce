@@ -47,11 +47,6 @@ export async function signup(
     return { success: false, message: "Invalid email address." };
   }
 
-  console.log("=== FRONTEND DEBUG ===");
-  console.log("oauth_provider:", oauth_provider);
-  console.log("oauth_id:", oauth_id);
-  console.log("Type:", typeof oauth_provider);
-
   const userObj = {
     first_name,
     last_name,
@@ -62,6 +57,8 @@ export async function signup(
     oauth_id: oauth_id || null, // Changed
   };
   let signupSuccess = false;
+  let isOAuth = oauth_id === "" && oauth_provider === ""
+  console.log('isOAuth:', isOAuth);
 
   try {
     await signupUser(userObj);
@@ -73,9 +70,12 @@ export async function signup(
     };
   }
 
-  if (signupSuccess) {
+  if (signupSuccess && !isOAuth) {
     redirect(`/auth/login?signup=success&email=${encodeURIComponent(email)}`);
-  } else {
+  } else if(isOAuth) {
+    redirect(`/auth/callback?success=true`)
+  }
+    else {
     toast("Signup failed, Try again later.");
     return {
       success: false,

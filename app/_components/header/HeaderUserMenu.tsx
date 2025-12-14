@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/app/_lib/services/authService";
 import Link from "next/link";
-import { FaShoppingBasket, FaUser } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 import HeaderCartIcon from "./HeaderCartIcon";
 
 async function HeaderUserMenu() {
@@ -15,7 +15,7 @@ async function HeaderUserMenu() {
         </Link>
       ) : (
         <Link
-          href="/cart"
+          href="/auth/login"
           className="border px-3 py-1 rounded-md text-muted-foreground hover:bg-foreground hover:text-background duration-200 transition-colors"
         >
           Login/Signup
