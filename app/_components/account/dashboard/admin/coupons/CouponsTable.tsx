@@ -15,11 +15,11 @@ interface Props {
 }
 
 export default async function CouponsTable({}: Props) {
-  const coupons = await getCoupons();
+  const coupons = await getCoupons() || [];
 
   return (
     <>
-      {coupons.length !== 0 ? (
+      {coupons?.length !== 0 ? (
         <Table>
           <TableCaption>A List Of all coupons</TableCaption>
           <TableHeader>
@@ -35,7 +35,7 @@ export default async function CouponsTable({}: Props) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {coupons.map((c) => (
+            {coupons?.map((c) => (
               <TableRow key={c.id}>
                 <TableCell>{c.id}</TableCell>
                 <TableCell>{c.code}</TableCell>

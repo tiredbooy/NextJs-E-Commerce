@@ -58,15 +58,18 @@ export async function cancelOrderReq(id: number) {
 }
 
 export async function getCoupons(): Promise<Coupon[]> {
-  try {
     const response = await authenticatedRequest({
       method: "GET",
       url: "/api/admin/coupons",
     });
+
+    const message = response?.message
+
+    if (message?.includes("No Coupons Available")) {
+      return []
+    }
+
     return response;
-  } catch (e: any) {
-    throw new Error(e.message || "Failed To Fetch Coupons");
-  }
 }
 
 export async function getCouponReq(code: string): Promise<Coupon> {
