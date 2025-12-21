@@ -102,18 +102,16 @@ export async function loginUserWithOAuth(userObj: LoginWithOAuth) {
     }
   }
 
-  return response.data
+  return response.data;
 }
 
 export async function linkOAuthToAccount(userObj: LoginWithOAuth) {
   try {
-    const response = await serverApi.post("/api/auth/link-oauth", userObj)
-    return response
+    const response = await serverApi.post("/api/auth/link-oauth", userObj);
+    return response;
+  } catch (e: any) {
+    throw new Error(e.message || "Failed to Link oAuth");
   }
-  catch(e: any) {
-    throw new Error(e.message || "Failed to Link oAuth")
-  }
-  
 }
 
 async function performTokenRefresh(): Promise<string> {
@@ -313,4 +311,14 @@ export async function logoutUser() {
   );
 
   await session.destroy();
+}
+
+export async function forgotPassword(email: string) {
+  const response = authenticatedRequest({
+    method: "POST",
+    url: "/api/auth/forgot-password",
+    data: { email },
+  });
+
+  return response;
 }
