@@ -6,7 +6,7 @@ interface Props {
 }
 
 export default async function page ({  }: Props) {
-  const initialSetting = await getSetting()
+  const initialSetting = await getSetting() || []
 
   return (
     <AdminSettings initialSetting={initialSetting} />

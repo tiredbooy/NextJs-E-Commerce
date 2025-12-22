@@ -4,7 +4,8 @@ import { getUserFavorites } from "@/app/_lib/services/userService";
 import FavoritesProductCards from "./FavoritesProductCards";
 
 async function FavoritesPage() {
-  const favorites = await getUserFavorites() || []
+  const favoritesData = await getUserFavorites() || []
+  const favorites = favoritesData.products
   
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">

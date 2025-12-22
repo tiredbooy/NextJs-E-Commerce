@@ -74,7 +74,7 @@ export async function addProductToFavoriteReq(productId: number) {
   }
 }
 
-export async function getUserFavorites(): Promise<Favorites[]> {
+export async function getUserFavorites() {
   try {
     const result = await authenticatedRequest({
       method: "GET",

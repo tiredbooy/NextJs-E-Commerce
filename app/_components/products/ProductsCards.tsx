@@ -4,25 +4,25 @@ import ProductCard from "./ProductCard";
 import { getProducts } from "@/app/_lib/services/productsService";
 
 interface Props {
-  queryObj : {
-    limit: number,
-    page: number,
-    category: string
-    brand: string
-    sale: string
-    search: string
-    minPrice: string
-    maxPrice: string
-    sortBy: string
-    sortOrder: string
-    sizes: string
-    colors: string
-  }
+  queryObj: {
+    limit: number;
+    page: number;
+    category: string;
+    brand: string;
+    sale: string;
+    search: string;
+    minPrice: string;
+    maxPrice: string;
+    sortBy: string;
+    sortOrder: string;
+    sizes: string;
+    colors: string;
+  };
 }
 
 async function ProductsCards({ queryObj }: Props) {
-  const productsData = await getProducts(queryObj)
-  const {products, page, total_pages, has_next, has_prev} = productsData;
+  const productsData = await getProducts(queryObj);
+  const { products, page, total_pages, has_next, has_prev } = productsData;
 
   return (
     <>
@@ -31,7 +31,14 @@ async function ProductsCards({ queryObj }: Props) {
           <ProductCard key={p.id} product={p} />
         ))}
       </div>
-      <Pagination currentPage={page} totalPages={total_pages} hasPrev={has_prev} hasNext={has_next} />
+      {total_pages > 1 && (
+        <Pagination
+          currentPage={page}
+          totalPages={total_pages}
+          hasPrev={has_prev}
+          hasNext={has_next}
+        />
+      )}
     </>
   );
 }

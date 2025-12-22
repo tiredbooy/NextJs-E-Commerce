@@ -228,13 +228,13 @@ const FilterContent: React.FC<FilterContentProps> = ({
       {/* Filter Options - Scrollable */}
       <div className="flex-1 overflow-y-auto px-4">
         {/* Categories - Radio Group */}
-        {availableCategories.length > 0 && (
+        {availableCategories?.length > 0 && (
           <CollapsibleSection title="Categories">
             <RadioGroup
               value={filters.categories[0]?.id || ""}
               onValueChange={handleCategoryChange}
             >
-              {availableCategories.map((category) => (
+              {availableCategories?.map((category) => (
                 <div key={category.id} className="flex items-center space-x-2 ">
                   <RadioGroupItem
                     value={category.id}
@@ -253,13 +253,13 @@ const FilterContent: React.FC<FilterContentProps> = ({
         )}
 
         {/* Brands - Radio Group */}
-        {availableBrands.length > 0 && (
+        {availableBrands?.length > 0 && (
           <CollapsibleSection title="Brands">
             <RadioGroup
               value={filters.brands[0]?.id || ""}
               onValueChange={handleBrandChange}
             >
-              {availableBrands.map((brand) => (
+              {availableBrands?.map((brand) => (
                 <div key={brand.id} className="flex items-center space-x-2">
                   <RadioGroupItem value={brand.id} id={`brand-${brand.id}`} />
                   <Label
@@ -283,10 +283,10 @@ const FilterContent: React.FC<FilterContentProps> = ({
         </CollapsibleSection>
 
         {/* Sizes */}
-        {availableSizes.length > 0 && (
+        {availableSizes?.length > 0 && (
           <CollapsibleSection title="Sizes" defaultOpen={false}>
             <div className="grid grid-cols-4 gap-2">
-              {availableSizes.map((size) => (
+              {availableSizes?.map((size) => (
                 <Button
                   key={size.id}
                   onClick={() => toggleArrayFilter("sizes", size)}
@@ -306,9 +306,9 @@ const FilterContent: React.FC<FilterContentProps> = ({
         )}
 
         {/* Colors */}
-        {availableColors.length > 0 && (
+        {availableColors?.length > 0 && (
           <CollapsibleSection title="Colors" defaultOpen={false}>
-            {availableColors.map((color) => (
+            {availableColors?.map((color) => (
               <div
                 key={color.id}
                 className="flex flex-row items-center justify-between"
