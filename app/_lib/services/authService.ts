@@ -313,12 +313,19 @@ export async function logoutUser() {
   await session.destroy();
 }
 
-export async function forgotPassword(email: string) {
-  const response = authenticatedRequest({
-    method: "POST",
-    url: "/api/auth/forgot-password",
-    data: { email },
-  });
+export async function forgotPasswordReq(email: string) {
+  const data = { email };
+  const response = serverApi.post("/api/auth/forgot-password", data);
+
+  return response;
+}
+
+export async function resetPasswordReq(data: {
+  token: string;
+  new_password: string;
+}) {
+
+  const response = serverApi.post("api/auth/reset-password", data);
 
   return response;
 }

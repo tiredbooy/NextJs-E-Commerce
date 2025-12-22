@@ -3,12 +3,15 @@
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
 import {
+  forgotPasswordReq,
   loginUser,
   loginUserWithOAuth,
   logoutUser,
+  resetPasswordReq,
   signupUser,
 } from "../services/authService";
 import { getStringFromForm } from "../utils/utils";
+import { ResetPasswordInputs } from "@/app/_components/auth/ResetPasswordForm";
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -57,8 +60,8 @@ export async function signup(
     oauth_id: oauth_id || null, // Changed
   };
   let signupSuccess = false;
-  let isOAuth = oauth_id === "" && oauth_provider === ""
-  console.log('isOAuth:', isOAuth);
+  let isOAuth = oauth_id === "" && oauth_provider === "";
+  console.log("isOAuth:", isOAuth);
 
   try {
     await signupUser(userObj);
@@ -72,10 +75,9 @@ export async function signup(
 
   if (signupSuccess && !isOAuth) {
     redirect(`/auth/login?signup=success&email=${encodeURIComponent(email)}`);
-  } else if(isOAuth) {
-    redirect(`/auth/callback?success=true`)
-  }
-    else {
+  } else if (isOAuth) {
+    redirect(`/auth/callback?success=true`);
+  } else {
     toast("Signup failed, Try again later.");
     return {
       success: false,
@@ -107,7 +109,7 @@ export async function login(
 export async function oauthLogin(
   prevState: { message: string } | undefined,
   formData: FormData
-): Promise<{ success?: boolean, message: string }> {
+): Promise<{ success?: boolean; message: string }> {
   const email = getStringFromForm(formData, "email");
   const oauth_provider = getStringFromForm(formData, "oauth_provider");
   const oauth_id = getStringFromForm(formData, "oauth_id");
@@ -122,10 +124,45 @@ export async function oauthLogin(
 
   try {
     await loginUserWithOAuth({ email, oauth_provider, oauth_id });
-    return {success: true, message: "Logged In Successfully!"}
+    return { success: true, message: "Logged In Successfully!" };
   } catch (err: any) {
     return { success: false, message: err.message || "Invalid Credentials" };
   }
+}
+
+export async function forgotPassword(email: string): Promise<{ message: string; success: boolean }> {
+  if (email === "") {
+    return {success: false, message: "You have to Enter Valid email"}
+  }
+
+  try {
+    const response = await forgotPasswordReq(email)
+    return {success: true, message: "Email Sent Succssfully"}
+  }catch(e: any) {
+    return {success: false, message: e.message || "Failed to send email"}
+  }
+  
+}
+
+export async function resetPassword(
+  inputsData: ResetPasswordInputs
+): Promise<{ message: string; success: boolean }> {
+  if (inputsData.new_password !== inputsData.confirm_password) {
+    return {success: false, message: "Passwords do not match"}
+  } 
+
+  const data: {token: string, new_password: string} = {
+    token: inputsData.token,
+    new_password: inputsData.new_password
+  }
+
+  const response = await resetPasswordReq(data);
+
+  if (response.error) {
+    return { success: false, message: response.error };
+  }
+
+  return { success: true, message: response.message };
 }
 
 export async function logout() {

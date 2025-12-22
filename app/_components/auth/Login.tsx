@@ -23,17 +23,16 @@ export default function Login() {
   const searchParams = useSearchParams();
   const [state, formAction, isPending] = useActionState(login, undefined);
   const [showPassword, setShowPassword] = useState(false);
+  const [emailInput, setEmailInput] = useState("");
 
   const signupSuccess = searchParams.get("signup") === "success";
   const email = searchParams.get("email");
 
   const error = searchParams.get("error") || "";
 
-  useEffect(() => {
-    if (state?.message && state.message !== "NEXT_REDIRECT") {
-      toast.error(state.message);
-    }
-  }, [state]);
+  const forgotPasswordNav = `/auth/forgot-password?${
+    `email=${emailInput}` ? `email=${emailInput}` : ""
+  }`;
 
   return (
     <div className="w-full min-h-screen flex justify-center items-center bg-gradient-to-bl from-background via-card to-background p-4">
@@ -90,6 +89,7 @@ export default function Login() {
                     id="email"
                     type="email"
                     name="email"
+                    onChange={(e) => setEmailInput(e.target.value)}
                     placeholder="you@example.com"
                     defaultValue={email ? email : ""}
                     className="pl-10"
@@ -101,9 +101,12 @@ export default function Login() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password">Password</Label>
-                  <button className="text-xs text-primary hover:underline">
+                  <Link
+                    href={forgotPasswordNav}
+                    className="text-xs text-primary hover:underline"
+                  >
                     Forgot?
-                  </button>
+                  </Link>
                 </div>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
