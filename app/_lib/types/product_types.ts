@@ -86,3 +86,18 @@ export interface Review {
   comment: string;
   created_at: string;
 }
+
+
+export interface SearchResponse {
+  products?: Product[];
+}
+
+export interface SearchResultsProps {
+  query: string;
+  results: Product[];
+  recentSearches: string[];
+  loading: boolean;
+  onProductSelect: (productId: number, productTitle: string) => void;
+  onRecentSearchSelect: (search: string) => void;
+  onViewAllResults: (query: string) => void;
+}

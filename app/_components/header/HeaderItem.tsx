@@ -1,12 +1,11 @@
 "use client";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useState, useEffect } from "react";
-import HeaderLogo from "./Logo";
-import HeaderNav from "./HeaderNav";
-import HeaderSearch from "./HeaderSearch";
-import HeaderUserMenu from "./HeaderUserMenu";
-import AnnouncementBar from "./AnnouncementBar";
 import { Announcment } from "@/app/_lib/types";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useState } from "react";
+import AnnouncementBar from "./AnnouncementBar";
+import HeaderNav from "./HeaderNav";
+import HeaderLogo from "./Logo";
+import HeaderSearch from "./search-popover/HeaderSearch";
 
 interface Props {
   announcment: Announcment;
