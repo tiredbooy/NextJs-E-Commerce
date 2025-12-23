@@ -16,7 +16,7 @@ export default function GlobalError({
     <html>
       <body>
         <div className="min-h-screen bg-gradient-to-br from-background via-card to-background flex items-center justify-center p-4">
-          <div className="max-w-1/2 w-full bg-background rounded-xl shadow-2xl border border-border overflow-hidden">
+          <div className="lg:max-w-1/2 w-full bg-background rounded-xl shadow-2xl border border-border overflow-hidden">
             <div className="text-center space-y-4 p-8">
               <div className="mx-auto w-24 h-24 bg-destructive/10 rounded-full flex items-center justify-center animate-pulse">
                 <AlertTriangle className="w-12 h-12 text-destructive" />

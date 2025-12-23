@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { SessionData, sessionOptions } from "./app/_lib/session";
 import { isTokenExpired } from "./app/_lib/utils/utils";
 
-const protectedRoutes = ["/account", "/admin"];
+const protectedRoutes = ["/account", "/admin", "/cart"];
 
 const authRoutes = ["/auth/login", "/auth/signup"];
 

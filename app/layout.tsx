@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { Poppins } from "next/font/google";
 import Providers from "./_lib/providers/providers";
 import "./globals.css";
+import { getCurrentSession } from "./_lib/services/authService";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -18,11 +19,13 @@ export const metadata: Metadata = {
     "Where elegance meets individuality. Explore refined footwear, couture apparel, and signature fragrances crafted for those who move with purpose and style.",
 };
 
-export default function MainLayout({
+export default async function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getCurrentSession()
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -35,7 +38,7 @@ export default function MainLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <CartProvider initialCount={0}>{children}</CartProvider>
+            <CartProvider initialCount={0} isAuthenticated={!!session}>{children}</CartProvider>
           </ThemeProvider>
           <Toaster />
         </Providers>

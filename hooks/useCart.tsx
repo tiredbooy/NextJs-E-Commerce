@@ -10,7 +10,7 @@ type CartContextType = {
   syncCart: (actualCount: number) => void;
 };
 
-const API_URL = process.env.API_URL
+const API_URL = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8080";
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -19,9 +19,11 @@ const CART_COUNT_KEY = "cart_count";
 export function CartProvider({
   children,
   initialCount,
+  isAuthenticated,
 }: {
   children: React.ReactNode;
   initialCount: number;
+  isAuthenticated: boolean;
 }) {
   const [cartCount, setCartCountState] = useState(initialCount);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -53,9 +55,12 @@ export function CartProvider({
   };
 
   useEffect(() => {
+    if (!isAuthenticated) return;
     const fetchAndSyncCart = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/cart`);
+        const response = await fetch(`${API_URL}/api/cart`, {
+          credentials: "include",
+        });
         if (!response.ok) return;
 
         const cart = await response.json();
@@ -69,7 +74,7 @@ export function CartProvider({
       }
     };
 
-    const syncInterval = setInterval(fetchAndSyncCart, 5 * 60 * 1000);
+    const syncInterval = setInterval(fetchAndSyncCart, 5 * 60 * 100);
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
@@ -82,7 +87,7 @@ export function CartProvider({
       clearInterval(syncInterval);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [cartCount]); // Include cartCount to access current value
+  }, [cartCount]);
 
   return (
     <CartContext.Provider
