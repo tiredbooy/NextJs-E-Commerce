@@ -37,13 +37,13 @@ export function AttributeCard({
 }: AttributeCardProps) {
   const handleToggle = (id: number) => {
     const newIds = selectedIds.includes(id)
-      ? selectedIds.filter((selectedId) => selectedId !== id)
+      ? selectedIds?.filter((selectedId) => selectedId !== id)
       : [...selectedIds, id];
     onSelectionChange(newIds);
   };
 
   const handleRemove = (id: number) => {
-    onSelectionChange(selectedIds.filter((selectedId) => selectedId !== id));
+    onSelectionChange(selectedIds?.filter((selectedId) => selectedId !== id));
   };
 
   return (
@@ -57,15 +57,15 @@ export function AttributeCard({
               <CardDescription>{description}</CardDescription>
             </div>
           </div>
-          {selectedItems.length > 0 && (
+          {selectedItems?.length > 0 && (
             <Badge variant="secondary" className="text-sm">
-              {selectedItems.length} selected
+              {selectedItems?.length} selected
             </Badge>
           )}
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        {selectedItems.length > 0 && (
+        {selectedItems?.length > 0 && (
           <SelectedBadges
             type={type}
             items={selectedItems}

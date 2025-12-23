@@ -24,7 +24,7 @@ export default function ProductAttributes({
   colors,
 }: Props) {
   const [isPending, startTransition] = useTransition();
-  const selectedSizes = sizes.filter((size) => data.size_ids.includes(size.id));
+  const selectedSizes = sizes?.filter((size) => data.size_ids.includes(size.id));
   const selectedColors = colors?.filter((color) =>
     data.color_ids.includes(color.id)
   );

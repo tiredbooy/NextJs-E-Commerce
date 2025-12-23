@@ -25,7 +25,7 @@ export function AttributeList({
       <CommandGroup>
         {isColorType ? (
           <div className="grid grid-cols-2 gap-1 p-2">
-            {(items as Color[]).map((color) => {
+            {(items as Color[])?.map((color) => {
               const isSelected = selectedIds.includes(color.id);
               return (
                 <button
@@ -50,7 +50,7 @@ export function AttributeList({
             })}
           </div>
         ) : (
-          (items as Size[]).map((size) => {
+          (items as Size[])?.map((size) => {
             const isSelected = selectedIds.includes(size.id);
             return (
               <CommandItem
