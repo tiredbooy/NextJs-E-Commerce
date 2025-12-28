@@ -23,7 +23,7 @@ const productSchema = z.object({
   description: z.string().max(1000, "Description too long"),
   category_ids: z.array(z.number()).min(1, "Category is required"),
   color_ids: z.array(z.number()),
-  size_ids: z.array(z.number()).min(1, "size is required"),
+  size_ids: z.array(z.number()),
   brand: z.number().positive(),
   slug: z
     .string()

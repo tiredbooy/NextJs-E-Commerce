@@ -20,10 +20,12 @@ export function CartProvider({
   children,
   initialCount,
   isAuthenticated,
+  token,
 }: {
   children: React.ReactNode;
   initialCount: number;
   isAuthenticated: boolean;
+  token: string;
 }) {
   const [cartCount, setCartCountState] = useState(initialCount);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -55,11 +57,15 @@ export function CartProvider({
   };
 
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated || token == "") return;
+
     const fetchAndSyncCart = async () => {
       try {
         const response = await fetch(`${API_URL}/api/cart`, {
           credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
         if (!response.ok) return;
 

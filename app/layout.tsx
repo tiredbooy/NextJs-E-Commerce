@@ -38,7 +38,7 @@ export default async function MainLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <CartProvider initialCount={0} isAuthenticated={!!session}>{children}</CartProvider>
+            <CartProvider initialCount={0} isAuthenticated={!!session} token={session.access}>{children}</CartProvider>
           </ThemeProvider>
           <Toaster />
         </Providers>

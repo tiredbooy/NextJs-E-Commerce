@@ -169,6 +169,18 @@ export default function ProductForm({
     return { profit: Number(profit.toFixed(2)), margin };
   };
 
+  let btnTxt;
+  let btnTxtLoading;
+  switch (mode) {
+    case "create" :
+      btnTxt = "Publish Product"
+      btnTxtLoading = "Publishing..."
+    break
+    case "edit" :
+      btnTxt = "Edit Product"
+      btnTxtLoading = "Editing..."
+  }
+
   const tabs = [
     { id: "basic", label: "Basic Info" },
     { id: "pricing", label: "Pricing" },
@@ -193,7 +205,7 @@ export default function ProductForm({
             className="gap-2 text-background font-semibold cursor-pointer"
           >
             <MdSave />
-            {isPending ? "Publishing..." : "Publish Product"}
+            {isPending ? btnTxtLoading : btnTxt}
           </Button>
         </div>
       </div>

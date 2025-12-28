@@ -35,7 +35,7 @@ export default function HeaderSearch() {
     }
   };
 
-  const handleProductSelect = (productId: string, productTitle: string) => {
+  const handleProductSelect = (productId: number, productTitle: string) => {
     saveSearch(productTitle);
     setOpen(false);
     setQuery("");
