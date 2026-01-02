@@ -79,7 +79,7 @@ export interface PaginatedProductsResponse {
 }
 
 export interface Review {
-  id: number;
+  id?: number;
   user_id: number;
   product_id: number;
   rating: number;
