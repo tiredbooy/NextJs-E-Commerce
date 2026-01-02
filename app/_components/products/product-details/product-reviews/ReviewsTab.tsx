@@ -7,11 +7,8 @@ import ReviewCards from "./ReviewCards";
 
 const ReviewsTab: React.FC<{ productId: number }> = async ({ productId }) => {
   const user = await getCurrentUser();
-  const reviews = (await getProductReviews(productId)) || [];
-  console.log('reviews:', reviews);
-
-  const averageRating = 4.7;
-  const totalReviews = 247;
+  const reviewsData = (await getProductReviews(productId)) || [];
+  const reviews = reviewsData.reviews
 
   return (
     <Card>
@@ -19,8 +16,8 @@ const ReviewsTab: React.FC<{ productId: number }> = async ({ productId }) => {
         <div className="space-y-6">
           {/* Rating Summary */}
           <RatingSummary
-            avgRating={averageRating}
-            totalReviews={totalReviews}
+            avgRating={reviewsData.avg_rating}
+            totalReviews={reviewsData.total_reviews}
           />
 
           {/* Reviews List */}

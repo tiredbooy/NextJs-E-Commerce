@@ -1,4 +1,6 @@
 import { Review } from "@/app/_lib/types/product_types";
+import { getInitials } from "@/app/_lib/utils/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Star } from "lucide-react";
 
 interface Props {
@@ -7,13 +9,26 @@ interface Props {
 }
 
 export default function ReviewCard({ review }: Props) {
+    const {id, profile, first_name, last_name, rating, comment, created_at} = review
+    const fullName = `${first_name} ${last_name}`
   return (
-    <div key={review.id} className="border-b pb-6 last:border-b-0">
+    <div key={id} className="border-b pb-6 last:border-b-0">
       <div className="flex items-start justify-between mb-2">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center flex-row gap-2">
+            {profile !== "" ? (
+              <Avatar className="w-8 h-8">
+                <AvatarImage src={profile} alt={fullName} className="object-cover" />
+              </Avatar>
+            ) : (
+              <Avatar>
+                <AvatarFallback className="text-xs font-medium">
+                  {getInitials(fullName)}
+                </AvatarFallback>
+              </Avatar>
+            )}
             <span className="font-semibold text-foreground/80">
-              {review.author}
+              {fullName}
             </span>
           </div>
           <div className="flex items-center gap-2 mt-1">
@@ -22,7 +37,7 @@ export default function ReviewCard({ review }: Props) {
                 <Star
                   key={star}
                   className={`w-4 h-4 ${
-                    star <= review.rating
+                    star <= rating
                       ? "fill-rating-star text-rating-star"
                       : "fill-rating-star-empty text-rating-star-empty"
                   }`}
@@ -30,12 +45,12 @@ export default function ReviewCard({ review }: Props) {
               ))}
             </div>
             <span className="text-sm text-muted-foreground/60">
-              {review.date}
+              {new Date(created_at).toLocaleDateString()}
             </span>
           </div>
         </div>
       </div>
-      <p className="text-muted-foreground/95 mt-2">{review.comment}</p>
+      <p className="text-muted-foreground/95 mt-2">{comment}</p>
     </div>
   );
 }

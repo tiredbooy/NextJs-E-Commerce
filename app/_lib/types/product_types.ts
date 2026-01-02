@@ -85,6 +85,15 @@ export interface Review {
   rating: number;
   comment: string;
   created_at: string;
+  first_name?: string
+  last_name?: string
+  profile?: string
+}
+
+export interface ReviewResponse {
+  reviews: Review[]
+  avg_rating: number
+  total_reviews: number
 }
 
 
