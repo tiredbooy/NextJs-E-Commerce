@@ -1,20 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import {
-  Package,
-  Shield,
-  Truck,
-  Info,
-  Star,
-  MessageSquare,
-} from "lucide-react";
-import DescriptionTab from "./DescriptionTab";
-import SpecificationsTab from "./SpecificationsTab";
+import { Info, Package, Star } from "lucide-react";
+import React from "react";
+import DescriptionTab from "../DescriptionTab";
 import ReviewsTab from "./ReviewsTab";
+import SpecificationsTab from "../SpecificationsTab";
 
 interface ProductDetailsTabsProps {
   productId: number;
@@ -49,7 +40,7 @@ const ProductDetailsTabs: React.FC<ProductDetailsTabsProps> = ({
               Specifications
             </TabsTrigger>
           )}
-          {reviews && reviews.length > 0 && (
+          {true && (
             <TabsTrigger
               value="reviews"
               className="rounded-md border-b-2 border-transparent data-[state=active]:bg-primary/20 px-6 py-3 cursor-pointer transition-colors duration-200"
@@ -71,7 +62,7 @@ const ProductDetailsTabs: React.FC<ProductDetailsTabsProps> = ({
             </TabsContent>
           )}
 
-          {reviews && reviews.length > 0 && (
+          {true && (
             <TabsContent value="reviews" className="mt-0">
               <ReviewsTab productId={productId} />
             </TabsContent>
@@ -83,3 +74,5 @@ const ProductDetailsTabs: React.FC<ProductDetailsTabsProps> = ({
 };
 
 export default ProductDetailsTabs;
+
+// reviews && reviews.length > 0 &&

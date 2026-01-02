@@ -1,7 +1,7 @@
 // components/product/ProductDetailLayout.tsx (Server Component)
 import ProductThumbnail from "./ProductThumbnail";
 import ProductInformation from "./ProductInformation";
-import ProductDetailsTabs from "./ProductReviews";
+import ProductDetailsTabs from "./product-reviews/ProductReviews";
 import { Product } from "@/app/_lib/types/product_types";
 
 interface Props {
@@ -22,7 +22,10 @@ const ProductDetailLayout: React.FC<Props> = ({ product }) => {
 
       {/* Reviews Section - Add later */}
       <div className="mt-16">
-        <ProductDetailsTabs productId={product.id} description={product.description} />
+        <ProductDetailsTabs
+          productId={product.id}
+          description={product.description}
+        />
       </div>
     </div>
   );
